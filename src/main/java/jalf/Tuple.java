@@ -3,8 +3,6 @@ package jalf;
 import java.util.HashMap;
 import java.util.Map;
 
-import static jalf.util.Utils.mapOf;
-
 /**
  * @author amirm
  */
