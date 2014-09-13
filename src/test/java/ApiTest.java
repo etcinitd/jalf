@@ -1,9 +1,15 @@
-import jalf.Relation;
-import org.junit.Test;
-
-import static jalf.util.Utils.*;
 import static jalf.JAlf.project;
+import static jalf.test.fixtures.SuppliersAndParts.CITY;
+import static jalf.test.fixtures.SuppliersAndParts.NAME;
+import static jalf.test.fixtures.SuppliersAndParts.SID;
+import static jalf.test.fixtures.SuppliersAndParts.suppliers;
+import static jalf.util.Utils.attrs;
+import static jalf.util.Utils.relation;
+import static jalf.util.Utils.tuple;
 import static org.junit.Assert.assertEquals;
+import jalf.Relation;
+
+import org.junit.Test;
 
 /**
  * @author amirm
@@ -13,14 +19,18 @@ public class ApiTest {
 
     @Test
     public void testProject() {
-        Relation suppliers = relation(
-                tuple("name", "S1", "city", "London"),
-                tuple("name", "S2", "city", "Paris")
-        );
+		Relation expected = relation(
+			tuple(SID, "S1", NAME, "Smith"),
+			tuple(SID, "S2", NAME, "Jones"),
+			tuple(SID, "S3", NAME, "Blake"),
+			tuple(SID, "S4", NAME, "Clark"),
+			tuple(SID, "S5", NAME, "Adams")
+		);
 
-        suppliers = project(suppliers, attrs("city"));
+        Relation actual = project(suppliers(), attrs(CITY));
 
-        assertEquals(2, suppliers.count());
+        assertEquals(expected, actual);
+        assertEquals(2, actual.count());
     }
 
 }
