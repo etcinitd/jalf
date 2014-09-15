@@ -5,7 +5,7 @@ import static jalf.util.ValidationUtils.validateNotNull;
 /**
  * @author amirm
  */
-public class AttrName {
+public class AttrName implements Comparable<AttrName> {
     public static AttrName attr(String name) {
         // TODO use a concurrent WeakHashMap to keep immutable AttrName(s)
         return new AttrName(name);
@@ -16,6 +16,11 @@ public class AttrName {
     private AttrName(String name) {
         validateNotNull("Parameter 'name' must be non-null.", name);
         this.name = name;
+    }
+
+    @Override
+    public int compareTo(AttrName o) {
+        return name.compareTo(o.name);
     }
 
     @Override
