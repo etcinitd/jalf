@@ -1,4 +1,4 @@
-package jalf.util;
+package jalf;
 
 import jalf.AttrName;
 import jalf.Relation;
@@ -13,7 +13,7 @@ import static java.util.Collections.unmodifiableSet;
 /**
  * @author amirm
  */
-public class JAlfUtils {
+public class JAlfDSL {
     public static Set<AttrName> attrs(String... attrs) {
         return unmodifiableSet(
                 Stream.of(attrs)
@@ -29,5 +29,11 @@ public class JAlfUtils {
 
     public static Relation relation(Tuple... tuples) {
         return new Relation(tuples);
+    }
+
+    // TODO What about passing a Stream?
+    public static Relation project(Relation relation, Set<AttrName> attrNames) {
+        // TODO implement
+        return relation;
     }
 }

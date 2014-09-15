@@ -9,7 +9,7 @@ import static jalf.util.ValidationUtils.*;
  * @author amirm
  */
 public class Tuple {
-    private Map<AttrName, AttrValue> attrs;
+    private Map<AttrName, Object> attrs;
 
     public Tuple(Object... keyValuePairs) {
         validateNotNull("Parameter 'keyValuePairs' must be non-null.", keyValuePairs);
@@ -23,7 +23,7 @@ public class Tuple {
             Object key = keyValuePairs[i++];
             String keyStr = validateCast("Attribute name must be a string.", key, String.class);
             Object value = keyValuePairs[i];
-            attrs.put(AttrName.attr(keyStr), new AttrValue(value));
+            attrs.put(AttrName.attr(keyStr), value);
         }
     }
 
