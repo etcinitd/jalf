@@ -37,4 +37,20 @@ public class JAlfDSLTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testRename() {
+        Relation expected = relation(
+                tuple(SUPPLIER_ID, "S1", NAME, "Smith", STATUS, 20, LIVES_IN, "London"),
+                tuple(SUPPLIER_ID, "S2", NAME, "Jones", STATUS, 10, LIVES_IN, "Paris"),
+                tuple(SUPPLIER_ID, "S3", NAME, "Blake", STATUS, 30, LIVES_IN, "Paris"),
+                tuple(SUPPLIER_ID, "S4", NAME, "Clark", STATUS, 20, LIVES_IN, "London"),
+                tuple(SUPPLIER_ID, "S5", NAME, "Adams", STATUS, 30, LIVES_IN, "Athens")
+        );
+
+        Relation actual = rename(suppliers(), renaming(SID, SUPPLIER_ID, CITY, LIVES_IN));
+
+        assertEquals(5, actual.count());
+        assertEquals(expected, actual);
+    }
+
 }

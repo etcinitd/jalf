@@ -7,6 +7,9 @@ import static jalf.JAlfDSL.tuple;
 
 public class SuppliersAndParts {
 
+    public static final String SUPPLIER_ID = "supplier_id";
+    public static final String LIVES_IN = "lives_in";
+
     public static final String SID = "sid";
     public static final String NAME = "name";
     public static final String CITY = "city";
