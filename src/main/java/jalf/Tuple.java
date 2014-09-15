@@ -1,15 +1,22 @@
 package jalf;
 
+import static jalf.util.ValidationUtils.validate;
+import static jalf.util.ValidationUtils.validateCast;
+import static jalf.util.ValidationUtils.validateNotNull;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import static jalf.util.ValidationUtils.*;
+import java.util.function.UnaryOperator;
 
 /**
  * @author amirm
  */
 public class Tuple {
     private Map<AttrName, Object> attrs;
+
+    public Tuple(Map<AttrName, Object> attrs){
+        this.attrs = attrs;
+    }
 
     public Tuple(Object... keyValuePairs) {
         validateNotNull("Parameter 'keyValuePairs' must be non-null.", keyValuePairs);
@@ -27,16 +34,31 @@ public class Tuple {
         }
     }
 
+    public Tuple project(AttrList on) {
+        Map<AttrName, Object> p = new HashMap<>();
+        for (AttrName attrName: on){
+            p.put(attrName, attrs.get(attrName));
+        }
+        return new Tuple(p);
+    }
+
+    public Tuple rename(UnaryOperator<AttrName> r) {
+        Map<AttrName, Object> renamed = new HashMap<>();
+        for (AttrName attrName: attrs.keySet()) {
+            AttrName as = r.apply(attrName);
+            if (as == null)
+                as = attrName;
+            renamed.put(as, attrs.get(attrName));
+        }
+        return new Tuple(renamed);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Tuple tuple = (Tuple) o;
-
-        if (!attrs.equals(tuple.attrs)) return false;
-
-        return true;
+        return attrs.equals(tuple.attrs);
     }
 
     @Override
