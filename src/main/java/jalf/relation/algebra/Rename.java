@@ -2,6 +2,7 @@ package jalf.relation.algebra;
 
 import jalf.Relation;
 import jalf.Renaming;
+import jalf.compiler.Cog;
 
 /**
  * Relational renaming.
@@ -23,6 +24,11 @@ public class Rename extends UnaryOperator {
 
     public Renaming getRenaming() {
         return renaming;
+    }
+
+    @Override
+    protected Cog compile(Cog compiled) {
+        return compiled.rename(this, compiled);
     }
 
 }

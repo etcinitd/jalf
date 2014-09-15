@@ -2,9 +2,9 @@ package jalf.relation.materialized;
 
 import static jalf.util.CollectionUtils.setOf;
 import jalf.Tuple;
+import jalf.compiler.Cog;
 
 import java.util.Collection;
-import java.util.stream.Stream;
 
 /**
  * MemoryRelation where an actual set of tuples is used as internal
@@ -17,9 +17,8 @@ public class SetMemoryRelation extends MemoryRelation {
         this.tuples = setOf(tuples);
     }
 
-    @Override
-    public Stream<Tuple> stream() {
-        return tuples.stream();
+    public Cog compile(){
+        return new Cog(this, tuples.stream());
     }
 
     @Override
