@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 /**
  * @author amirm
  */
-public class JAlfDSL {
+public class DSL {
 
     public static AttrList attrs(String... attrs) {
         SortedSet<AttrName> set = Stream.of(attrs)

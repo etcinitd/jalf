@@ -1,7 +1,7 @@
 package jalf.test.fixtures;
 
-import static jalf.JAlfDSL.relation;
-import static jalf.JAlfDSL.tuple;
+import static jalf.DSL.relation;
+import static jalf.DSL.tuple;
 import jalf.Relation;
 
 public class SuppliersAndParts {

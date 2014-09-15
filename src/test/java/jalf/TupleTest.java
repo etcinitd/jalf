@@ -1,7 +1,7 @@
 package jalf;
 
 import static jalf.test.fixtures.SuppliersAndParts.*;
-import static jalf.JAlfDSL.*;
+import static jalf.DSL.*;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

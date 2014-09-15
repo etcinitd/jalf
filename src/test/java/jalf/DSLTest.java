@@ -2,14 +2,14 @@ package jalf;
 
 import org.junit.Test;
 
-import static jalf.JAlfDSL.*;
+import static jalf.DSL.*;
 import static jalf.test.fixtures.SuppliersAndParts.*;
 import static org.junit.Assert.assertEquals;
 
 /**
  * @author amirm
  */
-public class JAlfDSLTest {
+public class DSLTest {
     // TODO rename, restrict, join
 
     @Test
