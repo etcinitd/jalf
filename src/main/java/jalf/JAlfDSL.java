@@ -1,5 +1,6 @@
 package jalf;
 
+import jalf.relation.materialized.SetMemoryRelation;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,17 +41,14 @@ public class JAlfDSL {
     }
 
     public static Relation relation(Tuple... tuples) {
-        return new Relation(tuples);
+        return new SetMemoryRelation(tuples);
     }
 
-    // TODO What about passing a Stream?
     public static Relation project(Relation relation, AttrList attrNames) {
-        // TODO implement
-        return relation;
+        return relation.project(attrNames);
     }
 
     public static Relation rename(Relation relation, Renaming renaming) {
-        // TODO implement
-        return relation;
+        return relation.rename(renaming);
     }
 }
