@@ -1,14 +1,14 @@
 package jalf;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author amirm
  */
 public class JAlf {
     // TODO What about passing a Stream?
-    public static Relation project(Relation suppliers, List<RelAttr> city) {
+    public static Relation project(Relation relation, Set<AttrName> attrNames) {
         // TODO implement
-        return suppliers;
+        return relation;
     }
 }

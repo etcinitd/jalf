@@ -1,29 +1,27 @@
 package jalf.util;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.unmodifiableList;
-import static java.util.Collections.unmodifiableMap;
-import jalf.RelAttr;
-import jalf.Relation;
-import jalf.Tuple;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.Collections.*;
 
 /**
  * @author amirm
  */
-public final class Utils {
-    private Utils() {
+public final class CollectionUtils {
+    private CollectionUtils() {
     }
 
     @SafeVarargs
     public static <T> List<T> listOf(T... values) {
         return unmodifiableList(Arrays.asList(values));
+    }
+
+    @SafeVarargs
+    public static <T> Set<T> setOf(T... values) {
+        return unmodifiableSet(
+                Stream.of(values).collect(Collectors.toSet()));
     }
 
     public static <K, V> Map<K, V> mapOf() {
@@ -51,20 +49,4 @@ public final class Utils {
         return unmodifiableMap(map);
     }
 
-    public static List<RelAttr> attrs(String... attrs) {
-        return unmodifiableList(
-                Stream.of(attrs)
-                        .distinct()
-                        .map(RelAttr::new)
-                        .collect(Collectors.toList())
-        );
-    }
-
-    public static Tuple tuple(Object... keyValuePairs) {
-        return new Tuple(keyValuePairs);
-    }
-
-    public static Relation relation(Tuple... tuples) {
-        return new Relation(tuples);
-    }
 }
