@@ -46,4 +46,16 @@ public abstract class AbstractRelation implements Relation {
 
     public abstract Cog compile();
 
+    ///
+
+    public boolean equals(Object other) {
+        if (other == this)
+            return true;
+        if (other == null || !(other instanceof Relation))
+            return false;
+        return equals((Relation) other);
+    }
+
+    public abstract boolean equals(Relation other);
+
 }

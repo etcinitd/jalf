@@ -1,10 +1,16 @@
 package jalf.relation.materialized;
 
 import static jalf.util.CollectionUtils.setOf;
+import jalf.Relation;
 import jalf.Tuple;
 import jalf.compiler.Cog;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Stream;
 
 /**
  * MemoryRelation where an actual set of tuples is used as internal
@@ -12,6 +18,10 @@ import java.util.Collection;
  */
 public class SetMemoryRelation extends MemoryRelation {
     private Collection<Tuple> tuples;
+
+    public SetMemoryRelation(Set<Tuple> tuples) {
+        this.tuples = tuples;
+    }
 
     public SetMemoryRelation(Tuple[] tuples) {
         this.tuples = setOf(tuples);
@@ -30,14 +40,30 @@ public class SetMemoryRelation extends MemoryRelation {
         return tuples.hashCode();
     }
 
-    public boolean equals(Object other){
-        if (other == this)
-            return true;
-        if (other == null)
-            return false;
+    public boolean equals(Relation other) {
         if (other instanceof SetMemoryRelation)
-            return tuples.equals(((SetMemoryRelation)other).tuples);
-        return super.equals(other);
+            return equals((SetMemoryRelation)other);
+        else
+            return equals(other.stream());
+    }
+
+    public boolean equals(Stream<Tuple> other) {
+        return other.allMatch(t -> tuples.contains(t));
+    }
+
+    public boolean equals(SetMemoryRelation other) {
+        return tuples.equals(other.tuples);
+    }
+
+    public static Collector<Tuple, ?, Relation> collector() {
+        Function<HashSet<Tuple>, Relation> finisher = SetMemoryRelation::new;
+        return Collector.of(
+                HashSet::new,
+                HashSet::add,
+                (left, right) -> { left.addAll(right); return left; },
+                finisher,
+                Collector.Characteristics.CONCURRENT,
+                Collector.Characteristics.UNORDERED);
     }
 
 }
