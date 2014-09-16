@@ -1,21 +1,21 @@
 package jalf;
 
-import static jalf.util.ValidationUtils.validate;
-import static jalf.util.ValidationUtils.validateCast;
-import static jalf.util.ValidationUtils.validateNotNull;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
+import static jalf.util.ValidationUtils.*;
+import static java.util.Collections.unmodifiableMap;
+
 /**
- * @author amirm
+ * A tuple is an immutable set of attributes (i.e. name value pairs), with
+ * no two pairs having the same name.
  */
 public class Tuple {
     private Map<AttrName, Object> attrs;
 
-    public Tuple(Map<AttrName, Object> attrs){
-        this.attrs = attrs;
+    public Tuple(Map<AttrName, Object> attrs) {
+        this.attrs = unmodifiableMap(attrs);
     }
 
     public Tuple(Object... keyValuePairs) {
@@ -36,20 +36,19 @@ public class Tuple {
 
     public Tuple project(AttrList on) {
         Map<AttrName, Object> p = new HashMap<>();
-        for (AttrName attrName: on){
-            p.put(attrName, attrs.get(attrName));
-        }
+        on.forEach(attrName -> p.put(attrName, attrs.get(attrName)));
         return new Tuple(p);
     }
 
     public Tuple rename(UnaryOperator<AttrName> r) {
         Map<AttrName, Object> renamed = new HashMap<>();
-        for (AttrName attrName: attrs.keySet()) {
+        attrs.entrySet().forEach(attribute -> {
+            AttrName attrName = attribute.getKey();
             AttrName as = r.apply(attrName);
             if (as == null)
                 as = attrName;
-            renamed.put(as, attrs.get(attrName));
-        }
+            renamed.put(as, attribute.getValue());
+        });
         return new Tuple(renamed);
     }
 
