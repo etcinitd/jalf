@@ -60,7 +60,7 @@ public class SetMemoryRelation extends MemoryRelation {
         Function<Set<Tuple>, Relation> finisher = SetMemoryRelation::new;
         return Collector.of(
                 CollectionUtils::newConcurrentHashSet,
-                Set::add,
+                Set<Tuple>::add,
                 (left, right) -> { left.addAll(right); return left; },
                 finisher,
                 Collector.Characteristics.CONCURRENT,
