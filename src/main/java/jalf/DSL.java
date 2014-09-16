@@ -13,6 +13,10 @@ import java.util.stream.Stream;
  */
 public class DSL {
 
+    public static AttrName attr(String attr){
+        return AttrName.attr(attr);
+    }
+
     public static AttrList attrs(String... attrs) {
         SortedSet<AttrName> set = Stream.of(attrs)
             .distinct()
