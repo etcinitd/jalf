@@ -44,6 +44,8 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
      * @return a Renaming instance implementing the total function.
      */
     public static Renaming extension(List<AttrName> attrNames) {
+        validateNotNull("Parameter 'attrNames' must be non-null.", attrNames);
+
         Map<AttrName, AttrName> renamingMap = new HashMap<>();
         for (int i = 0; i < attrNames.size(); i++) {
             AttrName currentName = attrNames.get(i++);
@@ -57,6 +59,8 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
      * Convenient shortcut over `explicit(List<AttrName>)`.
      */
     public static Renaming extension(AttrName...attrNames) {
+        validateNotNull("Parameter 'attrNames' must be non-null.", attrNames);
+
         List<AttrName> attrs = Stream.of(attrNames)
                 .collect(Collectors.toList());
         return extension(attrs);
@@ -66,6 +70,8 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
      * Convenient shortcut over `explicit(AttrName[])`.
      */
     public static Renaming extension(String...attrNames) {
+        validateNotNull("Parameter 'attrNames' must be non-null.", attrNames);
+
         List<AttrName> attrs = Stream.of(attrNames)
                 .map(AttrName::attr)
                 .collect(Collectors.toList());
