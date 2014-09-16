@@ -2,6 +2,9 @@ package jalf;
 
 import java.util.Iterator;
 import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Collections.unmodifiableSortedSet;
 
@@ -13,15 +16,44 @@ import static java.util.Collections.unmodifiableSortedSet;
  * of attribute names does not matter but some operators may depend on it.
  * Their documentation will make that clear.
  *
- * This class is not intended to be used by end-users, please use Jalf's DSL
- * instead.
+ * Instances of this class can be obtained either through factory methods or
+ * through JAlf's DSL.
  */
 public class AttrList implements Iterable<AttrName> {
 
     private SortedSet<AttrName> names;
 
-    public AttrList(SortedSet<AttrName> names){
+    private AttrList(SortedSet<AttrName> names){
         this.names = unmodifiableSortedSet(names);
+    }
+
+    /**
+     * Builds an attribute list from some attribute names.
+     *
+     * @pre attrNames should be distinct
+     * @param attrNames list of attribute names
+     * @return the built attribute list
+     */
+    public static AttrList attrs(AttrName... attrNames) {
+        SortedSet<AttrName> set = Stream.of(attrNames)
+            .distinct()
+            .collect(Collectors.toCollection(TreeSet::new));
+        return new AttrList(set);
+    }
+
+    /**
+     * Builds an attribute list from some attribute names.
+     *
+     * @pre attrNames should be distinct
+     * @param attrNames list of attribute names
+     * @return the built attribute list
+     */
+    public static AttrList attrs(String... attrNames) {
+        SortedSet<AttrName> set = Stream.of(attrNames)
+            .distinct()
+            .map(AttrName::attr)
+            .collect(Collectors.toCollection(TreeSet::new));
+        return new AttrList(set);
     }
 
     @Override
