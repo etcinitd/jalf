@@ -49,4 +49,7 @@ public final class CollectionUtils {
         return unmodifiableMap(map);
     }
 
+    public static <E> ConcurrentHashSet<E> newConcurrentHashSet() {
+        return new ConcurrentHashSet<>();
+    }
 }

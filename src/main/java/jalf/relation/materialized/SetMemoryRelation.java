@@ -1,16 +1,17 @@
 package jalf.relation.materialized;
 
-import static jalf.util.CollectionUtils.setOf;
 import jalf.Relation;
 import jalf.Tuple;
 import jalf.compiler.Cog;
+import jalf.util.CollectionUtils;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
+
+import static jalf.util.CollectionUtils.setOf;
 
 /**
  * MemoryRelation where an actual set of tuples is used as internal
@@ -56,10 +57,10 @@ public class SetMemoryRelation extends MemoryRelation {
     }
 
     public static Collector<Tuple, ?, Relation> collector() {
-        Function<HashSet<Tuple>, Relation> finisher = SetMemoryRelation::new;
+        Function<Set<Tuple>, Relation> finisher = SetMemoryRelation::new;
         return Collector.of(
-                HashSet::new,
-                HashSet::add,
+                CollectionUtils::newConcurrentHashSet,
+                Set::add,
                 (left, right) -> { left.addAll(right); return left; },
                 finisher,
                 Collector.Characteristics.CONCURRENT,
