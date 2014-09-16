@@ -58,7 +58,7 @@ public class AttrName implements Comparable<AttrName> {
 
     @Override
     public String toString() {
-        return name;
+        return "attr(\"" + name + "\"";
     }
 
 }

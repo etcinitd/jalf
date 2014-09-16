@@ -1,8 +1,10 @@
 package jalf;
 
+import static jalf.AttrName.attr;
 import static jalf.util.ValidationUtils.validateNotNull;
 import static java.util.Collections.unmodifiableMap;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,9 +63,7 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
     public static Renaming extension(AttrName...attrNames) {
         validateNotNull("Parameter 'attrNames' must be non-null.", attrNames);
 
-        List<AttrName> attrs = Stream.of(attrNames)
-                .collect(Collectors.toList());
-        return extension(attrs);
+        return extension(Arrays.asList(attrNames));
     }
 
     /**
@@ -101,7 +101,7 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
     public static Renaming prefix(String prefix) {
         validateNotNull("Parameter 'prefix' must be non-null.", prefix);
 
-        return intension(a -> AttrName.attr(prefix + a.toString()));
+        return intension(a -> attr(prefix + a.getName()));
     }
 
     /**
@@ -114,7 +114,7 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
     public static Renaming suffix(String suffix) {
         validateNotNull("Parameter 'suffix' must be non-null.", suffix);
 
-        return intension(a -> AttrName.attr(a.toString() + suffix));
+        return intension(a -> attr(a.getName() + suffix));
     }
 
     static class Extension extends Renaming {

@@ -29,7 +29,7 @@ public class RenamingTest {
     @Test
     public void testItSupportsIntensionRenaming() {
         AttrName SID = attr("SID");
-        Renaming r = Renaming.intension(a -> attr(a.toString().toUpperCase()));
+        Renaming r = Renaming.intension(a -> attr(a.getName().toUpperCase()));
         assertEquals(r.apply(sid), SID);
     }
 
