@@ -18,6 +18,10 @@ public class AttrName implements Comparable<AttrName> {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public int compareTo(AttrName o) {
         return name.compareTo(o.name);

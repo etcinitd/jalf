@@ -4,8 +4,10 @@ import jalf.AttrList;
 import jalf.Relation;
 import jalf.Renaming;
 import jalf.Tuple;
+import jalf.relation.algebra.Predicate;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
+import jalf.relation.algebra.Restrict;
 
 import java.util.stream.Stream;
 
@@ -28,6 +30,11 @@ public abstract class AbstractRelation implements Relation {
     @Override
     public Relation rename(Renaming renaming) {
         return new Rename(this, renaming);
+    }
+
+    @Override
+    public Relation restrict(Predicate predicate) {
+        return new Restrict(this, predicate);
     }
 
     ///

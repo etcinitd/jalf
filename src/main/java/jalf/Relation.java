@@ -1,5 +1,7 @@
 package jalf;
 
+import jalf.relation.algebra.Predicate;
+
 import java.util.stream.Stream;
 
 /**
@@ -40,6 +42,15 @@ public interface Relation {
     Relation rename(Renaming renaming);
 
     /**
+     * Filters tuples of this relation based on the predicate.
+     *
+     * @pre predicate attribute names must belong to attributes of the relation.
+     * @param predicate a predicate to use for filtering.
+     * @return the resulting relation.
+     */
+    Relation restrict(Predicate predicate);
+
+    /**
      * Returns a stream over this relation's tuples.
      *
      * @return a stream of tuples.
@@ -57,5 +68,4 @@ public interface Relation {
      * @return the size of the relation.
      */
     public long count();
-
 }

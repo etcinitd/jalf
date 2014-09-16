@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
  * @author amirm
  */
 public class DSLTest {
-    // TODO rename, restrict, join
+    // TODO restrict, join
 
     @Test
     public void testEqualsAndHashCode() {
@@ -24,11 +24,11 @@ public class DSLTest {
     @Test
     public void testProject() {
         Relation expected = relation(
-            tuple(SID, "S1", NAME, "Smith"),
-            tuple(SID, "S2", NAME, "Jones"),
-            tuple(SID, "S3", NAME, "Blake"),
-            tuple(SID, "S4", NAME, "Clark"),
-            tuple(SID, "S5", NAME, "Adams")
+                tuple(SID, "S1", NAME, "Smith"),
+                tuple(SID, "S2", NAME, "Jones"),
+                tuple(SID, "S3", NAME, "Blake"),
+                tuple(SID, "S4", NAME, "Clark"),
+                tuple(SID, "S5", NAME, "Adams")
         );
 
         Relation actual = project(suppliers(), attrs(SID, NAME));
@@ -50,5 +50,19 @@ public class DSLTest {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void testRestrict() {
+        Relation expected = relation(
+                tuple(SID, "S1", NAME, "Smith", STATUS, 20, CITY, "London"),
+                tuple(SID, "S4", NAME, "Clark", STATUS, 20, CITY, "London")
+        );
+
+        Relation actual = restrict(suppliers(), eq(CITY, "London"));
+
+        assertEquals(expected, actual);
+    }
+
+
 
 }

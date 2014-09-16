@@ -49,7 +49,7 @@ public class SetMemoryRelation extends MemoryRelation {
     }
 
     public boolean equals(Stream<Tuple> other) {
-        return other.allMatch(t -> tuples.contains(t));
+        return other.allMatch(tuples::contains);
     }
 
     public boolean equals(SetMemoryRelation other) {

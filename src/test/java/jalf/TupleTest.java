@@ -1,10 +1,10 @@
 package jalf;
 
-import static jalf.test.fixtures.SuppliersAndParts.*;
-import static jalf.DSL.*;
-
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static jalf.DSL.*;
+import static jalf.test.fixtures.SuppliersAndParts.*;
+import static org.junit.Assert.assertEquals;
 
 public class TupleTest {
 

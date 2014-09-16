@@ -1,9 +1,9 @@
 package jalf;
 
-import static java.util.Collections.unmodifiableSortedSet;
-
 import java.util.Iterator;
 import java.util.SortedSet;
+
+import static java.util.Collections.unmodifiableSortedSet;
 
 /**
  * A list of attributes.

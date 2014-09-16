@@ -4,6 +4,7 @@ import jalf.Relation;
 import jalf.Tuple;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
+import jalf.relation.algebra.Restrict;
 
 import java.util.stream.Stream;
 
@@ -54,4 +55,10 @@ public class Cog {
         return new Cog(rename, stream);
     }
 
+    /** Default compilation of `restrict`. */
+    public Cog restrict(Restrict restrict, Cog compiled) {
+        Stream<Tuple> stream = compiled.stream()
+                .filter(t -> restrict.getPredicate().test(t));
+        return new Cog(restrict, stream);
+    }
 }

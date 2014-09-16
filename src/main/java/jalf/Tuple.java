@@ -52,6 +52,10 @@ public class Tuple {
         return new Tuple(renamed);
     }
 
+    public boolean eq(AttrName attrName, Object value) {
+        return attrs.get(attrName).equals(value);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,5 +67,18 @@ public class Tuple {
     @Override
     public int hashCode() {
         return attrs.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        String result = "tuple(";
+        for (Map.Entry<AttrName, Object> entry : attrs.entrySet()) {
+            if (result.length() > 6)
+                result += ", ";
+            result += '"' + entry.getKey().getName() + '"';
+            result += ", ";
+            result += entry.getValue();
+        }
+        return result + ")";
     }
 }

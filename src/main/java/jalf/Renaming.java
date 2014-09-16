@@ -1,10 +1,10 @@
 package jalf;
 
-import static jalf.util.ValidationUtils.validateNotNull;
-import static java.util.Collections.unmodifiableMap;
-
 import java.util.Map;
 import java.util.function.UnaryOperator;
+
+import static jalf.util.ValidationUtils.validateNotNull;
+import static java.util.Collections.unmodifiableMap;
 
 /**
  * Captures the renaming of some attribute names.

@@ -1,12 +1,10 @@
 package jalf;
 
+import jalf.relation.algebra.Eq;
+import jalf.relation.algebra.Predicate;
 import jalf.relation.materialized.SetMemoryRelation;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,5 +48,13 @@ public class DSL {
 
     public static Relation rename(Relation relation, Renaming renaming) {
         return relation.rename(renaming);
+    }
+
+    public static Relation restrict(Relation relation, Predicate predicate) {
+        return relation.restrict(predicate);
+    }
+
+    public static Predicate eq(String attrName, Object value) {
+        return new Eq(AttrName.attr(attrName), value);
     }
 }
