@@ -45,8 +45,6 @@ public class Tuple {
         attrs.entrySet().forEach(attribute -> {
             AttrName attrName = attribute.getKey();
             AttrName as = r.apply(attrName);
-            if (as == null)
-                as = attrName;
             renamed.put(as, attribute.getValue());
         });
         return new Tuple(renamed);

@@ -5,8 +5,7 @@ import jalf.relation.algebra.Predicate;
 import jalf.relation.materialized.SetMemoryRelation;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.*;
 
 /**
  * @author amirm
@@ -25,17 +24,12 @@ public class DSL {
         return new AttrList(set);
     }
 
+    public static Renaming renaming(AttrName... namePairs) {
+        return Renaming.extension(namePairs);
+    }
+
     public static Renaming renaming(String... namePairs) {
-        List<AttrName> attrNames = Stream.of(namePairs)
-            .map(AttrName::attr)
-            .collect(Collectors.toList());
-        Map<AttrName, AttrName> renamingMap = new HashMap<>();
-        for (int i = 0; i < attrNames.size(); i++) {
-            AttrName currentName = attrNames.get(i++);
-            AttrName mappedName = attrNames.get(i);
-            renamingMap.put(currentName, mappedName);
-        }
-        return new Renaming(renamingMap);
+        return Renaming.extension(namePairs);
     }
 
     public static Tuple tuple(Object... keyValuePairs) {
