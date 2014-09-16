@@ -1,25 +1,25 @@
 package jalf.test.fixtures;
 
+import jalf.AttrName;
 import jalf.Relation;
 
-import static jalf.DSL.relation;
-import static jalf.DSL.tuple;
+import static jalf.DSL.*;
 
 public class SuppliersAndParts {
 
-    public static final String SID = "sid";
-    public static final String NAME = "name";
-    public static final String CITY = "city";
-    public static final String STATUS = "status";
+    public static final AttrName SID = attr("sid");
+    public static final AttrName NAME = attr("name");
+    public static final AttrName CITY = attr("city");
+    public static final AttrName STATUS = attr("status");
 
-    public static final String PID = "pid";
-    public static final String COLOR = "color";
-    public static final String WEIGHT = "weight";
+    public static final AttrName PID = attr("pid");
+    public static final AttrName COLOR = attr("color");
+    public static final AttrName WEIGHT = attr("weight");
 
-    public static final String QTY = "qty";
+    public static final AttrName QTY = attr("qty");
 
-    public static final String SUPPLIER_ID = "supplier_id";
-    public static final String LIVES_IN = "lives_in";
+    public static final AttrName SUPPLIER_ID = attr("supplier_id");
+    public static final AttrName LIVES_IN = attr("lives_in");
 
     public static Relation suppliers() {
         return relation(

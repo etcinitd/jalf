@@ -1,19 +1,11 @@
 package jalf.test.dsl;
 
-import static jalf.DSL.relation;
-import static jalf.DSL.rename;
-import static jalf.DSL.renaming;
-import static jalf.DSL.tuple;
-import static jalf.test.fixtures.SuppliersAndParts.CITY;
-import static jalf.test.fixtures.SuppliersAndParts.NAME;
-import static jalf.test.fixtures.SuppliersAndParts.SID;
-import static jalf.test.fixtures.SuppliersAndParts.STATUS;
-import static jalf.test.fixtures.SuppliersAndParts.SUPPLIER_ID;
-import static org.junit.Assert.assertEquals;
-import jalf.Relation;
-import jalf.Renaming;
-
+import jalf.*;
 import org.junit.Test;
+
+import static jalf.DSL.*;
+import static jalf.test.fixtures.SuppliersAndParts.*;
+import static org.junit.Assert.*;
 
 public class RenameTest {
 
@@ -32,8 +24,12 @@ public class RenameTest {
 
     @Test
     public void testItSupportsPrefixRenaming() {
+        AttrName S_SID = attr("s_sid");
+        AttrName S_NAME = attr("s_name");
+        AttrName S_STATUS = attr("s_status");
+        AttrName S_CITY = attr("s_city");
         Relation expected = relation(
-            tuple("s_sid", "S1", "s_name", "Smith", "s_status", 20, "s_city", "London")
+            tuple(S_SID, "S1", S_NAME, "Smith", S_STATUS, 20, S_CITY, "London")
         );
         Relation actual = rename(SOURCE, Renaming.prefix("s_"));
         assertEquals(expected, actual);
@@ -41,8 +37,12 @@ public class RenameTest {
 
     @Test
     public void testItSupportsSuffixRenaming() {
+        AttrName SID_S = attr("sid_s");
+        AttrName NAME_S = attr("name_s");
+        AttrName STATUS_S = attr("status_s");
+        AttrName CITY_S = attr("city_s");
         Relation expected = relation(
-            tuple("sid_s", "S1", "name_s", "Smith", "status_s", 20, "city_s", "London")
+            tuple(SID_S, "S1", NAME_S, "Smith", STATUS_S, 20, CITY_S, "London")
         );
         Relation actual = rename(SOURCE, Renaming.suffix("_s"));
         assertEquals(expected, actual);

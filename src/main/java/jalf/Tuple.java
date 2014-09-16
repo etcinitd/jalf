@@ -28,9 +28,9 @@ public class Tuple {
 
         for (int i = 0; i < keyValuePairs.length; i++) {
             Object key = keyValuePairs[i++];
-            String keyStr = validateCast("Attribute name must be a string.", key, String.class);
+            AttrName attr = validateCast("Attribute name must be an AttrName.", key, AttrName.class);
             Object value = keyValuePairs[i];
-            attrs.put(AttrName.attr(keyStr), value);
+            attrs.put(attr, value);
         }
     }
 
