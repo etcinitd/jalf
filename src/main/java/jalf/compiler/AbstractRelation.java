@@ -1,10 +1,10 @@
 package jalf.compiler;
 
 import jalf.AttrList;
+import jalf.Predicate;
 import jalf.Relation;
 import jalf.Renaming;
 import jalf.Tuple;
-import jalf.relation.algebra.Predicate;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;

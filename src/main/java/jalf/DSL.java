@@ -1,7 +1,6 @@
 package jalf;
 
-import jalf.relation.algebra.Eq;
-import jalf.relation.algebra.Predicate;
+import jalf.predicate.Eq;
 import jalf.relation.materialized.SetMemoryRelation;
 
 /**
@@ -37,12 +36,8 @@ public class DSL {
 
     // Predicate
 
-    public static Predicate eq(AttrName attrName, Object value) {
-        return new Eq(attrName, value);
-    }
-
-    public static Predicate eq(String attrName, Object value) {
-        return eq(AttrName.attr(attrName), value);
+    public static Predicate eq(Object left, Object right) {
+        return new Eq(left, right);
     }
 
     // Tuple

@@ -1,19 +1,32 @@
-package jalf.relation.algebra;
+package jalf.predicate;
 
 import jalf.AttrName;
+import jalf.Predicate;
 import jalf.Tuple;
 
 public class Eq extends Predicate {
-    private AttrName attrName;
-    private Object value;
+    private Object left;
+    private Object right;
 
-    public Eq(AttrName attrName, Object value) {
-        this.attrName = attrName;
-        this.value = value;
+    public Eq(Object left, Object right) {
+        this.left = left;
+        this.right = right;
     }
 
     @Override
     public boolean test(Tuple tuple) {
-        return tuple.get(attrName).equals(value);
+        Object atLeft = getFor(left, tuple);
+        Object atRight = getFor(right, tuple);
+        if (atLeft == null)
+            return atRight == null;
+        else
+            return atLeft.equals(atRight);
+    }
+
+    private Object getFor(Object what, Tuple tuple) {
+        if (what instanceof AttrName)
+            return tuple.get((AttrName)what);
+        else
+            return what;
     }
 }

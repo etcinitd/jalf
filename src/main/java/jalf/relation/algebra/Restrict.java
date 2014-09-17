@@ -1,5 +1,6 @@
 package jalf.relation.algebra;
 
+import jalf.Predicate;
 import jalf.Relation;
 import jalf.compiler.Cog;
 

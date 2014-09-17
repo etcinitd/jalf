@@ -1,7 +1,5 @@
 package jalf;
 
-import jalf.relation.algebra.Predicate;
-
 import java.util.stream.Stream;
 
 /**
