@@ -41,8 +41,30 @@ public class RestrictTest {
                 tuple(SID, "S5", NAME, "Adams", STATUS, 30, CITY, "Athens")
         );
         Relation actual = restrict(suppliers(),
-                (t -> ((String)t.get(NAME)).indexOf('a') >= 0));
+                t -> ((String)t.get(NAME)).indexOf('a') >= 0);
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testItSupportsFriendlyNativePredicates() {
+        Relation expected = relation(
+                tuple(SID, "S3", NAME, "Blake", STATUS, 30, CITY, "Paris"),
+                tuple(SID, "S4", NAME, "Clark", STATUS, 20, CITY, "London"),
+                tuple(SID, "S5", NAME, "Adams", STATUS, 30, CITY, "Athens")
+        );
+        Relation actual = restrict(suppliers(), NAME.asStr(),
+                name -> name.indexOf('a') >= 0);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testItSupportsTypeCastedFriendlyNativePredicates() {
+        Relation expected = relation(
+                tuple(SID, "S3", NAME, "Blake", STATUS, 30, CITY, "Paris"),
+                tuple(SID, "S5", NAME, "Adams", STATUS, 30, CITY, "Athens")
+        );
+        Relation actual = restrict(suppliers(), STATUS.as(Integer.class),
+                status -> status == 30);
+        assertEquals(expected, actual);
+    }
 }
