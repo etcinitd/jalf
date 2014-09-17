@@ -1,5 +1,7 @@
 package jalf;
 
+import org.w3c.dom.Attr;
+
 import static jalf.util.ValidationUtils.validateNotNull;
 
 /**
@@ -32,6 +34,10 @@ public class AttrName implements Comparable<AttrName> {
         return new AttrName(name);
     }
 
+    public static <T> TypedAttrName<T> attr(String name, Class<T> type) {
+        return attr(name).as(type);
+    }
+
     public String getName() {
         return name;
     }
@@ -50,7 +56,7 @@ public class AttrName implements Comparable<AttrName> {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (o == null || getClass() != o.getClass())
+        if (o == null || !(o instanceof AttrName))
             return false;
         AttrName attrName = (AttrName) o;
         return name.equals(attrName.name);
@@ -58,14 +64,34 @@ public class AttrName implements Comparable<AttrName> {
 
     @Override
     public String toString() {
-        return "attr(\"" + name + "\"";
-    }
-
-    public TypedAttrName<String> asStr() {
-        return new TypedAttrName<>(this, String.class);
+        return "attr(\"" + name + "\")";
     }
 
     public <T> TypedAttrName<T> as(Class<T> type) {
-        return new TypedAttrName<>(this, type);
+        return new TypedAttrName<T>(this, type);
+    }
+
+    public TypedAttrName<String> asStr() {
+        return as(String.class);
+    }
+
+    public TypedAttrName<Integer> asInt() {
+        return as(Integer.class);
+    }
+
+    public TypedAttrName<Long> asLong() {
+        return as(Long.class);
+    }
+
+    public TypedAttrName<Float> asFloat() {
+        return as(Float.class);
+    }
+
+    public TypedAttrName<Double> asDouble() {
+        return as(Double.class);
+    }
+
+    public TypedAttrName<Boolean> asBool() {
+        return as(Boolean.class);
     }
 }

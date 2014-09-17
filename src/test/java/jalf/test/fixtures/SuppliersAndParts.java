@@ -2,24 +2,25 @@ package jalf.test.fixtures;
 
 import jalf.AttrName;
 import jalf.Relation;
+import jalf.TypedAttrName;
 
 import static jalf.DSL.*;
 
 public class SuppliersAndParts {
 
-    public static final AttrName SID = attr("sid");
-    public static final AttrName NAME = attr("name");
-    public static final AttrName CITY = attr("city");
-    public static final AttrName STATUS = attr("status");
+    public static final TypedAttrName<String> SID = attr("sid", String.class);
+    public static final TypedAttrName<String> NAME = attr("name", String.class);
+    public static final TypedAttrName<String> CITY = attr("city", String.class);
+    public static final TypedAttrName<Integer> STATUS = attr("status", Integer.class);
 
-    public static final AttrName PID = attr("pid");
-    public static final AttrName COLOR = attr("color");
-    public static final AttrName WEIGHT = attr("weight");
+    public static final TypedAttrName<String> PID = attr("pid", String.class);
+    public static final TypedAttrName<String> COLOR = attr("color", String.class);
+    public static final TypedAttrName<Double> WEIGHT = attr("weight", Double.class);
 
-    public static final AttrName QTY = attr("qty");
+    public static final TypedAttrName<Integer> QTY = attr("qty", Integer.class);
 
-    public static final AttrName SUPPLIER_ID = attr("supplier_id");
-    public static final AttrName LIVES_IN = attr("lives_in");
+    public static final TypedAttrName<String> SUPPLIER_ID = attr("supplier_id", String.class);
+    public static final TypedAttrName<String> LIVES_IN = attr("lives_in", String.class);
 
     public static Relation suppliers() {
         return relation(

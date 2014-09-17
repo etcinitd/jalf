@@ -2,13 +2,17 @@ package jalf;
 
 /**
  */
-class TypedAttrName<T> extends AttrName {
+public class TypedAttrName<T> extends AttrName {
     private AttrName delegate;
     private Class<T> type;
 
     TypedAttrName(AttrName attrName, Class<T> type) {
         super(attrName.getName());
-        delegate = attrName;
+        // always use the root delegate
+        if (attrName instanceof TypedAttrName)
+            delegate = ((TypedAttrName) attrName).delegate;
+        else
+            delegate = attrName;
         this.type = type;
     }
 
@@ -27,16 +31,6 @@ class TypedAttrName<T> extends AttrName {
     }
 
     @Override
-    public String toString() {
-        return delegate.toString();
-    }
-
-    @Override
-    public TypedAttrName<String> asStr() {
-        return delegate.asStr();
-    }
-
-    @Override
     public String getName() {
         return delegate.getName();
     }
@@ -44,5 +38,15 @@ class TypedAttrName<T> extends AttrName {
     @Override
     public int compareTo(AttrName o) {
         return delegate.compareTo(o);
+    }
+
+    @Override
+    public <T> TypedAttrName<T> as(Class<T> type) {
+        return new TypedAttrName<>(delegate, type);
+    }
+
+    @Override
+    public String toString() {
+        return "attr(\"" + getName() + "\", " + type.getSimpleName() + ".class)";
     }
 }
