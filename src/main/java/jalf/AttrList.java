@@ -19,11 +19,11 @@ import static java.util.Collections.unmodifiableSortedSet;
  * Instances of this class can be obtained either through factory methods or
  * through JAlf's DSL.
  */
-public class AttrList implements Iterable<AttrName> {
+public class AttrList implements Iterable<AttrName<?>> {
 
-    private SortedSet<AttrName> names;
+    private SortedSet<AttrName<?>> names;
 
-    private AttrList(SortedSet<AttrName> names){
+    private AttrList(SortedSet<AttrName<?>> names){
         this.names = unmodifiableSortedSet(names);
     }
 
@@ -34,8 +34,8 @@ public class AttrList implements Iterable<AttrName> {
      * @param attrNames list of attribute names
      * @return the built attribute list
      */
-    public static AttrList attrs(AttrName... attrNames) {
-        SortedSet<AttrName> set = Stream.of(attrNames)
+    public static AttrList attrs(AttrName<?>... attrNames) {
+        SortedSet<AttrName<?>> set = Stream.of(attrNames)
             .distinct()
             .collect(Collectors.toCollection(TreeSet::new));
         return new AttrList(set);
@@ -49,7 +49,7 @@ public class AttrList implements Iterable<AttrName> {
      * @return the built attribute list
      */
     public static AttrList attrs(String... attrNames) {
-        SortedSet<AttrName> set = Stream.of(attrNames)
+        SortedSet<AttrName<?>> set = Stream.of(attrNames)
             .distinct()
             .map(AttrName::attr)
             .collect(Collectors.toCollection(TreeSet::new));
@@ -57,7 +57,7 @@ public class AttrList implements Iterable<AttrName> {
     }
 
     @Override
-    public Iterator<AttrName> iterator() {
+    public Iterator<AttrName<?>> iterator() {
         return names.iterator();
     }
 

@@ -12,7 +12,7 @@ import static jalf.util.ValidationUtils.validateNotNull;
  *
  * Instances of this class can be obtained using the `attr` factory method.
  */
-public class AttrName implements Comparable<AttrName> {
+public class AttrName<T> implements Comparable<AttrName<T>> {
 
     private String name;
 
@@ -27,9 +27,14 @@ public class AttrName implements Comparable<AttrName> {
      * @param name of the attribute
      * @return an AttrName instance for `name`
      */
-    public static AttrName attr(String name) {
+    public static AttrName<?> attr(String name) {
         // TODO use a concurrent WeakHashMap to keep immutable AttrName(s)
-        return new AttrName(name);
+        return new AttrName<Object>(name);
+    }
+
+    public static <C> AttrName<C> attr(String name, Class<C> type) {
+        // TODO use a concurrent WeakHashMap to keep immutable AttrName(s)
+        return new AttrName<C>(name);
     }
 
     public String getName() {
@@ -37,7 +42,7 @@ public class AttrName implements Comparable<AttrName> {
     }
 
     @Override
-    public int compareTo(AttrName o) {
+    public int compareTo(AttrName<T> o) {
         return name.compareTo(o.name);
     }
 
@@ -52,7 +57,7 @@ public class AttrName implements Comparable<AttrName> {
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
-        AttrName attrName = (AttrName) o;
+        AttrName<?> attrName = (AttrName<?>) o;
         return name.equals(attrName.name);
     }
 

@@ -24,10 +24,10 @@ public class RenameTest {
 
     @Test
     public void testItSupportsPrefixRenaming() {
-        AttrName S_SID = attr("s_sid");
-        AttrName S_NAME = attr("s_name");
-        AttrName S_STATUS = attr("s_status");
-        AttrName S_CITY = attr("s_city");
+        AttrName<String> S_SID = attr("s_sid", String.class);
+        AttrName<String> S_NAME = attr("s_name", String.class);
+        AttrName<Integer> S_STATUS = attr("s_status", Integer.class);
+        AttrName<String> S_CITY = attr("s_city", String.class);
         Relation expected = relation(
             tuple(S_SID, "S1", S_NAME, "Smith", S_STATUS, 20, S_CITY, "London")
         );
@@ -37,10 +37,10 @@ public class RenameTest {
 
     @Test
     public void testItSupportsSuffixRenaming() {
-        AttrName SID_S = attr("sid_s");
-        AttrName NAME_S = attr("name_s");
-        AttrName STATUS_S = attr("status_s");
-        AttrName CITY_S = attr("city_s");
+        AttrName<String> SID_S = attr("sid_s", String.class);
+        AttrName<String> NAME_S = attr("name_s", String.class);
+        AttrName<Integer> STATUS_S = attr("status_s", Integer.class);
+        AttrName<String> CITY_S = attr("city_s", String.class);
         Relation expected = relation(
             tuple(SID_S, "S1", NAME_S, "Smith", STATUS_S, 20, CITY_S, "London")
         );

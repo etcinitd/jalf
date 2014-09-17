@@ -7,11 +7,11 @@ import org.junit.Test;
 
 public class RenamingTest {
 
-    AttrName sid = attr("sid");
-    AttrName ssid = attr("ssid");
-    AttrName name = attr("name");
-    AttrName sname = attr("sname");
-    AttrName city = attr("city");
+    AttrName<String> sid = attr("sid", String.class);
+    AttrName<String> ssid = attr("ssid", String.class);
+    AttrName<String> name = attr("name", String.class);
+    AttrName<String> sname = attr("sname", String.class);
+    AttrName<String> city = attr("city", String.class);
 
     @Test
     public void testItSupportsExtensionRenaming() {
@@ -28,7 +28,7 @@ public class RenamingTest {
 
     @Test
     public void testItSupportsIntensionRenaming() {
-        AttrName SID = attr("SID");
+        AttrName<?> SID = attr("SID");
         Renaming r = Renaming.intension(a -> attr(a.toString().toUpperCase()));
         assertEquals(r.apply(sid), SID);
     }

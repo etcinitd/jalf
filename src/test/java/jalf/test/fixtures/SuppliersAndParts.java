@@ -7,19 +7,19 @@ import static jalf.DSL.*;
 
 public class SuppliersAndParts {
 
-    public static final AttrName SID = attr("sid");
-    public static final AttrName NAME = attr("name");
-    public static final AttrName CITY = attr("city");
-    public static final AttrName STATUS = attr("status");
+    public static final AttrName<String> SID = attr("sid", String.class);
+    public static final AttrName<String> NAME = attr("name", String.class);
+    public static final AttrName<String> CITY = attr("city", String.class);
+    public static final AttrName<Integer> STATUS = attr("status", Integer.class);
 
-    public static final AttrName PID = attr("pid");
-    public static final AttrName COLOR = attr("color");
-    public static final AttrName WEIGHT = attr("weight");
+    public static final AttrName<String> PID = attr("pid", String.class);
+    public static final AttrName<String> COLOR = attr("color", String.class);
+    public static final AttrName<String> WEIGHT = attr("weight", String.class);
 
-    public static final AttrName QTY = attr("qty");
+    public static final AttrName<Integer> QTY = attr("qty", Integer.class);
 
-    public static final AttrName SUPPLIER_ID = attr("supplier_id");
-    public static final AttrName LIVES_IN = attr("lives_in");
+    public static final AttrName<String> SUPPLIER_ID = attr("supplier_id", String.class);
+    public static final AttrName<String> LIVES_IN = attr("lives_in", String.class);
 
     public static Relation suppliers() {
         return relation(

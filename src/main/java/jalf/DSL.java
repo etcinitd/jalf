@@ -10,13 +10,17 @@ public class DSL {
 
     // AttrName
 
-    public static AttrName attr(String attr){
+    public static AttrName<?> attr(String attr){
         return AttrName.attr(attr);
+    }
+
+    public static <T> AttrName<T> attr(String attr, Class<T> type){
+        return AttrName.attr(attr, type);
     }
 
     // AttrList
 
-    public static AttrList attrs(AttrName... attrNames) {
+    public static AttrList attrs(AttrName<?>... attrNames) {
         return AttrList.attrs(attrNames);
     }
 
@@ -26,7 +30,7 @@ public class DSL {
 
     // Renaming
 
-    public static Renaming renaming(AttrName... namePairs) {
+    public static Renaming renaming(AttrName<?>... namePairs) {
         return Renaming.extension(namePairs);
     }
 
@@ -68,6 +72,12 @@ public class DSL {
 
     public static Relation restrict(Relation relation, java.util.function.Predicate<Tuple> fn) {
         return restrict(relation, Predicate.java(fn));
+    }
+
+    public static <T> Relation restrict(Relation relation, AttrName<T> name, java.util.function.Predicate<T> fn) {
+        @SuppressWarnings("unchecked")
+        java.util.function.Predicate<Tuple> tfn = (t -> fn.test((T)t.get(name)));
+        return restrict(relation, tfn);
     }
 
 }
