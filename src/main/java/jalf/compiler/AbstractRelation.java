@@ -67,7 +67,7 @@ public abstract class AbstractRelation implements Relation {
      *    `equals(Relation)` method.
      * 2. SetMemoryRelation implements two strategies:
      *    2.1 against another set-based (through underlying collection equality)
-     *    2.2 against an arbitrary stream (through tuple inclusion).
+     *    2.2 against another relation (through memory reload).
      * 3. Operator implements two strategies too:
      *    3.1 delegates to the in-memory `other` relation if it is one
      *    3.2 loads itself into memory to make such a delegate call.
@@ -75,9 +75,8 @@ public abstract class AbstractRelation implements Relation {
      * TODO: The current strategy is not optimal at all, even if it basically
      * works. Possible optimizations include
      *
-     * 1. loading the smallest relation into memory in strategy 3.2) above.
-     * 2. implement comparison of ordered streams instead of 3.2.
-     * 3. avoid the delegation complexity by extracting equals responsibility
+     * 1. implement comparison of ordered streams instead of 2.2. and 3.2.
+     * 2. avoid the delegation complexity by extracting equals responsibility
      *    to another abstraction (?)
      */
     public boolean equals(Object other) {

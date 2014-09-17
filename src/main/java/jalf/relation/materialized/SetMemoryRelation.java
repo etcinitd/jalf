@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collector;
-import java.util.stream.Stream;
 
 import static jalf.util.CollectionUtils.setOf;
 
@@ -42,14 +41,9 @@ public class SetMemoryRelation extends MemoryRelation {
     }
 
     public boolean equals(Relation other) {
-        if (other instanceof SetMemoryRelation)
-            return equals((SetMemoryRelation)other);
-        else
-            return equals(other.stream());
-    }
-
-    public boolean equals(Stream<Tuple> other) {
-        return other.allMatch(tuples::contains);
+        if (!(other instanceof SetMemoryRelation))
+            other = other.stream().collect(SetMemoryRelation.collector());
+        return equals((SetMemoryRelation)other);
     }
 
     public boolean equals(SetMemoryRelation other) {

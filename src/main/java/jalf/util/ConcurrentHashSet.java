@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-class ConcurrentHashSet<E>
+public class ConcurrentHashSet<E>
         implements Set<E>, Serializable {
     private final ConcurrentHashMap<E, Boolean> map;
     private transient Set<E> keySet;
