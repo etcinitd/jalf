@@ -66,4 +66,8 @@ public class DSL {
         return relation.restrict(predicate);
     }
 
+    public static Relation restrict(Relation relation, java.util.function.Predicate<Tuple> fn) {
+        return restrict(relation, Predicate.java(fn));
+    }
+
 }
