@@ -45,4 +45,16 @@ public class RestrictTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testItSupportsFriendlyNativePredicates() {
+        Relation expected = relation(
+                tuple(SID, "S3", NAME, "Blake", STATUS, 30, CITY, "Paris"),
+                tuple(SID, "S4", NAME, "Clark", STATUS, 20, CITY, "London"),
+                tuple(SID, "S5", NAME, "Adams", STATUS, 30, CITY, "Athens")
+        );
+        Relation actual = restrict(suppliers(), NAME,
+                (name -> name.indexOf('a') >= 0));
+        assertEquals(expected, actual);
+    }
+
 }

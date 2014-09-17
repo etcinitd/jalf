@@ -18,9 +18,9 @@ import static java.util.Collections.unmodifiableMap;
  * through JAlf's DSL. 
  */
 public class Tuple {
-    private Map<AttrName, Object> attrs;
+    private Map<AttrName<?>, Object> attrs;
 
-    private Tuple(Map<AttrName, Object> attrs) {
+    private Tuple(Map<AttrName<?>, Object> attrs) {
         this.attrs = unmodifiableMap(attrs);
     }
 
@@ -36,10 +36,10 @@ public class Tuple {
         validateNotNull("Parameter 'keyValuePairs' must be non-null.", keyValuePairs);
         validate("Length of key-value pairs must be even.", keyValuePairs.length % 2, 0);
 
-        Map<AttrName, Object> attrs = new HashMap<>();
+        Map<AttrName<?>, Object> attrs = new HashMap<>();
         for (int i = 0; i < keyValuePairs.length; i++) {
             Object key = keyValuePairs[i++];
-            AttrName attr = validateCast("Attribute name must be an AttrName.", key, AttrName.class);
+            AttrName<?> attr = validateCast("Attribute name must be an AttrName.", key, AttrName.class);
             Object value = keyValuePairs[i];
             attrs.put(attr, value);
         }
@@ -53,7 +53,7 @@ public class Tuple {
      * @param attrName an attribute name.
      * @return the value associated with the specified attribute name.
      */
-    public Object get(AttrName attrName) {
+    public Object get(AttrName<?> attrName) {
         return attrs.get(attrName);
     }
 
@@ -65,7 +65,7 @@ public class Tuple {
      * @return a projection of this tuple on attributes specified in `on`.
      */
     public Tuple project(AttrList on) {
-        Map<AttrName, Object> p = new HashMap<>();
+        Map<AttrName<?>, Object> p = new HashMap<>();
         on.forEach(attrName -> p.put(attrName, attrs.get(attrName)));
         return new Tuple(p);
     }
@@ -77,10 +77,10 @@ public class Tuple {
      * @return the renamed tuple.
      */
     public Tuple rename(Renaming r) {
-        Map<AttrName, Object> renamed = new HashMap<>();
+        Map<AttrName<?>, Object> renamed = new HashMap<>();
         attrs.entrySet().forEach(attribute -> {
-            AttrName attrName = attribute.getKey();
-            AttrName as = r.apply(attrName);
+            AttrName<?> attrName = attribute.getKey();
+            AttrName<?> as = r.apply(attrName);
             renamed.put(as, attribute.getValue());
         });
         return new Tuple(renamed);
@@ -102,7 +102,7 @@ public class Tuple {
     @Override
     public String toString() {
         String result = "tuple(";
-        for (Map.Entry<AttrName, Object> entry : attrs.entrySet()) {
+        for (Map.Entry<AttrName<?>, Object> entry : attrs.entrySet()) {
             if (result.length() > 6)
                 result += ", ";
             result += '"' + entry.getKey().getName() + '"';

@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  * by making all pairs explicit) or by intension (i.e. using an arbitrary
  * function). Various static factory methods provide instances of this class.
  */
-public abstract class Renaming implements UnaryOperator<AttrName> {
+public abstract class Renaming implements UnaryOperator<AttrName<?>> {
 
     // DSL information contracts
 
@@ -30,7 +30,7 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
      * @param attrNames before/after mapping of attribute name renaming. 
      * @return a Renaming instance implementing the total function.
      */
-    public static Renaming extension(Map<AttrName, AttrName> attrNames) {
+    public static Renaming extension(Map<AttrName<?>, AttrName<?>> attrNames) {
         validateNotNull("Parameter 'attrNames' must be non-null.", attrNames);
 
         return new Extension(attrNames);
@@ -43,13 +43,13 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
      * @param attrNames a sequence of (before, after) attribute names.
      * @return a Renaming instance implementing the total function.
      */
-    public static Renaming extension(List<AttrName> attrNames) {
+    public static Renaming extension(List<AttrName<?>> attrNames) {
         validateNotNull("Parameter 'attrNames' must be non-null.", attrNames);
 
-        Map<AttrName, AttrName> renamingMap = new HashMap<>();
+        Map<AttrName<?>, AttrName<?>> renamingMap = new HashMap<>();
         for (int i = 0; i < attrNames.size(); i++) {
-            AttrName currentName = attrNames.get(i++);
-            AttrName mappedName = attrNames.get(i);
+            AttrName<?> currentName = attrNames.get(i++);
+            AttrName<?> mappedName = attrNames.get(i);
             renamingMap.put(currentName, mappedName);
         }
         return extension(renamingMap);
@@ -58,10 +58,10 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
     /**
      * Convenient shortcut over `explicit(List<AttrName>)`.
      */
-    public static Renaming extension(AttrName...attrNames) {
+    public static Renaming extension(AttrName<?>... attrNames) {
         validateNotNull("Parameter 'attrNames' must be non-null.", attrNames);
 
-        List<AttrName> attrs = Stream.of(attrNames)
+        List<AttrName<?>> attrs = Stream.of(attrNames)
                 .collect(Collectors.toList());
         return extension(attrs);
     }
@@ -69,10 +69,10 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
     /**
      * Convenient shortcut over `explicit(AttrName[])`.
      */
-    public static Renaming extension(String...attrNames) {
+    public static Renaming extension(String... attrNames) {
         validateNotNull("Parameter 'attrNames' must be non-null.", attrNames);
 
-        List<AttrName> attrs = Stream.of(attrNames)
+        List<AttrName<?>> attrs = Stream.of(attrNames)
                 .map(AttrName::attr)
                 .collect(Collectors.toList());
         return extension(attrs);
@@ -84,7 +84,7 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
      * @param fn a total function from AttrName -> AttrName.
      * @return A decoration of `fn` as a proper Renaming instance.
      */
-    public static Renaming intension(UnaryOperator<AttrName> fn) {
+    public static Renaming intension(UnaryOperator<AttrName<?>> fn) {
         validateNotNull("Parameter 'fn' must be non-null.", fn);
 
         if (fn instanceof Renaming) return (Renaming) fn;
@@ -119,14 +119,14 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
 
     static class Extension extends Renaming {
 
-        private Map<AttrName, AttrName> renamings;
+        private Map<AttrName<?>, AttrName<?>> renamings;
 
-        Extension(Map<AttrName, AttrName> renamings) {
+        Extension(Map<AttrName<?>, AttrName<?>> renamings) {
             this.renamings = unmodifiableMap(renamings);
         }
 
         @Override
-        public AttrName apply(AttrName t) {
+        public AttrName<?> apply(AttrName<?> t) {
             if (renamings.containsKey(t))
                 return renamings.get(t);
             else
@@ -152,14 +152,14 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
 
     static class Intension extends Renaming {
 
-        private UnaryOperator<AttrName> fn;
+        private UnaryOperator<AttrName<?>> fn;
 
-        Intension(UnaryOperator<AttrName> fn) {
+        Intension(UnaryOperator<AttrName<?>> fn) {
             this.fn = fn;
         }
 
         @Override
-        public AttrName apply(AttrName t) {
+        public AttrName<?> apply(AttrName<?> t) {
             return fn.apply(t);
         }
 

@@ -25,7 +25,7 @@ public class Eq extends Predicate {
 
     private Object getFor(Object what, Tuple tuple) {
         if (what instanceof AttrName)
-            return tuple.get((AttrName)what);
+            return tuple.get((AttrName<?>)what);
         else
             return what;
     }
