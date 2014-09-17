@@ -10,7 +10,7 @@ public class DSL {
 
     // AttrName
 
-    public static AttrName attr(String attr){
+    public static AttrName attr(String attr) {
         return AttrName.attr(attr);
     }
 
@@ -70,4 +70,9 @@ public class DSL {
         return restrict(relation, Predicate.java(fn));
     }
 
+    public static <T> Relation restrict(Relation relation, TypedAttrName<T> name, java.util.function.Predicate<T> fn) {
+        @SuppressWarnings("unchecked")
+        java.util.function.Predicate<Tuple> tfn = (t -> fn.test((T) t.get(name)));
+        return restrict(relation, tfn);
+    }
 }

@@ -16,7 +16,7 @@ public class AttrName implements Comparable<AttrName> {
 
     private String name;
 
-    private AttrName(String name) {
+    AttrName(String name) {
         validateNotNull("Parameter 'name' must be non-null.", name);
         this.name = name;
     }
@@ -61,4 +61,11 @@ public class AttrName implements Comparable<AttrName> {
         return "attr(\"" + name + "\"";
     }
 
+    public TypedAttrName<String> asStr() {
+        return new TypedAttrName<>(this, String.class);
+    }
+
+    public <T> TypedAttrName<T> as(Class<T> type) {
+        return new TypedAttrName<>(this, type);
+    }
 }
