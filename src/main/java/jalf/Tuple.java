@@ -2,7 +2,6 @@ package jalf;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.UnaryOperator;
 
 import static jalf.util.ValidationUtils.*;
 import static java.util.Collections.unmodifiableMap;
@@ -10,37 +9,74 @@ import static java.util.Collections.unmodifiableMap;
 /**
  * A tuple is an immutable set of attributes (i.e. name value pairs), with
  * no two pairs having the same name.
+ *
+ * This class implements the tuple abstraction in an immutable way. Methods
+ * implementing the tuple algebra always compute a new Tuple instance without
+ * modifying the receiver.
+ *
+ * Instances of this class can be obtained through static factory methods or
+ * through JAlf's DSL. 
  */
 public class Tuple {
     private Map<AttrName, Object> attrs;
 
-    public Tuple(Map<AttrName, Object> attrs) {
+    private Tuple(Map<AttrName, Object> attrs) {
         this.attrs = unmodifiableMap(attrs);
     }
 
-    public Tuple(Object... keyValuePairs) {
+    /**
+     * Builds a tuple from a list of (attribute name, value) pairs.
+     *
+     * @pre keyValuePairs must have an even size. Odd elements must all be
+     * attribute names.
+     * @param keyValuePairs the list of pairs to convert to a tuple.
+     * @return factored tuple.
+     */
+    public static Tuple varargs(Object... keyValuePairs) {
         validateNotNull("Parameter 'keyValuePairs' must be non-null.", keyValuePairs);
         validate("Length of key-value pairs must be even.", keyValuePairs.length % 2, 0);
-        attrs = new HashMap<>();
-        if (keyValuePairs.length == 0) {
-            return;
-        }
 
+        Map<AttrName, Object> attrs = new HashMap<>();
         for (int i = 0; i < keyValuePairs.length; i++) {
             Object key = keyValuePairs[i++];
             AttrName attr = validateCast("Attribute name must be an AttrName.", key, AttrName.class);
             Object value = keyValuePairs[i];
             attrs.put(attr, value);
         }
+        return new Tuple(attrs);
     }
 
+    /**
+     * Returns the value associated to an attribute name.
+     *
+     * @pre attrName must belong to tuple's attributes.
+     * @param attrName an attribute name.
+     * @return the value associated with the specified attribute name.
+     */
+    public Object get(AttrName attrName) {
+        return attrs.get(attrName);
+    }
+
+    /**
+     * Returns a projection of this tuple on some of its attributes.
+     *
+     * @pre `on` must be a subset of this tuple's attributes.
+     * @param on a list of attributes to project on.
+     * @return a projection of this tuple on attributes specified in `on`.
+     */
     public Tuple project(AttrList on) {
         Map<AttrName, Object> p = new HashMap<>();
         on.forEach(attrName -> p.put(attrName, attrs.get(attrName)));
         return new Tuple(p);
     }
 
-    public Tuple rename(UnaryOperator<AttrName> r) {
+    /**
+     * Returns a new tuple by renaming some attributes.
+     *
+     * @param r renaming function mapping old to new attribute names.
+     * @return the renamed tuple.
+     */
+    public Tuple rename(Renaming r) {
         Map<AttrName, Object> renamed = new HashMap<>();
         attrs.entrySet().forEach(attribute -> {
             AttrName attrName = attribute.getKey();
@@ -48,10 +84,6 @@ public class Tuple {
             renamed.put(as, attribute.getValue());
         });
         return new Tuple(renamed);
-    }
-
-    public boolean eq(AttrName attrName, Object value) {
-        return attrs.get(attrName).equals(value);
     }
 
     @Override

@@ -14,6 +14,6 @@ public class Eq extends Predicate {
 
     @Override
     public boolean test(Tuple tuple) {
-        return tuple.eq(attrName, value);
+        return tuple.get(attrName).equals(value);
     }
 }
