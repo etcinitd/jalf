@@ -1,7 +1,5 @@
 package jalf;
 
-import org.w3c.dom.Attr;
-
 import static jalf.util.ValidationUtils.validateNotNull;
 
 /**

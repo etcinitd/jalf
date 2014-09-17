@@ -41,7 +41,7 @@ public class TypedAttrName<T> extends AttrName {
     }
 
     @Override
-    public <T> TypedAttrName<T> as(Class<T> type) {
+    public <U> TypedAttrName<U> as(Class<U> type) {
         return new TypedAttrName<>(delegate, type);
     }
 

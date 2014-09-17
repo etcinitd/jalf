@@ -1,6 +1,5 @@
 package jalf.test.fixtures;
 
-import jalf.AttrName;
 import jalf.Relation;
 import jalf.TypedAttrName;
 
