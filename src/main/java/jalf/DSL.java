@@ -1,7 +1,6 @@
 package jalf;
 
-import jalf.predicate.Among;
-import jalf.predicate.Eq;
+import jalf.predicate.*;
 import jalf.relation.materialized.SetMemoryRelation;
 
 /**
@@ -41,12 +40,38 @@ public class DSL {
 
     // Predicate
 
+    public static Predicate among(AttrName val, Iterable<?> vals) {
+        return new Among(val, vals);
+    }
+
     public static Predicate eq(Object left, Object right) {
         return new Eq(left, right);
     }
 
-    public static Predicate among(AttrName val, Iterable<?> vals) {
-        return new Among(val, vals);
+    //TODO Is there a clean way to make Comparable predicates more Java type-safe?
+
+    @SuppressWarnings("unchecked")
+    public static Predicate gt(Comparable<?> left, Comparable<?> right) {
+        return new Gt((Comparable<Object>) left, (Comparable<Object>) right);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Predicate gte(Comparable<?> left, Comparable<?> right) {
+        return new Gte((Comparable<Object>) left, (Comparable<Object>) right);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Predicate lt(Comparable<?> left, Comparable<?> right) {
+        return new Lt((Comparable<Object>) left, (Comparable<Object>) right);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Predicate lte(Comparable<?> left, Comparable<?> right) {
+        return new Lte((Comparable<Object>) left, (Comparable<Object>) right);
+    }
+
+    public static Predicate neq(Object left, Object right) {
+        return new Neq(left, right);
     }
 
     // Tuple

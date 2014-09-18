@@ -1,9 +1,5 @@
 package jalf;
 
-import static jalf.AttrName.attr;
-import static jalf.util.ValidationUtils.validateNotNull;
-import static java.util.Collections.unmodifiableMap;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +7,10 @@ import java.util.Map;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static jalf.AttrName.attr;
+import static jalf.util.ValidationUtils.validateNotNull;
+import static java.util.Collections.unmodifiableMap;
 
 /**
  * Captures the renaming of some attribute names.
