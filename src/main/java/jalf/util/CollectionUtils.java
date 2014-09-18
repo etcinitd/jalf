@@ -3,6 +3,7 @@ package jalf.util;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static java.util.Collections.*;
 
@@ -52,4 +53,11 @@ public final class CollectionUtils {
     public static <E> ConcurrentHashSet<E> newConcurrentHashSet() {
         return new ConcurrentHashSet<>();
     }
-}
+
+    public static <T> Stream<T> streamOf(Iterable<T> it) {
+        return StreamSupport.stream(it.spliterator(), false);
+    }
+
+    public static <T> Stream<T> parallelStreamOf(Iterable<T> it) {
+        return StreamSupport.stream(it.spliterator(), true);
+    }}

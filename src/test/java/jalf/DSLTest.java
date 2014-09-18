@@ -10,7 +10,6 @@ import static org.junit.Assert.assertEquals;
  * @author amirm
  */
 public class DSLTest {
-    // TODO restrict, join
 
     @Test
     public void testEqualsAndHashCode() {
@@ -62,7 +61,4 @@ public class DSLTest {
 
         assertEquals(expected, actual);
     }
-
-
-
 }

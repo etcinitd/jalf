@@ -1,5 +1,6 @@
 package jalf;
 
+import jalf.predicate.Among;
 import jalf.predicate.Eq;
 import jalf.relation.materialized.SetMemoryRelation;
 
@@ -42,6 +43,10 @@ public class DSL {
 
     public static Predicate eq(Object left, Object right) {
         return new Eq(left, right);
+    }
+
+    public static Predicate among(AttrName val, Iterable<?> vals) {
+        return new Among(val, vals);
     }
 
     // Tuple

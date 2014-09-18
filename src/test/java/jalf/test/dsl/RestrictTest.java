@@ -1,12 +1,12 @@
 package jalf.test.dsl;
 
-import jalf.*;
-
+import jalf.Relation;
 import org.junit.Test;
 
 import static jalf.DSL.*;
 import static jalf.test.fixtures.SuppliersAndParts.*;
-import static org.junit.Assert.*;
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
 
 public class RestrictTest {
 
@@ -65,6 +65,20 @@ public class RestrictTest {
         );
         Relation actual = restrict(suppliers(), STATUS.asInt(),
                 status -> status == 30);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testItSupportsAttributeAmongIterable() {
+        Relation expected = relation(
+                tuple(SID, "S1", NAME, "Smith", STATUS, 20, CITY, "London"),
+                tuple(SID, "S2", NAME, "Jones", STATUS, 10, CITY, "Paris"),
+                tuple(SID, "S3", NAME, "Blake", STATUS, 30, CITY, "Paris"),
+                tuple(SID, "S4", NAME, "Clark", STATUS, 20, CITY, "London")
+        );
+
+        Relation actual = restrict(suppliers(), among(CITY, asList("London", "Paris")));
+
         assertEquals(expected, actual);
     }
 }
