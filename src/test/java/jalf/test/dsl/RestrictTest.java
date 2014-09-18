@@ -167,29 +167,6 @@ public class RestrictTest {
     }
 
     @Test
-    public void testItSupportsFriendlyNativePredicates() {
-        Relation expected = relation(
-                tuple(SID, "S3", NAME, "Blake", STATUS, 30, CITY, "Paris"),
-                tuple(SID, "S4", NAME, "Clark", STATUS, 20, CITY, "London"),
-                tuple(SID, "S5", NAME, "Adams", STATUS, 30, CITY, "Athens")
-        );
-        Relation actual = restrict(suppliers(), NAME,
-                name -> name.indexOf('a') >= 0);
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void testItSupportsTwoTypeCastsForNativePredicates() {
-        Relation expected = relation(
-                tuple(SID, "S3", NAME, "Blake", STATUS, 30, CITY, "Paris"),
-                tuple(SID, "S5", NAME, "Adams", STATUS, 30, CITY, "Athens")
-        );
-        Relation actual = restrict(suppliers(), STATUS.asInt(),
-                status -> status == 30);
-        assertEquals(expected, actual);
-    }
-
-    @Test
     public void testItSupportsAttributeAmongIterable() {
         Relation expected = relation(
                 tuple(SID, "S1", NAME, "Smith", STATUS, 20, CITY, "London"),

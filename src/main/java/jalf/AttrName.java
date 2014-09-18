@@ -32,11 +32,6 @@ public class AttrName implements Comparable<AttrName> {
         return new AttrName(name);
     }
 
-    public static <T> TypedAttrName<T> attr(String name, Class<T> type) {
-        // TODO use a concurrent WeakHashMap to keep immutable TypedAttrName(s)
-        return new TypedAttrName<>(attr(name), type);
-    }
-
     public String getName() {
         return name;
     }
@@ -64,33 +59,5 @@ public class AttrName implements Comparable<AttrName> {
     @Override
     public String toString() {
         return "attr(\"" + name + "\")";
-    }
-
-    public <T> TypedAttrName<T> as(Class<T> type) {
-        return attr(name, type);
-    }
-
-    public TypedAttrName<String> asStr() {
-        return as(String.class);
-    }
-
-    public TypedAttrName<Integer> asInt() {
-        return as(Integer.class);
-    }
-
-    public TypedAttrName<Long> asLong() {
-        return as(Long.class);
-    }
-
-    public TypedAttrName<Float> asFloat() {
-        return as(Float.class);
-    }
-
-    public TypedAttrName<Double> asDouble() {
-        return as(Double.class);
-    }
-
-    public TypedAttrName<Boolean> asBool() {
-        return as(Boolean.class);
     }
 }

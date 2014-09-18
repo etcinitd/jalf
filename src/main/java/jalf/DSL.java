@@ -14,10 +14,6 @@ public class DSL {
         return AttrName.attr(attr);
     }
 
-    public static <T> TypedAttrName<T> attr(String attr, Class<T> type) {
-        return AttrName.attr(attr, type);
-    }
-
     // AttrList
 
     public static AttrList attrs(AttrName... attrNames) {
@@ -102,12 +98,5 @@ public class DSL {
 
     public static Relation restrict(Relation relation, java.util.function.Predicate<Tuple> fn) {
         return restrict(relation, Predicate.java(fn));
-    }
-
-    public static <T> Relation restrict(Relation relation, TypedAttrName<T> name, java.util.function.Predicate<T> fn) {
-        // TODO Explicit check for standard eligible type casts, such as Integer to Long?
-        @SuppressWarnings("unchecked")
-        java.util.function.Predicate<Tuple> tfn = t -> fn.test((T) t.get(name));
-        return restrict(relation, tfn);
     }
 }
