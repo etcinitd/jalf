@@ -17,6 +17,7 @@ public class Among extends Predicate {
 
     @Override
     public boolean test(Tuple tuple) {
-        return parallelStreamOf(vals).anyMatch(val -> val.equals(tuple.get(attrName)));
+        Object attrVal = tuple.get(attrName);
+        return parallelStreamOf(vals).anyMatch(val -> val.equals(attrVal));
     }
 }
