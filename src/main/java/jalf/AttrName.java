@@ -32,6 +32,23 @@ public class AttrName implements Comparable<AttrName> {
         return new AttrName(name);
     }
 
+    /**
+     * Dress `obj` as an attribute name, applying the necessary coercions.
+     *
+     * @pre the actual type of `obj` must match one the factory methods or
+     *      be an AttrName already.
+     * @param obj an object to dress as an attribute name.
+     * @return obj coerced as an attribute name
+     * @throws IllegalArgumentException if coercion fails.
+     */
+    public static AttrName dress(Object obj) {
+        if (obj instanceof AttrName)
+            return (AttrName) obj;
+        if (obj instanceof String)
+            return attr((String)obj);
+        throw new IllegalArgumentException("Unable to dress `" + obj + "` as AttrName");
+    }
+
     public String getName() {
         return name;
     }

@@ -38,8 +38,7 @@ public class Tuple {
 
         Map<AttrName, Object> attrs = new HashMap<>();
         for (int i = 0; i < keyValuePairs.length; i++) {
-            Object key = keyValuePairs[i++];
-            AttrName attr = validateCast("Attribute name must be an AttrName.", key, AttrName.class);
+            AttrName attr = AttrName.dress(keyValuePairs[i++]);
             Object value = keyValuePairs[i];
             attrs.put(attr, value);
         }
