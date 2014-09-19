@@ -56,6 +56,10 @@ public class AttrList implements Iterable<AttrName> {
         return new AttrList(set);
     }
 
+    public boolean contains(AttrName name) {
+        return names.contains(name);
+    }
+
     @Override
     public Iterator<AttrName> iterator() {
         return names.iterator();
