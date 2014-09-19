@@ -2,7 +2,6 @@ package jalf.type;
 
 import jalf.AttrName;
 import jalf.Type;
-import jalf.TypedAttrName;
 
 public class HeadingBasedType {
 
@@ -17,10 +16,6 @@ public class HeadingBasedType {
     }
 
     public Type<?> getTypeOf(AttrName attrName) {
-        return heading.getTypeOf(attrName);
-    }
-
-    public <T> Type<T> getTypeOf(TypedAttrName<T> attrName) {
         return heading.getTypeOf(attrName);
     }
 
