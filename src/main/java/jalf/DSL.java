@@ -28,6 +28,12 @@ public class DSL {
         return AttrList.attrs(attrNames);
     }
 
+    // Heading and Types
+
+    public static Heading heading(Object... pairs) {
+        return Heading.varargs(pairs);
+    }
+
     // Renaming
 
     public static Renaming renaming(AttrName... namePairs) {
