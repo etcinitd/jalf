@@ -1,10 +1,13 @@
 package jalf.compiler;
 
+import jalf.AttrList;
 import jalf.Relation;
+import jalf.Renaming;
 import jalf.Tuple;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
+import jalf.type.TupleType;
 
 import java.util.stream.Stream;
 
@@ -42,16 +45,20 @@ public class Cog {
 
     /** Default compilation of `project`. */
     public Cog project(Project projection, Cog compiled){
+        AttrList on = projection.getAttributes();
+        TupleType tt = projection.getTupleType();
         Stream<Tuple> stream = compiled.stream()
-                .map(t -> t.project(projection.getAttributes()))
+                .map(t -> t.project(on, tt))
                 .distinct();
         return new Cog(projection, stream);
     }
 
     /** Default compilation of `rename`. */
     public Cog rename(Rename rename, Cog compiled){
+        Renaming renaming = rename.getRenaming();
+        TupleType tt = rename.getTupleType();
         Stream<Tuple> stream = compiled.stream()
-                .map(t -> t.rename(rename.getRenaming()));
+                .map(t -> t.rename(renaming, tt));
         return new Cog(rename, stream);
     }
 

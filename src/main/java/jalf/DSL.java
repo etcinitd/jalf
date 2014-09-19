@@ -1,9 +1,15 @@
 package jalf;
 
-import jalf.predicate.*;
+import jalf.predicate.Among;
+import jalf.predicate.Eq;
+import jalf.predicate.Gt;
+import jalf.predicate.Gte;
+import jalf.predicate.Lt;
+import jalf.predicate.Lte;
+import jalf.predicate.Neq;
 import jalf.relation.materialized.SetMemoryRelation;
+import jalf.type.Heading;
 import jalf.type.RelationType;
-import jalf.type.TupleType;
 
 import java.util.stream.Stream;
 
@@ -82,18 +88,18 @@ public class DSL {
 
     // Tuple
 
-    public static Tuple tuple(TupleType type, Object... keyValuePairs) {
-        return Tuple.varargs(keyValuePairs);
-    }
-
     public static Tuple tuple(Object... keyValuePairs) {
-        return tuple(TupleType.infer(keyValuePairs), keyValuePairs);
+        return Tuple.varargs(keyValuePairs);
     }
 
     // Relation
 
     public static Relation relation(RelationType type, Tuple... tuples) {
         return new SetMemoryRelation(type, tuples);
+    }
+
+    public static Relation relation(Heading heading, Tuple... tuples) {
+        return relation(RelationType.heading(heading), tuples);
     }
 
     public static Relation relation(Tuple... tuples) {

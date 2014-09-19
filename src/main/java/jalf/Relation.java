@@ -1,5 +1,8 @@
 package jalf;
 
+import jalf.type.RelationType;
+import jalf.type.TupleType;
+
 import java.util.stream.Stream;
 
 /**
@@ -19,6 +22,20 @@ import java.util.stream.Stream;
  * needed for JAlf' compiler infrastructure to work.
  */
 public interface Relation {
+
+    /**
+     * Returns the type of this relation.
+     *
+     * @return the type of the relation.
+     */
+    public RelationType getType();
+
+    /**
+     * Returns the type of the tuples belonging to this relation.
+     *
+     * @return the type of the relation's tuples
+     */
+    public TupleType getTupleType();
 
     /**
      * Projects this relation on a subset of its attributes.

@@ -15,7 +15,7 @@ public abstract class Operator extends AbstractRelation {
             return other.equals(this);
         else
             return stream()
-                .collect(MemoryRelation.collector())
+                .collect(MemoryRelation.collector(getType()))
                 .equals(other);
     }
 

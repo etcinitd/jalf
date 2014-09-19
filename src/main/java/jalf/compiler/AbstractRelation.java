@@ -4,6 +4,7 @@ import jalf.*;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
+import jalf.type.TupleType;
 
 import java.util.stream.Stream;
 
@@ -17,6 +18,18 @@ import java.util.stream.Stream;
  * compilation process.
  */
 public abstract class AbstractRelation implements Relation {
+
+    private TupleType tupleType;
+
+    @Override
+    public TupleType getTupleType() {
+        if (tupleType == null) {
+            tupleType = getType().toTupleType();
+        }
+        return tupleType;
+    }
+
+    ///
 
     @Override
     public Relation project(AttrList attributes) {

@@ -1,8 +1,10 @@
 package jalf.relation.materialized;
 
+import static jalf.util.CollectionUtils.setOf;
 import jalf.Relation;
 import jalf.Tuple;
 import jalf.compiler.Cog;
+import jalf.type.RelationType;
 import jalf.util.CollectionUtils;
 
 import java.util.Collection;
@@ -10,21 +12,26 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collector;
 
-import static jalf.util.CollectionUtils.setOf;
-
 /**
  * MemoryRelation where an actual set of tuples is used as internal
  * representation.
  */
 public class SetMemoryRelation extends MemoryRelation {
+    private RelationType type;
     private Collection<Tuple> tuples;
 
-    public SetMemoryRelation(Set<Tuple> tuples) {
+    public SetMemoryRelation(RelationType type, Set<Tuple> tuples) {
+        this.type = type;
         this.tuples = tuples;
     }
 
-    public SetMemoryRelation(Tuple[] tuples) {
-        this.tuples = setOf(tuples);
+    public SetMemoryRelation(RelationType type, Tuple[] tuples) {
+        this(type, setOf(tuples));
+    }
+
+    @Override
+    public RelationType getType() {
+        return type;
     }
 
     public Cog compile(){
@@ -42,7 +49,7 @@ public class SetMemoryRelation extends MemoryRelation {
 
     public boolean equals(Relation other) {
         if (!(other instanceof SetMemoryRelation))
-            other = other.stream().collect(SetMemoryRelation.collector());
+            other = other.stream().collect(SetMemoryRelation.collector(other.getType()));
         return equals((SetMemoryRelation)other);
     }
 
@@ -50,8 +57,10 @@ public class SetMemoryRelation extends MemoryRelation {
         return tuples.equals(other.tuples);
     }
 
-    public static Collector<Tuple, ?, Relation> collector() {
-        Function<Set<Tuple>, Relation> finisher = SetMemoryRelation::new;
+    public static Collector<Tuple, ?, Relation> collector(RelationType type) {
+        Function<Set<Tuple>, Relation> finisher = (tuples) -> {
+            return new SetMemoryRelation(type, tuples);
+        };
         return Collector.of(
                 CollectionUtils::newConcurrentHashSet,
                 Set<Tuple>::add,

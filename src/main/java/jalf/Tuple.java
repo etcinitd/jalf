@@ -1,10 +1,12 @@
 package jalf;
 
+import static jalf.util.ValidationUtils.validate;
+import static jalf.util.ValidationUtils.validateNotNull;
+import static java.util.Collections.unmodifiableMap;
+import jalf.type.TupleType;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import static jalf.util.ValidationUtils.*;
-import static java.util.Collections.unmodifiableMap;
 
 /**
  * A tuple is an immutable set of attributes (i.e. name value pairs), with
@@ -19,8 +21,10 @@ import static java.util.Collections.unmodifiableMap;
  */
 public class Tuple {
     private Map<AttrName, Object> attrs;
+    private TupleType type;
 
-    private Tuple(Map<AttrName, Object> attrs) {
+    private Tuple(TupleType type, Map<AttrName, Object> attrs) {
+        this.type = type;
         this.attrs = unmodifiableMap(attrs);
     }
 
@@ -42,7 +46,14 @@ public class Tuple {
             Object value = keyValuePairs[i];
             attrs.put(attr, value);
         }
-        return new Tuple(attrs);
+        return new Tuple(null, attrs);
+    }
+
+    public TupleType getType() {
+        if (type == null) {
+            type = TupleType.infer(attrs);
+        }
+        return type;
     }
 
     /**
@@ -63,10 +74,10 @@ public class Tuple {
      * @param on a list of attributes to project on.
      * @return a projection of this tuple on attributes specified in `on`.
      */
-    public Tuple project(AttrList on) {
+    public Tuple project(AttrList on, TupleType resultingType) {
         Map<AttrName, Object> p = new HashMap<>();
         on.forEach(attrName -> p.put(attrName, attrs.get(attrName)));
-        return new Tuple(p);
+        return new Tuple(resultingType, p);
     }
 
     /**
@@ -75,14 +86,14 @@ public class Tuple {
      * @param r renaming function mapping old to new attribute names.
      * @return the renamed tuple.
      */
-    public Tuple rename(Renaming r) {
+    public Tuple rename(Renaming r, TupleType resultingType) {
         Map<AttrName, Object> renamed = new HashMap<>();
         attrs.entrySet().forEach(attribute -> {
             AttrName attrName = attribute.getKey();
             AttrName as = r.apply(attrName);
             renamed.put(as, attribute.getValue());
         });
-        return new Tuple(renamed);
+        return new Tuple(resultingType, renamed);
     }
 
     @Override
@@ -110,4 +121,5 @@ public class Tuple {
         }
         return result + ")";
     }
+
 }

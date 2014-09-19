@@ -23,6 +23,7 @@ public class SuppliersAndParts {
 
     public static Relation suppliers() {
         return relation(
+            heading(SID, String.class, NAME, String.class, STATUS, Integer.class, CITY, String.class),
             tuple(SID, "S1", NAME, "Smith", STATUS, 20, CITY, "London"),
             tuple(SID, "S2", NAME, "Jones", STATUS, 10, CITY, "Paris"),
             tuple(SID, "S3", NAME, "Blake", STATUS, 30, CITY, "Paris"),
@@ -33,6 +34,7 @@ public class SuppliersAndParts {
 
     public static Relation parts() {
         return relation(
+            heading(PID, String.class, NAME, String.class, COLOR, String.class, WEIGHT, Float.class, CITY, String.class),
             tuple(PID, "P1", NAME, "Nut",   COLOR, "Red",   WEIGHT, 12.0, CITY, "London"),
             tuple(PID, "P2", NAME, "Bolt",  COLOR, "Green", WEIGHT, 17.0, CITY, "Paris"),
             tuple(PID, "P3", NAME, "Screw", COLOR, "Blue",  WEIGHT, 17.0, CITY, "Oslo"),
@@ -44,6 +46,7 @@ public class SuppliersAndParts {
 
     public static Relation shipments() {
         return relation(
+            heading(SID, String.class, PID, String.class, QTY, Integer.class),
             tuple(SID, "S1", PID, "P1", QTY, 300),
             tuple(SID, "S1", PID, "P2", QTY, 200),
             tuple(SID, "S1", PID, "P3", QTY, 400),

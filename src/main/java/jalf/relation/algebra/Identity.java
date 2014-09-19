@@ -2,6 +2,7 @@ package jalf.relation.algebra;
 
 import jalf.Relation;
 import jalf.compiler.Cog;
+import jalf.type.RelationType;
 
 public class Identity extends UnaryOperator {
 
@@ -12,6 +13,11 @@ public class Identity extends UnaryOperator {
     }
 
     @Override
+	public RelationType getType() {
+		return operand.getType();
+	}
+
+	@Override
     public Relation getOperand() {
         return operand;
     }
