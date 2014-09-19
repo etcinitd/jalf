@@ -2,6 +2,10 @@ package jalf;
 
 import jalf.predicate.*;
 import jalf.relation.materialized.SetMemoryRelation;
+import jalf.type.RelationType;
+import jalf.type.TupleType;
+
+import java.util.stream.Stream;
 
 /**
  * @author amirm
@@ -72,14 +76,22 @@ public class DSL {
 
     // Tuple
 
-    public static Tuple tuple(Object... keyValuePairs) {
+    public static Tuple tuple(TupleType type, Object... keyValuePairs) {
         return Tuple.varargs(keyValuePairs);
+    }
+
+    public static Tuple tuple(Object... keyValuePairs) {
+        return tuple(TupleType.infer(keyValuePairs), keyValuePairs);
     }
 
     // Relation
 
+    public static Relation relation(RelationType type, Tuple... tuples) {
+        return new SetMemoryRelation(type, tuples);
+    }
+
     public static Relation relation(Tuple... tuples) {
-        return new SetMemoryRelation(tuples);
+        return relation(RelationType.infer(Stream.of(tuples)), tuples);
     }
 
     // Relational algebra
