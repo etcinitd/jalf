@@ -1,5 +1,6 @@
 package jalf.relation.algebra;
 
+import jalf.Heading;
 import jalf.Predicate;
 import jalf.Relation;
 import jalf.compiler.Cog;
@@ -9,9 +10,8 @@ import jalf.compiler.Cog;
  */
 public class Restrict extends UnaryOperator {
 
-    private Relation operand;
-
-    private Predicate predicate;
+    private final Relation operand;
+    private final Predicate predicate;
 
     public Restrict(Relation operand, Predicate predicate) {
         this.operand = operand;
@@ -24,6 +24,11 @@ public class Restrict extends UnaryOperator {
 
     public Predicate getPredicate() {
         return predicate;
+    }
+
+    @Override
+    public Heading heading() {
+        return operand.heading();
     }
 
     @Override

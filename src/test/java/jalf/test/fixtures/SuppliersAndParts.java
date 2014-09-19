@@ -21,6 +21,9 @@ public class SuppliersAndParts {
     public static final AttrName SUPPLIER_ID = attr("supplier_id");
     public static final AttrName LIVES_IN = attr("lives_in");
 
+    public static final AttrName P_NAME = attr("p_name");
+    public static final AttrName P_CITY = attr("p_city");
+
     public static Relation suppliers() {
         return relation(
             tuple(SID, "S1", NAME, "Smith", STATUS, 20, CITY, "London"),

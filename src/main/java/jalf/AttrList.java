@@ -1,12 +1,13 @@
 package jalf;
 
-import java.util.Iterator;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static jalf.util.CollectionUtils.parallelStreamOf;
+import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableSortedSet;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A list of attributes.
@@ -31,13 +32,13 @@ public class AttrList implements Iterable<AttrName> {
      * Builds an attribute list from some attribute names.
      *
      * @pre attrNames should be distinct
-     * @param attrNames list of attribute names
+     * @param attrNames collection of attribute names
      * @return the built attribute list
      */
-    public static AttrList attrs(AttrName... attrNames) {
-        SortedSet<AttrName> set = Stream.of(attrNames)
-            .distinct()
-            .collect(Collectors.toCollection(TreeSet::new));
+    public static AttrList attrs(Iterable<AttrName> attrNames) {
+        // TODO use a concurrent WeakHashMap to keep immutable AttrList(s)
+        SortedSet<AttrName> set = parallelStreamOf(attrNames)
+                .collect(Collectors.toCollection(TreeSet::new));
         return new AttrList(set);
     }
 
@@ -48,17 +49,42 @@ public class AttrList implements Iterable<AttrName> {
      * @param attrNames list of attribute names
      * @return the built attribute list
      */
+    public static AttrList attrs(AttrName... attrNames) {
+        return attrs(asList(attrNames));
+    }
+
+    /**
+     * Builds an attribute list from some attribute names.
+     *
+     * @pre attrNames should be distinct
+     * @param attrNames list of attribute names
+     * @return the built attribute list
+     */
     public static AttrList attrs(String... attrNames) {
-        SortedSet<AttrName> set = Stream.of(attrNames)
-            .distinct()
-            .map(AttrName::attr)
-            .collect(Collectors.toCollection(TreeSet::new));
-        return new AttrList(set);
+        List<AttrName> iterable = Stream.of(attrNames)
+                .distinct()
+                .map(AttrName::attr)
+                .collect(toList());
+        return attrs(iterable);
     }
 
     @Override
     public Iterator<AttrName> iterator() {
         return names.iterator();
+    }
+
+    public boolean contains(AttrName name) {
+        return names.contains(name);
+    }
+
+    public AttrList intersect(AttrList other) {
+        Set<AttrName> common = new HashSet<>();
+        for (AttrName name : names) {
+            if (other.names.contains(name)) {
+                common.add(name);
+            }
+        }
+        return AttrList.attrs(common);
     }
 
     @Override
@@ -75,5 +101,4 @@ public class AttrList implements Iterable<AttrName> {
         AttrList other = (AttrList) obj;
         return names.equals(other.names);
     }
-
 }

@@ -1,12 +1,19 @@
 package jalf.compiler;
 
+import jalf.AttrList;
 import jalf.Relation;
 import jalf.Tuple;
+import jalf.relation.algebra.Join;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
 
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
+
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.groupingBy;
 
 /**
  * Compiled-version of a relation(al) expression, ready to be consumed.
@@ -60,5 +67,22 @@ public class Cog {
         Stream<Tuple> stream = compiled.stream()
                 .filter(t -> restrict.getPredicate().test(t));
         return new Cog(restrict, stream);
+    }
+
+    /** Default compilation of `join`. */
+    public Cog join(Join join, Cog left, Cog right) {
+        AttrList on = join.getLeft().heading().getAttrList().intersect(
+                join.getRight().heading().getAttrList());
+        Stream<Tuple> stream = join(left.stream(), right.stream(), on);
+        return new Cog(join, stream);
+    }
+
+    private Stream<Tuple> join(Stream<Tuple> leftStream, Stream<Tuple> rightStream, AttrList on) {
+        Map<Tuple, List<Tuple>> leftTuplesIndex = leftStream.collect(groupingBy(t -> t.project(on)));
+        return rightStream.flatMap(rightTuple -> {
+            Tuple rightCommon = rightTuple.project(on);
+            List<Tuple> leftTuples = leftTuplesIndex.getOrDefault(rightCommon, emptyList());
+            return leftTuples.stream().map(t -> t.join(rightTuple));
+        });
     }
 }

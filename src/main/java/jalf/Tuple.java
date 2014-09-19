@@ -1,7 +1,7 @@
 package jalf;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static jalf.util.ValidationUtils.*;
 import static java.util.Collections.unmodifiableMap;
@@ -18,10 +18,12 @@ import static java.util.Collections.unmodifiableMap;
  * through JAlf's DSL. 
  */
 public class Tuple {
-    private Map<AttrName, Object> attrs;
+    private final Map<AttrName, Object> attrs;
+    private final Heading heading;
 
     private Tuple(Map<AttrName, Object> attrs) {
-        this.attrs = unmodifiableMap(attrs);
+        this.attrs = unmodifiableMap(new ConcurrentHashMap<>(attrs));
+        this.heading = constructHeading(attrs);
     }
 
     /**
@@ -36,7 +38,7 @@ public class Tuple {
         validateNotNull("Parameter 'keyValuePairs' must be non-null.", keyValuePairs);
         validate("Length of key-value pairs must be even.", keyValuePairs.length % 2, 0);
 
-        Map<AttrName, Object> attrs = new HashMap<>();
+        Map<AttrName, Object> attrs = new ConcurrentHashMap<>();
         for (int i = 0; i < keyValuePairs.length; i++) {
             Object key = keyValuePairs[i++];
             AttrName attr = validateCast("Attribute name must be an AttrName.", key, AttrName.class);
@@ -44,6 +46,16 @@ public class Tuple {
             attrs.put(attr, value);
         }
         return new Tuple(attrs);
+    }
+
+    public Heading heading() {
+        return heading;
+    }
+
+    private Heading constructHeading(Map<AttrName, Object> attrs) {
+        Map<AttrName, AttrType> attrTypes = new ConcurrentHashMap<>();
+        attrs.forEach((name, val) -> attrTypes.put(name, AttrType.typeOf(val)));
+        return Heading.headingOf(attrTypes);
     }
 
     /**
@@ -65,7 +77,7 @@ public class Tuple {
      * @return a projection of this tuple on attributes specified in `on`.
      */
     public Tuple project(AttrList on) {
-        Map<AttrName, Object> p = new HashMap<>();
+        Map<AttrName, Object> p = new ConcurrentHashMap<>();
         on.forEach(attrName -> p.put(attrName, attrs.get(attrName)));
         return new Tuple(p);
     }
@@ -77,13 +89,19 @@ public class Tuple {
      * @return the renamed tuple.
      */
     public Tuple rename(Renaming r) {
-        Map<AttrName, Object> renamed = new HashMap<>();
+        Map<AttrName, Object> renamed = new ConcurrentHashMap<>();
         attrs.entrySet().forEach(attribute -> {
             AttrName attrName = attribute.getKey();
             AttrName as = r.apply(attrName);
             renamed.put(as, attribute.getValue());
         });
         return new Tuple(renamed);
+    }
+
+    public Tuple join(Tuple tuple) {
+        Map<AttrName, Object> joined = new ConcurrentHashMap<>(attrs);
+        joined.putAll(tuple.attrs);
+        return new Tuple(joined);
     }
 
     @Override

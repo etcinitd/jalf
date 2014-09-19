@@ -1,6 +1,7 @@
 package jalf;
 
 import jalf.predicate.*;
+import jalf.relation.algebra.Join;
 import jalf.relation.materialized.SetMemoryRelation;
 
 /**
@@ -98,5 +99,9 @@ public class DSL {
 
     public static Relation restrict(Relation relation, java.util.function.Predicate<Tuple> fn) {
         return restrict(relation, Predicate.java(fn));
+    }
+
+    public static Relation join(Relation left, Relation right) {
+        return new Join(left, right);
     }
 }

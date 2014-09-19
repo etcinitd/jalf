@@ -19,6 +19,7 @@ import java.util.stream.Stream;
  * needed for JAlf' compiler infrastructure to work.
  */
 public interface Relation {
+    Heading heading();
 
     /**
      * Projects this relation on a subset of its attributes.

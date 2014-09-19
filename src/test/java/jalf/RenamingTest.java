@@ -1,9 +1,9 @@
 package jalf;
 
-import static org.junit.Assert.assertEquals;
-import static jalf.DSL.*;
-
 import org.junit.Test;
+
+import static jalf.DSL.attr;
+import static org.junit.Assert.assertEquals;
 
 public class RenamingTest {
 

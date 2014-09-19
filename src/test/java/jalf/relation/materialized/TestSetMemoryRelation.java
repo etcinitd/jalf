@@ -1,13 +1,14 @@
 package jalf.relation.materialized;
 
-import jalf.*;
-import jalf.relation.algebra.*;
-import org.junit.*;
+import jalf.Relation;
+import jalf.relation.algebra.Identity;
+import org.junit.Test;
 
-import static jalf.DSL.*;
-import static jalf.util.CollectionUtils.*;
-import static jalf.test.fixtures.SuppliersAndParts.*;
-import static org.junit.Assert.*;
+import static jalf.DSL.tuple;
+import static jalf.test.fixtures.SuppliersAndParts.SID;
+import static jalf.util.CollectionUtils.setOf;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class TestSetMemoryRelation {
 

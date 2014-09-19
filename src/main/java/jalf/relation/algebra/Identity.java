@@ -1,11 +1,12 @@
 package jalf.relation.algebra;
 
+import jalf.Heading;
 import jalf.Relation;
 import jalf.compiler.Cog;
 
 public class Identity extends UnaryOperator {
 
-    private Relation operand;
+    private final Relation operand;
 
     public Identity(Relation operand) {
         this.operand = operand;
@@ -14,6 +15,11 @@ public class Identity extends UnaryOperator {
     @Override
     public Relation getOperand() {
         return operand;
+    }
+
+    @Override
+    public Heading heading() {
+        return operand.heading();
     }
 
     @Override

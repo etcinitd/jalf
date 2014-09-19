@@ -1,11 +1,13 @@
 package jalf.test.dsl;
 
-import jalf.*;
+import jalf.AttrName;
+import jalf.Relation;
+import jalf.Renaming;
 import org.junit.Test;
 
 import static jalf.DSL.*;
 import static jalf.test.fixtures.SuppliersAndParts.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class RenameTest {
 

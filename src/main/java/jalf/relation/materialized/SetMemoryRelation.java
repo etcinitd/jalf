@@ -1,5 +1,6 @@
 package jalf.relation.materialized;
 
+import jalf.Heading;
 import jalf.Relation;
 import jalf.Tuple;
 import jalf.compiler.Cog;
@@ -11,20 +12,32 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 
 import static jalf.util.CollectionUtils.setOf;
+import static java.util.Collections.emptyMap;
 
 /**
  * MemoryRelation where an actual set of tuples is used as internal
  * representation.
  */
 public class SetMemoryRelation extends MemoryRelation {
-    private Collection<Tuple> tuples;
+    private final Collection<Tuple> tuples;
+    private final Heading heading;
 
     public SetMemoryRelation(Set<Tuple> tuples) {
         this.tuples = tuples;
+        if (tuples.size() > 0) {
+            this.heading = tuples.iterator().next().heading();
+        } else {
+            this.heading = Heading.headingOf(emptyMap());
+        }
     }
 
     public SetMemoryRelation(Tuple[] tuples) {
-        this.tuples = setOf(tuples);
+        this(setOf(tuples));
+    }
+
+    @Override
+    public Heading heading() {
+        return heading;
     }
 
     public Cog compile(){
