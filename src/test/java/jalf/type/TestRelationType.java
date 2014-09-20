@@ -12,6 +12,13 @@ public class TestRelationType {
     RelationType type = RelationType.varargs(SID, String.class);
 
     @Test
+    public void testInfer() {
+        Relation suppliers = suppliers();
+        RelationType inferred = RelationType.infer(suppliers.stream());
+        assertEquals(suppliers.getType(), inferred);
+    }
+
+    @Test
     public void testEquals() {
         // it is equal to itself
         assertTrue(type.equals(type));
@@ -42,6 +49,22 @@ public class TestRelationType {
         assertFalse(type.contains(r));
         r = relation(tuple(SID, "S1", STATUS, 12));
         assertFalse(type.contains(r));
+    }
+
+    @Test
+    public void testProject() {
+        RelationType from = RelationType.varargs(SID, String.class, STATUS, Integer.class);
+        RelationType actual = from.project(attrs(SID));
+        RelationType expected = type;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testRename() {
+        RelationType from = RelationType.varargs(SID, String.class, STATUS, Integer.class);
+        RelationType expected = RelationType.varargs(NAME, String.class, STATUS, Integer.class);;
+        RelationType actual = from.rename(renaming(SID, NAME));
+        assertEquals(expected, actual);
     }
 
 }
