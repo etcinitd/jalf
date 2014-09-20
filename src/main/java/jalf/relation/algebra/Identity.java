@@ -13,11 +13,11 @@ public class Identity extends UnaryOperator {
     }
 
     @Override
-	public RelationType getType() {
-		return operand.getType();
-	}
+    public RelationType getType() {
+        return operand.getType();
+    }
 
-	@Override
+    @Override
     public Relation getOperand() {
         return operand;
     }
