@@ -136,4 +136,19 @@ public class Heading {
         return new Heading(renamed);
     }
 
+    @Override
+    public int hashCode() {
+        return attributes.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+        if (obj == null || !(obj instanceof Heading))
+            return false;
+        Heading other = (Heading) obj;
+        return attributes.equals(other.attributes);
+    }
+
 }
