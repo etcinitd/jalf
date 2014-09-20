@@ -14,29 +14,64 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Relation type, captures the possible types of relations.
+ *
+ * A relation type defines the 'structure' of a relation, in terms of a heading.
+ */
 public class RelationType extends HeadingBasedType implements Type<Relation> {
 
     private TupleType tupleType;
 
-    public RelationType(Heading heading) {
+    private RelationType(Heading heading) {
         super(heading);
         tupleType = TupleType.heading(heading);
     }
 
-    public static RelationType varargs(Object... args) {
-        return new RelationType(Heading.varargs(args));
-    }
-
+    /**
+     * Factors a relation type from a given heading.
+     *
+     * @param heading a heading instance.
+     * @return the factored relation type.
+     */
     public static RelationType heading(Heading heading) {
         return new RelationType(heading);
     }
 
+    /**
+     * Factors a relation type from a list of attribute (name, type) pairs.
+     *
+     * @pre pairs must have an even size. Odd elements must be attribute names,
+     * even elements must be types.
+     * @param nameTypePairs the list of pairs to convert to a relation type.
+     * @return factored relation type.
+     */
+    public static RelationType varargs(Object... nameTypePairs) {
+        return new RelationType(Heading.varargs(nameTypePairs));
+    }
+
+    /**
+     * Computes the least common super type (`lcst`) of `r1` and `r2`.
+     *
+     * The two relation types must have compatible headings, that is, they must
+     * have the same set of attribute names and compatible types (in terms of
+     * Type.leastCommonSuperType) for each of them.
+     *
+     * Note: as JAlf does not support type inheritance for now, this method will
+     * throw a TypeException unless `r1` and `r2` capture the exact same type.
+     *
+     * @param r1 a relation type.
+     * @param r2 another relation type.
+     * @return the least common super type of `r1` and `r2`.
+     */
     public static RelationType leastCommonSupertype(RelationType r1, RelationType r2) {
         validateNotNull("Argument r1 must not be null", r1);
         validateNotNull("Argument r2 must not be null", r2);
 
-        Heading h = Heading.leastCommonSuperHeading(r1.getHeading(), r2.getHeading());
-        return RelationType.heading(h);
+        Heading h1 = r1.getHeading();
+        Heading h2 = r2.getHeading();
+        Heading lcsh = Heading.leastCommonSuperHeading(h1, h2);
+        return RelationType.heading(lcsh);
     }
 
     public static RelationType infer(Stream<Tuple> of) {

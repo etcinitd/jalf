@@ -49,6 +49,11 @@ public class Tuple {
         return new Tuple(TupleType.infer(attrs), attrs);
     }
 
+    /**
+     * Returns the type of this tuple.
+     *
+     * @return the type of this tuple as a TupleType instance.
+     */
     public TupleType getType() {
         return type;
     }

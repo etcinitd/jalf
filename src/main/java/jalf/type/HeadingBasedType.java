@@ -3,6 +3,9 @@ package jalf.type;
 import jalf.AttrName;
 import jalf.Type;
 
+/**
+ * Helper class for implementing TupleType and RelationType.
+ */
 public class HeadingBasedType {
 
     protected Heading heading;

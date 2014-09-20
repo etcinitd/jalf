@@ -56,6 +56,12 @@ public class AttrList implements Iterable<AttrName> {
         return new AttrList(set);
     }
 
+    /**
+     * Checks whether this attribute list contains `name`.
+     *
+     * @param name an attribute name.
+     * @return true if this contains `name`, false otherwise.
+     */
     public boolean contains(AttrName name) {
         return names.contains(name);
     }
