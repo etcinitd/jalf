@@ -16,17 +16,27 @@ public class Rename extends UnaryOperator {
 
     private RelationType type;
 
+    public Rename(Relation operand, Renaming renaming, RelationType type) {
+        this.operand = operand;
+        this.renaming = renaming;
+        this.type = type;
+    }
+
     public Rename(Relation operand, Renaming renaming) {
         this.operand = operand;
         this.renaming = renaming;
+        this.type = typeCheck();
     }
 
     @Override
     public RelationType getType() {
-        if (type == null) {
-            type = operand.getType().rename(renaming);
-        }
         return type;
+    }
+
+    @Override
+    protected RelationType typeCheck() {
+        // TODO: implement proper type checking
+        return operand.getType().rename(renaming);
     }
 
     public Relation getOperand() {

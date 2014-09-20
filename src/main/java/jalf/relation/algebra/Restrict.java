@@ -16,17 +16,27 @@ public class Restrict extends UnaryOperator {
 
     private RelationType type;
 
+    public Restrict(Relation operand, Predicate predicate, RelationType type) {
+        this.operand = operand;
+        this.predicate = predicate;
+        this.type = type;
+    }
+
     public Restrict(Relation operand, Predicate predicate) {
         this.operand = operand;
         this.predicate = predicate;
+        this.type = typeCheck();
     }
 
     @Override
     public RelationType getType() {
-        if (type == null) {
-            type = operand.getType().restrict(predicate);
-        }
         return type;
+    }
+
+    @Override
+    protected RelationType typeCheck() {
+        // TODO: implement proper type checking
+        return operand.getType().restrict(predicate);
     }
 
     public Relation getOperand() {

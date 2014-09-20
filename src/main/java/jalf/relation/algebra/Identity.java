@@ -18,6 +18,11 @@ public class Identity extends UnaryOperator {
     }
 
     @Override
+    protected RelationType typeCheck() {
+        return operand.getType();
+    }
+
+    @Override
     public Relation getOperand() {
         return operand;
     }
