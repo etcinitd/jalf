@@ -17,6 +17,10 @@ public class TupleType extends HeadingBasedType implements Type<Tuple> {
         return new TupleType(h);
     }
 
+    public static TupleType varargs(Object... nameTypePairs) {
+        return heading(Heading.varargs(nameTypePairs));
+    }
+
     public static TupleType infer(Map<AttrName, Object> keyValuePairs) {
         return new TupleType(Heading.infer(keyValuePairs));
     }
