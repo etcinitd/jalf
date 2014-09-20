@@ -46,13 +46,10 @@ public class Tuple {
             Object value = keyValuePairs[i];
             attrs.put(attr, value);
         }
-        return new Tuple(null, attrs);
+        return new Tuple(TupleType.infer(attrs), attrs);
     }
 
     public TupleType getType() {
-        if (type == null) {
-            type = TupleType.infer(attrs);
-        }
         return type;
     }
 
