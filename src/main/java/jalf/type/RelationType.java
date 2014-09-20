@@ -7,6 +7,7 @@ import jalf.Relation;
 import jalf.Renaming;
 import jalf.Tuple;
 import jalf.Type;
+import jalf.TypeException;
 
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -48,7 +49,7 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
         };
         TupleType r = of.collect(Collectors.reducing(identity, mapper, op));
         if (r == null) {
-            throw new IllegalArgumentException("Stream of tuples may not be empty");
+            throw new TypeException("Unable to infer relation type: stream of tuples may not be empty");
         }
         return RelationType.heading(r.getHeading());
     }

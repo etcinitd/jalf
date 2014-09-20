@@ -95,7 +95,7 @@ public class DSL {
     // Relation
 
     public static Relation relation(RelationType type, Tuple... tuples) {
-        return new SetMemoryRelation(type, tuples);
+        return SetMemoryRelation.tuples(type, tuples);
     }
 
     public static Relation relation(Heading heading, Tuple... tuples) {
