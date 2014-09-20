@@ -19,6 +19,7 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
 
     public RelationType(Heading heading) {
         super(heading);
+        tupleType = TupleType.heading(heading);
     }
 
     public static RelationType varargs(Object... args) {
@@ -53,9 +54,6 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
     }
 
     public TupleType toTupleType() {
-        if (tupleType == null) {
-            tupleType = TupleType.heading(heading);
-        }
         return tupleType;
     }
 
