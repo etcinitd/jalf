@@ -39,6 +39,12 @@ public class TupleType extends HeadingBasedType implements Type<Tuple> {
     }
 
     @Override
+    public boolean contains(Object value) {
+        return (value instanceof Tuple) &&
+                ((Tuple)value).getType().isSubTypeOf(this);
+    }
+
+    @Override
     public int hashCode() {
         return 31*TupleType.class.hashCode() + heading.hashCode();
     }

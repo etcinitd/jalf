@@ -62,6 +62,12 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
         return Relation.class;
     }
 
+    @Override
+    public boolean contains(Object value) {
+        return (value instanceof Relation) &&
+                ((Relation)value).getType().isSubTypeOf(this);
+    }
+
     public RelationType project(AttrList attributes) {
         return new RelationType(heading.project(attributes));
     }

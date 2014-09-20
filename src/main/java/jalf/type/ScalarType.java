@@ -25,6 +25,11 @@ public class ScalarType<T> implements Type<T> {
     }
 
     @Override
+    public boolean contains(Object value) {
+        return representation.isInstance(value);
+    }
+
+    @Override
     public int hashCode() {
         return 31*ScalarType.class.hashCode() + representation.hashCode();
     }

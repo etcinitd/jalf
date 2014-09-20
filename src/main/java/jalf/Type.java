@@ -89,10 +89,39 @@ public interface Type<T> {
     }
 
     /**
+     * Checks if this type is a sub type of `type`.
+     *
+     * Note: JAlf does not support type inheritance so far, so this method
+     * returns true only if `type` is equal to `this`.
+     *
+     * @param type another type.
+     * @return true if this is a sub type of `type`, false otherwise.
+     */
+    default boolean isSubTypeOf(Type<?> type) {
+        // TODO: properly implement type inheritance (Type#isSubTypeOf)
+        return equals(type);
+    }
+
+    /**
      * Returns the java class used for representing values of this type.
      *
      * @return the representation class.
      */
     public Class<T> getRepresentationClass();
+
+    /**
+     * Checks if this type contains `value`, that is, if `value` belongs to the
+     * set of values captured by this type.
+     *
+     * Note: this method is not parameterized by T by intent, as it is used in
+     * many places where types are used in an "unsafe" way. That said, a
+     * necessary condition for this method to return true is for `value` to be
+     * an instance of T. Observe that such a condition is not sufficient, e.g.
+     * relation and tuple types impose further conditions.
+     *
+     * @param value an arbitrary value (null supported)
+     * @return true if `value` belongs to this, false otherwise.
+     */
+    public boolean contains(Object value);
 
 }
