@@ -1,4 +1,4 @@
-package jalf.test.fixtures;
+package jalf.fixtures;
 
 import jalf.AttrName;
 import jalf.Relation;

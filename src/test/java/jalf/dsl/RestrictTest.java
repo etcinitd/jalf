@@ -1,10 +1,11 @@
-package jalf.test.dsl;
+package jalf.dsl;
 
 import jalf.Relation;
+
 import org.junit.Test;
 
 import static jalf.DSL.*;
-import static jalf.test.fixtures.SuppliersAndParts.*;
+import static jalf.fixtures.SuppliersAndParts.*;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 

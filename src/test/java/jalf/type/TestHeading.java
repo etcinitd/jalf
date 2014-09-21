@@ -1,6 +1,6 @@
 package jalf.type;
 
-import static jalf.test.fixtures.SuppliersAndParts.*;
+import static jalf.fixtures.SuppliersAndParts.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;

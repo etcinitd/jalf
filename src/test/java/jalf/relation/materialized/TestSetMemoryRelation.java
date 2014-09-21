@@ -8,7 +8,7 @@ import org.junit.*;
 
 import static jalf.DSL.*;
 import static jalf.util.CollectionUtils.*;
-import static jalf.test.fixtures.SuppliersAndParts.*;
+import static jalf.fixtures.SuppliersAndParts.*;
 import static org.junit.Assert.*;
 
 public class TestSetMemoryRelation {

@@ -1,8 +1,9 @@
 package jalf;
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
-import static jalf.test.fixtures.SuppliersAndParts.*;
+import static jalf.fixtures.SuppliersAndParts.*;
 
 public class TestAttrList {
 

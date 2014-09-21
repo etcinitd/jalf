@@ -3,7 +3,7 @@ package jalf;
 import org.junit.Test;
 
 import static jalf.DSL.*;
-import static jalf.test.fixtures.SuppliersAndParts.*;
+import static jalf.fixtures.SuppliersAndParts.*;
 import static org.junit.Assert.assertEquals;
 
 public class TupleTest {

@@ -1,11 +1,11 @@
-package jalf.test.dsl;
+package jalf.dsl;
 
 import jalf.*;
 
 import org.junit.Test;
 
 import static jalf.DSL.*;
-import static jalf.test.fixtures.SuppliersAndParts.*;
+import static jalf.fixtures.SuppliersAndParts.*;
 import static org.junit.Assert.*;
 
 public class ProjectTest {

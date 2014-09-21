@@ -1,7 +1,7 @@
 package jalf.type;
 
 import static org.junit.Assert.*;
-import static jalf.test.fixtures.SuppliersAndParts.*;
+import static jalf.fixtures.SuppliersAndParts.*;
 import jalf.Tuple;
 
 import org.junit.Test;
