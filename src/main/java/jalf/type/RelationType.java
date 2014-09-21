@@ -123,11 +123,20 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
      * Projects this type on a subset of its attributes.
      *
      * @pre attributes should be a subset of the type's attribute names.
-     * @param attributes a set of attribute names.
+     * @param on a set of attribute names.
      * @return the projected type.
      */
-    public RelationType project(AttrList attributes) {
-        return new RelationType(heading.project(attributes));
+    public RelationType project(AttrList on) {
+        AttrList mine = this.heading.toAttrList();
+        AttrList extra = on.difference(mine);
+        if (extra.isEmpty()) {
+            return new RelationType(heading.project(on));
+        } else {
+            String which = extra.stream()
+                    .map(a -> a.getName())
+                    .collect(Collectors.joining(", "));
+            throw new TypeException("No such attributes: " + which);
+        }
     }
 
     /**

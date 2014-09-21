@@ -108,6 +108,16 @@ public class Heading {
     }
 
     /**
+     * Returns an attribute list with the attributes names belonging to this
+     * heading.
+     *
+     * @return an attribute list.
+     */
+    public AttrList toAttrList() {
+        return AttrList.collection(this.attributes.keySet());
+    }
+
+    /**
      * Projects this heading on a subset of its attributes captured by `on`.
      *
      * @pre `on` should be a subset of the heading attribute names.
