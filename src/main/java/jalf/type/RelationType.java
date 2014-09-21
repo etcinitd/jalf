@@ -53,13 +53,12 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
     /**
      * Computes the least common super type (`lcst`) of `r1` and `r2`.
      *
-     * The two relation types must have compatible headings, that is, they must
-     * have the same set of attribute names and compatible types (in terms of
-     * Type.leastCommonSuperType) for each of them.
-     *
      * Note: as JAlf does not support type inheritance for now, this method will
      * throw a TypeException unless `r1` and `r2` capture the exact same type.
      *
+     * @pre `r1` and `r2` must have compatible headings, that is, they must
+     * have the same set of attribute names and compatible types for each of
+     * them according to `Type.leastCommonSupertype`.
      * @param r1 a relation type.
      * @param r2 another relation type.
      * @return the least common super type of `r1` and `r2`.
@@ -74,6 +73,17 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
         return RelationType.heading(lcsh);
     }
 
+    /**
+     * Infers a relation type from a stream of tuples.
+     *
+     * @pre all tuples must be heading-compatible, i.e. they must have same
+     * set of attribute names and compatible types for each of them according
+     * to `Type.leastCommonSuperType`.
+     * @pre the stream of tuples may not be empty.
+     * @param of a stream of tuples.
+     * @return the inferred relation type.
+     * @throws TypeException if any precondition is violated.
+     */
     public static RelationType infer(Stream<Tuple> of) {
         TupleType identity = null;
         Function<Tuple,TupleType> mapper = (t) -> t.getType();
@@ -89,6 +99,11 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
         return RelationType.heading(r.getHeading());
     }
 
+    /**
+     * Returns the corresponding tuple type.
+     *
+     * @return the type of the relation tuples.
+     */
     public TupleType toTupleType() {
         return tupleType;
     }
@@ -104,14 +119,35 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
                 ((Relation)value).getType().isSubTypeOf(this);
     }
 
+    /**
+     * Projects this type on a subset of its attributes.
+     *
+     * @pre attributes should be a subset of the type's attribute names.
+     * @param attributes a set of attribute names.
+     * @return the projected type.
+     */
     public RelationType project(AttrList attributes) {
         return new RelationType(heading.project(attributes));
     }
 
+    /**
+     * Returns the type obtained by renaming some of its attributes.
+     *
+     * @param renaming a renaming function.
+     * @return the relation type where attribute have been renamed according to
+     * `renaming`.
+     */
     public RelationType rename(Renaming renaming) {
         return new RelationType(heading.rename(renaming));
     }
 
+    /**
+     * Returns the relation subtype constrained by the given tuple predicate.
+     *
+     * @pre the predicate must only refer to attributes of the relation type.
+     * @param predicate a tuple predicate.
+     * @return a subtype of this relation, by constraint `predicate`.
+     */
     public RelationType restrict(Predicate predicate) {
         return this;
     }
