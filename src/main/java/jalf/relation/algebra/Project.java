@@ -35,7 +35,6 @@ public class Project extends UnaryOperator {
 
     @Override
     protected RelationType typeCheck() {
-        // TODO: implement proper type checking
         return operand.getType().project(attributes);
     }
 
