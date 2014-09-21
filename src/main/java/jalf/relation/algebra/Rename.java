@@ -35,7 +35,7 @@ public class Rename extends UnaryOperator {
 
     @Override
     protected RelationType typeCheck() {
-        // TODO: implement proper type checking
+        // TODO: implement proper type checking (?)
         return operand.getType().rename(renaming);
     }
 

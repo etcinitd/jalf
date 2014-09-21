@@ -91,8 +91,8 @@ public class Tuple {
      * Returns a projection of this tuple on some of its attributes.
      *
      * Note: despite its visibility, this method is part of JAlf protected API.
-     * It should not be used by end users. TODO: how to fix this without
-     * hurting performance too much?
+     * It should not be used by end users.
+     * TODO: how to fix this without hurting performance too much?
      *
      * @pre `on` must be a subset of this tuple's attributes.
      * @pre `resultingType` should be faithful to the actual result, that it
@@ -111,8 +111,8 @@ public class Tuple {
      * Returns a new tuple by renaming some attributes.
      *
      * Note: despite its visibility, this method is part of JAlf protected API.
-     * It should not be used by end users. TODO: how to fix this without
-     * hurting performance too much?
+     * It should not be used by end users.
+     * TODO: how to fix this without hurting performance too much?
      *
      * @param r renaming function mapping old to new attribute names.
      * @pre `resultingType` should be faithful to the actual result, that it
@@ -132,6 +132,10 @@ public class Tuple {
 
     /**
      * Joins this tuple with another one.
+     *
+     * Note: despite its visibility, this method is part of JAlf protected API.
+     * It should not be used by end users.
+     * TODO: how to fix this without hurting performance too much?
      *
      * @pre this and other should agree on the values on common attributes.
      * @pre `resultingType` should be faithful to the actual result, that it

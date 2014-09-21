@@ -81,8 +81,9 @@ public abstract class AbstractRelation implements Relation {
      *    3.1 delegates to the in-memory `other` relation if it is one
      *    3.2 loads itself into memory to make such a delegate call.
      *
+     * TODO: Take relation type into account when computing equality.
      * TODO: The current strategy is not optimal at all, even if it basically
-     * works. Possible optimizations include
+     * works. Possible optimizations include:
      *
      * 1. implement comparison of ordered streams instead of 2.2. and 3.2.
      * 2. avoid the delegation complexity by extracting equals responsibility
