@@ -1,8 +1,30 @@
 package jalf;
 
 import static jalf.util.ValidationUtils.validateNotNull;
+import jalf.type.Heading;
+import jalf.type.RelationType;
 import jalf.type.ScalarType;
+import jalf.type.TupleType;
 
+/**
+ * JAl's type abstraction, i.e. a set of values.
+ *
+ * This is the main interface of JAlf's type system. Conceptually, a JAlf type
+ * is a set of immutable values. JAlf currently distinguishes between scalar,
+ * tuple and relation types. The last two are implemented by JAlf own classes,
+ * see TupleType and RelationType. In contrast, scalar types can be obtained by
+ * simple decoration of arbitrary Java classes. The latter must however properly
+ * implement so-called value objects. In particular, the objects must be
+ * immutable (or not mutated in practice) and their class must provide
+ * consistent implementations of `hashCode` and `equals`. Provided those
+ * requirements ae met, any class/object can be used for capturing values in
+ * JAlf tuples and relations.
+ *
+ * This interface is not intended to be instantiated directly. Instances may be
+ * obtained through the factory methods.
+ *
+ * @param <T> the java class used for representing the values of this type.
+ */
 public interface Type<T> {
 
     /**
@@ -11,11 +33,55 @@ public interface Type<T> {
      * @param representation the Java class used to represent values.
      * @return a Type instance.
      */
-    static <U> Type<U> scalar(Class<U> representation) {
+    public static <U> Type<U> scalarType(Class<U> representation) {
         validateNotNull("Argument representation must not be null", representation);
 
         // TODO use a concurrent WeakHashMap to avoid creating the same type a million times
         return new ScalarType<U>(representation);
+    }
+
+    /**
+     * Factors a tuple type for a given heading
+     *
+     * @param heading a heading.
+     * @return factored tuple type instance.
+     */
+    public static TupleType tupleType(Heading heading) {
+        return TupleType.heading(heading);
+    }
+
+    /**
+     * Factors a tuple type from a list of attribute (name, type) pairs.
+     *
+     * @pre pairs must have an even size. Odd elements must be attribute names,
+     * even elements must be types.
+     * @param nameTypePairs the list of pairs to convert to a tuple type.
+     * @return factored tuple type.
+     */
+    public static TupleType tupleType(Object... nameTypePairs) {
+        return TupleType.varargs(nameTypePairs);
+    }
+
+    /**
+     * Factors a relation type from a given heading.
+     *
+     * @param heading a heading instance.
+     * @return the factored relation type.
+     */
+    public static RelationType relationType(Heading heading) {
+        return RelationType.heading(heading);
+    }
+
+    /**
+     * Factors a relation type from a list of attribute (name, type) pairs.
+     *
+     * @pre pairs must have an even size. Odd elements must be attribute names,
+     * even elements must be types.
+     * @param nameTypePairs the list of pairs to convert to a relation type.
+     * @return factored relation type.
+     */
+    public static RelationType relationType(Object... nameTypePairs) {
+        return RelationType.varargs(nameTypePairs);
     }
 
     /**
@@ -25,11 +91,11 @@ public interface Type<T> {
      * @param obj an object to dress as a Type.
      * @return a Type instance.
      */
-    static Type<?> dress(Object obj) {
+    public static Type<?> dress(Object obj) {
         if (obj instanceof Type)
             return (Type<?>) obj;
         if (obj instanceof Class)
-            return scalar((Class<?>)obj);
+            return scalarType((Class<?>)obj);
         throw new IllegalArgumentException("Unable to dress `" + obj + "` to Type");
     }
 
@@ -39,14 +105,14 @@ public interface Type<T> {
      * @param value any java object.
      * @return a JAlf type to use for `value`
      */
-    static Type<?> infer(Object value) {
+    public static Type<?> infer(Object value) {
         validateNotNull("Argument value must not be null", value);
 
         if (value instanceof Tuple)
             return ((Tuple) value).getType();
         if (value instanceof Relation)
             return ((Relation) value).getType();
-        return scalar(value.getClass());
+        return scalarType(value.getClass());
     }
 
     /**
