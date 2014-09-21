@@ -1,10 +1,15 @@
 package jalf;
 
+import static jalf.util.ValidationUtils.validate;
+import static jalf.util.ValidationUtils.validateNotNull;
+import static java.util.Collections.unmodifiableMap;
+import jalf.type.TupleType;
+
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static jalf.util.ValidationUtils.*;
-import static java.util.Collections.unmodifiableMap;
+import java.util.stream.Collectors;
 
 /**
  * A tuple is an immutable set of attributes (i.e. name value pairs), with
@@ -18,12 +23,14 @@ import static java.util.Collections.unmodifiableMap;
  * through JAlf's DSL. 
  */
 public class Tuple {
-    private final Map<AttrName, Object> attrs;
-    private final Heading heading;
 
-    private Tuple(Map<AttrName, Object> attrs) {
-        this.attrs = unmodifiableMap(new ConcurrentHashMap<>(attrs));
-        this.heading = constructHeading(attrs);
+    private final Map<AttrName, Object> attrs;
+
+    private final TupleType type;
+
+    private Tuple(TupleType type, Map<AttrName, Object> attrs) {
+        this.type = type;
+        this.attrs = unmodifiableMap(attrs);
     }
 
     /**
@@ -40,22 +47,20 @@ public class Tuple {
 
         Map<AttrName, Object> attrs = new ConcurrentHashMap<>();
         for (int i = 0; i < keyValuePairs.length; i++) {
-            Object key = keyValuePairs[i++];
-            AttrName attr = validateCast("Attribute name must be an AttrName.", key, AttrName.class);
+            AttrName attr = AttrName.dress(keyValuePairs[i++]);
             Object value = keyValuePairs[i];
             attrs.put(attr, value);
         }
-        return new Tuple(attrs);
+        return new Tuple(TupleType.infer(attrs), attrs);
     }
 
-    public Heading heading() {
-        return heading;
-    }
-
-    private Heading constructHeading(Map<AttrName, Object> attrs) {
-        Map<AttrName, AttrType> attrTypes = new ConcurrentHashMap<>();
-        attrs.forEach((name, val) -> attrTypes.put(name, AttrType.typeOf(val)));
-        return Heading.headingOf(attrTypes);
+    /**
+     * Returns the type of this tuple.
+     *
+     * @return the type of this tuple as a TupleType instance.
+     */
+    public TupleType getType() {
+        return type;
     }
 
     /**
@@ -70,38 +75,76 @@ public class Tuple {
     }
 
     /**
+     * Fetches some attribute values and returns them as a list.
+     *
+     * @pre attrNames should only contain existing attributes.
+     * @param attrNames some attribute names.
+     * @return the list of values corresponding to the attribute names.
+     */
+    public List<Object> fetch(AttrList attrNames) {
+        return attrNames.stream()
+                .map(a -> attrs.get(a))
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Returns a projection of this tuple on some of its attributes.
      *
+     * Note: despite its visibility, this method is part of JAlf protected API.
+     * It should not be used by end users. TODO: how to fix this without
+     * hurting performance too much?
+     *
      * @pre `on` must be a subset of this tuple's attributes.
+     * @pre `resultingType` should be faithful to the actual result, that it
+     * it must guarantee the post condition.
      * @param on a list of attributes to project on.
      * @return a projection of this tuple on attributes specified in `on`.
+     * @post `resultingType.contains(project(on, resultingType))` is true
      */
-    public Tuple project(AttrList on) {
-        Map<AttrName, Object> p = new ConcurrentHashMap<>();
+    public Tuple project(AttrList on, TupleType resultingType) {
+        Map<AttrName, Object> p = new HashMap<>();
         on.forEach(attrName -> p.put(attrName, attrs.get(attrName)));
-        return new Tuple(p);
+        return new Tuple(resultingType, p);
     }
 
     /**
      * Returns a new tuple by renaming some attributes.
      *
+     * Note: despite its visibility, this method is part of JAlf protected API.
+     * It should not be used by end users. TODO: how to fix this without
+     * hurting performance too much?
+     *
      * @param r renaming function mapping old to new attribute names.
+     * @pre `resultingType` should be faithful to the actual result, that it
+     * it must guarantee the post condition.
      * @return the renamed tuple.
+     * @post `resultingType.contains(rename(r, resultingType))` is true
      */
-    public Tuple rename(Renaming r) {
-        Map<AttrName, Object> renamed = new ConcurrentHashMap<>();
+    public Tuple rename(Renaming r, TupleType resultingType) {
+        Map<AttrName, Object> renamed = new HashMap<>();
         attrs.entrySet().forEach(attribute -> {
             AttrName attrName = attribute.getKey();
             AttrName as = r.apply(attrName);
             renamed.put(as, attribute.getValue());
         });
-        return new Tuple(renamed);
+        return new Tuple(resultingType, renamed);
     }
 
-    public Tuple join(Tuple tuple) {
+    /**
+     * Joins this tuple with another one.
+     *
+     * @pre this and other should agree on the values on common attributes.
+     * @pre `resultingType` should be faithful to the actual result, that it
+     * it must guarantee the post condition.
+     * @param other another tuple to join on.
+     * @param resultingType the type of the result.
+     * @return the joined tuple.
+     * @post `resultingType.contains(join(other, resultingType))` is true
+     */
+    public Tuple join(Tuple other, TupleType resultingType) {
         Map<AttrName, Object> joined = new ConcurrentHashMap<>(attrs);
-        joined.putAll(tuple.attrs);
-        return new Tuple(joined);
+        joined.putAll(other.attrs);
+        return new Tuple(resultingType, joined);
     }
 
     @Override
@@ -129,4 +172,5 @@ public class Tuple {
         }
         return result + ")";
     }
+
 }

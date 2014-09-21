@@ -1,19 +1,21 @@
 package jalf.compiler;
 
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.groupingBy;
 import jalf.AttrList;
+import jalf.Predicate;
 import jalf.Relation;
+import jalf.Renaming;
 import jalf.Tuple;
 import jalf.relation.algebra.Join;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
+import jalf.type.TupleType;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.groupingBy;
 
 /**
  * Compiled-version of a relation(al) expression, ready to be consumed.
@@ -49,40 +51,53 @@ public class Cog {
 
     /** Default compilation of `project`. */
     public Cog project(Project projection, Cog compiled){
+        AttrList on = projection.getAttributes();
+        TupleType tt = projection.getTupleType();
         Stream<Tuple> stream = compiled.stream()
-                .map(t -> t.project(projection.getAttributes()))
+                .map(t -> t.project(on, tt))
                 .distinct();
         return new Cog(projection, stream);
     }
 
     /** Default compilation of `rename`. */
     public Cog rename(Rename rename, Cog compiled){
+        Renaming renaming = rename.getRenaming();
+        TupleType tt = rename.getTupleType();
         Stream<Tuple> stream = compiled.stream()
-                .map(t -> t.rename(rename.getRenaming()));
+                .map(t -> t.rename(renaming, tt));
         return new Cog(rename, stream);
     }
 
     /** Default compilation of `restrict`. */
     public Cog restrict(Restrict restrict, Cog compiled) {
+        Predicate predicate = restrict.getPredicate();
         Stream<Tuple> stream = compiled.stream()
-                .filter(t -> restrict.getPredicate().test(t));
+                .filter(t -> predicate.test(t));
         return new Cog(restrict, stream);
     }
 
     /** Default compilation of `join`. */
     public Cog join(Join join, Cog left, Cog right) {
-        AttrList on = join.getLeft().heading().getAttrList().intersect(
-                join.getRight().heading().getAttrList());
-        Stream<Tuple> stream = join(left.stream(), right.stream(), on);
+        AttrList on = join.getJoinAttrList();
+        Stream<Tuple> stream = hashJoin(join, left, right);
         return new Cog(join, stream);
     }
 
-    private Stream<Tuple> join(Stream<Tuple> leftStream, Stream<Tuple> rightStream, AttrList on) {
-        Map<Tuple, List<Tuple>> leftTuplesIndex = leftStream.collect(groupingBy(t -> t.project(on)));
+    private Stream<Tuple> hashJoin(Join join, Cog left, Cog right) {
+        // get some info about the join to apply
+        AttrList on = join.getJoinAttrList();
+        TupleType tt = join.getTupleType();
+
+        // get underlying streams
+        Stream<Tuple> leftStream = left.stream();
+        Stream<Tuple> rightStream = right.stream();
+
+        // build an index on left tuples and do the hash join
+        Map<Object, List<Tuple>> leftTuplesIndex = leftStream.collect(groupingBy(t -> t.fetch(on)));
         return rightStream.flatMap(rightTuple -> {
-            Tuple rightCommon = rightTuple.project(on);
-            List<Tuple> leftTuples = leftTuplesIndex.getOrDefault(rightCommon, emptyList());
-            return leftTuples.stream().map(t -> t.join(rightTuple));
+            Object rightKey = rightTuple.fetch(on);
+            List<Tuple> leftTuples = leftTuplesIndex.getOrDefault(rightKey, emptyList());
+            return leftTuples.stream().map(t -> t.join(rightTuple, tt));
         });
     }
 }

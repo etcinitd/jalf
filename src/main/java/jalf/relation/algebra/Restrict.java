@@ -1,9 +1,9 @@
 package jalf.relation.algebra;
 
-import jalf.Heading;
 import jalf.Predicate;
 import jalf.Relation;
 import jalf.compiler.Cog;
+import jalf.type.RelationType;
 
 /**
  * Relational restrict.
@@ -11,11 +11,32 @@ import jalf.compiler.Cog;
 public class Restrict extends UnaryOperator {
 
     private final Relation operand;
+
     private final Predicate predicate;
+
+    private RelationType type;
+
+    public Restrict(Relation operand, Predicate predicate, RelationType type) {
+        this.operand = operand;
+        this.predicate = predicate;
+        this.type = type;
+    }
 
     public Restrict(Relation operand, Predicate predicate) {
         this.operand = operand;
         this.predicate = predicate;
+        this.type = typeCheck();
+    }
+
+    @Override
+    public RelationType getType() {
+        return type;
+    }
+
+    @Override
+    protected RelationType typeCheck() {
+        // TODO: implement proper type checking
+        return operand.getType().restrict(predicate);
     }
 
     public Relation getOperand() {
@@ -24,11 +45,6 @@ public class Restrict extends UnaryOperator {
 
     public Predicate getPredicate() {
         return predicate;
-    }
-
-    @Override
-    public Heading heading() {
-        return operand.heading();
     }
 
     @Override

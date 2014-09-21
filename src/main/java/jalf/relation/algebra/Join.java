@@ -1,13 +1,9 @@
 package jalf.relation.algebra;
 
-import jalf.AttrName;
-import jalf.AttrType;
-import jalf.Heading;
+import jalf.AttrList;
 import jalf.Relation;
 import jalf.compiler.Cog;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import jalf.type.RelationType;
 
 /**
  * Relational natural join based on same name attributes.
@@ -15,13 +11,26 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Join extends BinaryOperator {
 
     private final Relation left;
-    private final Relation right;
-    private final Heading heading;
 
-    public Join(Relation left, Relation right) {
+    private final Relation right;
+
+    private final RelationType type;
+
+    public Join(RelationType type, Relation left, Relation right) {
         this.left = left;
         this.right = right;
-        this.heading = constructHeading();
+        this.type = type;
+    }
+
+    public Join(Relation left, Relation right){
+        this.left = left;
+        this.right = right;
+        this.type = typeCheck();
+    }
+
+    @Override
+    public RelationType getType() {
+        return type;
     }
 
     @Override
@@ -34,20 +43,26 @@ public class Join extends BinaryOperator {
         return right;
     }
 
-    @Override
-    public Heading heading() {
-        return heading;
+    /**
+     * Return the attributes on which the join operates. As Join is a natural
+     * join, these are the attributes common to right and left operands.
+     *
+     * @return the common attributes as an AttrList instance.
+     */
+    public AttrList getJoinAttrList() {
+        AttrList leftAttrs = left.getType().toAttrList();
+        AttrList rightAttrs = right.getType().toAttrList();
+        return leftAttrs.intersect(rightAttrs);
     }
 
-    private Heading constructHeading() {
-        Map<AttrName, AttrType> joinedAttrTypes = new ConcurrentHashMap<>();
-        joinedAttrTypes.putAll(left.heading().getAttrTypes());
-        joinedAttrTypes.putAll(right.heading().getAttrTypes());
-        return Heading.headingOf(joinedAttrTypes);
+    @Override
+    protected RelationType typeCheck() {
+        return left.getType().join(right.getType());
     }
 
     @Override
     protected Cog compile(Cog left, Cog right) {
         return left.join(this, left, right);
     }
+
 }

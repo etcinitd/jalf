@@ -2,9 +2,7 @@ package jalf.relation.algebra;
 
 import jalf.*;
 import jalf.compiler.Cog;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import jalf.type.RelationType;
 
 /**
  * Relational projection.
@@ -12,13 +10,31 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Project extends UnaryOperator {
 
     private final Relation operand;
+
     private final AttrList attributes;
-    private final Heading heading;
+
+    private final RelationType type;
+
+    public Project(Relation operand, AttrList attributes, RelationType type) {
+        this.operand = operand;
+        this.attributes = attributes;
+        this.type = type;
+    }
 
     public Project(Relation operand, AttrList attributes) {
         this.operand = operand;
         this.attributes = attributes;
-        this.heading = constructHeading();
+        this.type = typeCheck();
+    }
+
+    @Override
+    public RelationType getType() {
+        return type;
+    }
+
+    @Override
+    protected RelationType typeCheck() {
+        return operand.getType().project(attributes);
     }
 
     public Relation getOperand() {
@@ -27,20 +43,6 @@ public class Project extends UnaryOperator {
 
     public AttrList getAttributes() {
         return attributes;
-    }
-
-    @Override
-    public Heading heading() {
-        return heading;
-    }
-
-    private Heading constructHeading() {
-        Map<AttrName, AttrType> newAttrTypes = new ConcurrentHashMap<>();
-        operand.heading().getAttrTypes().forEach((name, type) -> {
-            if (attributes.contains(name))
-                newAttrTypes.put(name, type);
-        });
-        return Heading.headingOf(newAttrTypes);
     }
 
     @Override

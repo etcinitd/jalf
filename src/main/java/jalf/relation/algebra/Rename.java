@@ -1,10 +1,9 @@
 package jalf.relation.algebra;
 
-import jalf.*;
+import jalf.Relation;
+import jalf.Renaming;
 import jalf.compiler.Cog;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import jalf.type.RelationType;
 
 /**
  * Relational renaming.
@@ -12,13 +11,32 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Rename extends UnaryOperator {
 
     private final Relation operand;
+
     private final Renaming renaming;
-    private final Heading heading;
+
+    private RelationType type;
+
+    public Rename(Relation operand, Renaming renaming, RelationType type) {
+        this.operand = operand;
+        this.renaming = renaming;
+        this.type = type;
+    }
 
     public Rename(Relation operand, Renaming renaming) {
         this.operand = operand;
         this.renaming = renaming;
-        this.heading = constructHeading();
+        this.type = typeCheck();
+    }
+
+    @Override
+    public RelationType getType() {
+        return type;
+    }
+
+    @Override
+    protected RelationType typeCheck() {
+        // TODO: implement proper type checking
+        return operand.getType().rename(renaming);
     }
 
     public Relation getOperand() {
@@ -27,17 +45,6 @@ public class Rename extends UnaryOperator {
 
     public Renaming getRenaming() {
         return renaming;
-    }
-
-    @Override
-    public Heading heading() {
-        return heading;
-    }
-
-    private Heading constructHeading() {
-        Map<AttrName, AttrType> newAttrTypes = new ConcurrentHashMap<>();
-        operand.heading().getAttrTypes().forEach((name, type) -> newAttrTypes.put(renaming.apply(name), type));
-        return Heading.headingOf(newAttrTypes);
     }
 
     @Override

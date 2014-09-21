@@ -12,7 +12,7 @@ public class TupleTest {
     public void testItProjectsAsExpected() {
         Tuple source = tuple(SID, "S1", NAME, "Smith", STATUS, 20, CITY, "London");
         Tuple expected = tuple(SID, "S1", NAME, "Smith");
-        Tuple actual = source.project(attrs(SID, NAME));
+        Tuple actual = source.project(attrs(SID, NAME), null);
         assertEquals(expected, actual);
     }
 
@@ -20,7 +20,7 @@ public class TupleTest {
     public void testItRenamesAsExpected() {
         Tuple source = tuple(SID, "S1", NAME, "Smith");
         Tuple expected = tuple(SUPPLIER_ID, "S1", NAME, "Smith");
-        Tuple actual = source.rename(renaming(SID, SUPPLIER_ID));
+        Tuple actual = source.rename(renaming(SID, SUPPLIER_ID), null);
         assertEquals(expected, actual);
     }
 

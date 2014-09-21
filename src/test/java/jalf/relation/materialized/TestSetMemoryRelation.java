@@ -1,38 +1,41 @@
 package jalf.relation.materialized;
 
-import jalf.Relation;
-import jalf.relation.algebra.Identity;
-import org.junit.Test;
+import jalf.*;
+import jalf.relation.algebra.*;
+import jalf.type.RelationType;
 
-import static jalf.DSL.tuple;
-import static jalf.test.fixtures.SuppliersAndParts.SID;
-import static jalf.util.CollectionUtils.setOf;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.*;
+
+import static jalf.DSL.*;
+import static jalf.util.CollectionUtils.*;
+import static jalf.test.fixtures.SuppliersAndParts.*;
+import static org.junit.Assert.*;
 
 public class TestSetMemoryRelation {
 
-    Relation empty = new SetMemoryRelation(setOf());
+    Relation dum = new SetMemoryRelation(
+            RelationType.varargs(),
+            setOf());
 
-    Relation s1 = new SetMemoryRelation(setOf(
-            tuple(SID, "S1")
-    ));
+    Relation s1 = new SetMemoryRelation(
+            RelationType.varargs(SID, String.class),
+            setOf(tuple(SID, "S1")));
 
-    Relation s1bis = new SetMemoryRelation(setOf(
-            tuple(SID, "S1")
-    ));
+    Relation s1bis = new SetMemoryRelation(
+            RelationType.varargs(SID, String.class),
+            setOf(tuple(SID, "S1")));
     
-    Relation s2 = new SetMemoryRelation(setOf(
-            tuple(SID, "S2")
-    ));
+    Relation s2 = new SetMemoryRelation(
+            RelationType.varargs(SID, String.class),
+            setOf(tuple(SID, "S2")));
 
     @Test
     public void testEqualsAgainstAnotherOne() {
         assertTrue(s1.equals(s1));
         assertTrue(s1.equals(s1bis));
         assertFalse(s1.equals(s2));
-        assertFalse(s1.equals(empty));
-        assertFalse(empty.equals(s1));
+        assertFalse(s1.equals(dum));
+        assertFalse(dum.equals(s1));
     }
 
     @Test
@@ -40,8 +43,8 @@ public class TestSetMemoryRelation {
         assertTrue(s1.equals(new Identity(s1)));
         assertTrue(s1.equals(new Identity(s1bis)));
         assertFalse(s1.equals(new Identity(s2)));
-        assertFalse(s1.equals(new Identity(empty)));
-        assertFalse(empty.equals(new Identity(s1)));
+        assertFalse(s1.equals(new Identity(dum)));
+        assertFalse(dum.equals(new Identity(s1)));
     }
 
 }

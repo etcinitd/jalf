@@ -3,6 +3,10 @@ package jalf;
 import jalf.predicate.*;
 import jalf.relation.algebra.Join;
 import jalf.relation.materialized.SetMemoryRelation;
+import jalf.type.Heading;
+import jalf.type.RelationType;
+
+import java.util.stream.Stream;
 
 /**
  * @author amirm
@@ -23,6 +27,12 @@ public class DSL {
 
     public static AttrList attrs(String... attrNames) {
         return AttrList.attrs(attrNames);
+    }
+
+    // Heading and Types
+
+    public static Heading heading(Object... pairs) {
+        return Heading.varargs(pairs);
     }
 
     // Renaming
@@ -79,8 +89,16 @@ public class DSL {
 
     // Relation
 
+    public static Relation relation(RelationType type, Tuple... tuples) {
+        return SetMemoryRelation.tuples(type, tuples);
+    }
+
+    public static Relation relation(Heading heading, Tuple... tuples) {
+        return relation(RelationType.heading(heading), tuples);
+    }
+
     public static Relation relation(Tuple... tuples) {
-        return new SetMemoryRelation(tuples);
+        return relation(RelationType.infer(Stream.of(tuples)), tuples);
     }
 
     // Relational algebra

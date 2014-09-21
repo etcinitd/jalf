@@ -1,8 +1,8 @@
 package jalf.relation.algebra;
 
-import jalf.Heading;
 import jalf.Relation;
 import jalf.compiler.Cog;
+import jalf.type.RelationType;
 
 public class Identity extends UnaryOperator {
 
@@ -13,13 +13,18 @@ public class Identity extends UnaryOperator {
     }
 
     @Override
-    public Relation getOperand() {
-        return operand;
+    public RelationType getType() {
+        return operand.getType();
     }
 
     @Override
-    public Heading heading() {
-        return operand.heading();
+    protected RelationType typeCheck() {
+        return operand.getType();
+    }
+
+    @Override
+    public Relation getOperand() {
+        return operand;
     }
 
     @Override

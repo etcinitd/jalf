@@ -3,6 +3,7 @@ package jalf.relation.materialized;
 import jalf.Relation;
 import jalf.Tuple;
 import jalf.compiler.AbstractRelation;
+import jalf.type.RelationType;
 
 import java.util.stream.Collector;
 
@@ -12,8 +13,8 @@ import java.util.stream.Collector;
  */
 public abstract class MemoryRelation extends AbstractRelation {
 
-    public static Collector<Tuple, ?, Relation> collector() {
-        return SetMemoryRelation.collector();
+    public static Collector<Tuple, ?, Relation> collector(RelationType type) {
+        return SetMemoryRelation.collector(type);
     }
 
 }
