@@ -66,7 +66,7 @@ public class SetMemoryRelation extends MemoryRelation {
     }
 
     public Cog compile(){
-        return new Cog(this, tuples.stream());
+        return new Cog(this, () -> tuples.stream());
     }
 
     @Override

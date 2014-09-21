@@ -31,6 +31,28 @@ public class JoinTest {
     }
 
     @Test
+    public void testItSupportsJoinNoCommonAttribute() {
+        Relation left = relation(
+                tuple(SID, "S1"),
+                tuple(SID, "S2")
+        );
+        Relation right = relation(
+                tuple(PID, "P1"),
+                tuple(PID, "P2"),
+                tuple(PID, "P3")
+        );
+        Relation expected = relation(
+                tuple(SID, "S1", PID, "P1"),
+                tuple(SID, "S1", PID, "P2"),
+                tuple(SID, "S1", PID, "P3"),
+                tuple(SID, "S2", PID, "P1"),
+                tuple(SID, "S2", PID, "P2"),
+                tuple(SID, "S2", PID, "P3")
+        );
+        assertEquals(expected, join(left, right));
+    }
+
+    @Test
     public void testItSupportsJoinOnJoin() {
         Relation expected = relation(
                 tuple(SID, "S1", NAME, "Smith", STATUS, 20, CITY, "London", PID, "P1", QTY, 300, P_NAME, "Nut",   COLOR, "Red",   WEIGHT, 12.0, P_CITY, "London"),
