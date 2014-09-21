@@ -1,12 +1,13 @@
 package jalf;
 
+import static java.util.Collections.unmodifiableSortedSet;
+
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.Collections.unmodifiableSortedSet;
 
 /**
  * A list of attributes.
@@ -28,6 +29,29 @@ public class AttrList implements Iterable<AttrName> {
     }
 
     /**
+     * Builds an list from any stream of attribute names.
+     *
+     * @param attrNames a stream of attribute names.
+     * @return an attribute list.
+     */
+    public static AttrList stream(Stream<AttrName> attrNames) {
+        SortedSet<AttrName> set = attrNames
+                .distinct()
+                .collect(Collectors.toCollection(TreeSet::new));
+        return new AttrList(set);
+    }
+
+    /**
+     * Builds an list from any collection of attribute names.
+     *
+     * @param attrNames a collection of attribute names.
+     * @return an attribute list.
+     */
+    public static AttrList collection(Collection<AttrName> attrNames) {
+        return stream(attrNames.stream());
+    }
+
+    /**
      * Builds an attribute list from some attribute names.
      *
      * @pre attrNames should be distinct
@@ -35,10 +59,7 @@ public class AttrList implements Iterable<AttrName> {
      * @return the built attribute list
      */
     public static AttrList attrs(AttrName... attrNames) {
-        SortedSet<AttrName> set = Stream.of(attrNames)
-            .distinct()
-            .collect(Collectors.toCollection(TreeSet::new));
-        return new AttrList(set);
+        return stream(Stream.of(attrNames));
     }
 
     /**
@@ -49,11 +70,7 @@ public class AttrList implements Iterable<AttrName> {
      * @return the built attribute list
      */
     public static AttrList attrs(String... attrNames) {
-        SortedSet<AttrName> set = Stream.of(attrNames)
-            .distinct()
-            .map(AttrName::attr)
-            .collect(Collectors.toCollection(TreeSet::new));
-        return new AttrList(set);
+        return stream(Stream.of(attrNames).map(AttrName::attr));
     }
 
     /**
@@ -66,9 +83,36 @@ public class AttrList implements Iterable<AttrName> {
         return names.contains(name);
     }
 
+    /**
+     * Checks if this attribute list is the empty list.
+     *
+     * @return true if this attribute list contains not name at all, false
+     * otherwise.
+     */
+    public boolean isEmpty() {
+        return names.isEmpty();
+    }
+
+    /**
+     * Computes the difference between this and `other`.
+     *
+     * @param other another arbitrary attribute list.
+     * @return another attributes list having all names in `this` but those
+     * also in `other`.
+     */
+    public AttrList difference(AttrList other) {
+        SortedSet<AttrName> diff = new TreeSet<>(this.names);
+        diff.removeAll(other.names);
+        return new AttrList(diff);
+    }
+
     @Override
     public Iterator<AttrName> iterator() {
         return names.iterator();
+    }
+
+    public Stream<AttrName> stream() {
+        return names.stream();
     }
 
     @Override
@@ -84,6 +128,14 @@ public class AttrList implements Iterable<AttrName> {
             return false;
         AttrList other = (AttrList) obj;
         return names.equals(other.names);
+    }
+
+    @Override
+    public String toString() {
+        return "attrs(" + names.stream()
+                .map(a -> a.getName())
+                .collect(Collectors.joining(", "))
+                + ")";
     }
 
 }
