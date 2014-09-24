@@ -1,13 +1,12 @@
 package jalf.dsl;
 
-import jalf.Relation;
-
-import org.junit.Test;
-
+import jalf.*;
 import static jalf.DSL.*;
 import static jalf.fixtures.SuppliersAndParts.*;
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+
+import org.junit.Test;
 
 public class RestrictTest {
 
@@ -179,5 +178,15 @@ public class RestrictTest {
         Relation actual = restrict(suppliers(), among(CITY, asList("London", "Paris")));
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testItThrowsWhenReferencingUnexistingAttributes() {
+        try {
+            restrict(suppliers(), eq(WEIGHT, 12.0));
+            assertFalse(true);
+        } catch (TypeException ex) {
+            assertEquals("No such attributes: weight", ex.getMessage());
+        }
     }
 }

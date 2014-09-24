@@ -8,6 +8,9 @@ import jalf.predicate.Lt;
 import jalf.predicate.Lte;
 import jalf.predicate.Neq;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 /**
  * Tuple predicate, i.e. evaluating boolean expressions on tuples.
  */
@@ -94,5 +97,29 @@ public abstract class Predicate implements java.util.function.Predicate<Tuple> {
     public static Predicate lte(Comparable<?> left, Comparable<?> right) {
         return new Lte((Comparable<Object>) left, (Comparable<Object>) right);
     }
+
+    /**
+     * Checks whether this predicate supports static analysis.
+     *
+     * @return true if this predicate can be analyzed statically, false
+     * otherwise.
+     */
+    public boolean isStaticallyAnalyzable() {
+        return true;
+    }
+
+    /**
+     * Returns the list of attribute names referenced by this predicate.
+     *
+     * @pre the predicate must be statically available.
+     * @return a list of all attribute names referenced by this predicate.
+     */
+    public AttrList getReferencedAttributes() {
+        Set<AttrName> attrNames = new TreeSet<AttrName>();
+        fillReferencedAttributes(attrNames);
+        return AttrList.collection(attrNames);
+    }
+
+    protected abstract void fillReferencedAttributes(Set<AttrName> attrNames);
 
 }

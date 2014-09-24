@@ -127,16 +127,8 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
      * @return the projected type.
      */
     public RelationType project(AttrList on) {
-        AttrList mine = this.heading.toAttrList();
-        AttrList extra = on.difference(mine);
-        if (extra.isEmpty()) {
-            return new RelationType(heading.project(on));
-        } else {
-            String which = extra.stream()
-                    .map(a -> a.getName())
-                    .collect(Collectors.joining(", "));
-            throw new TypeException("No such attributes: " + which);
-        }
+        checkValidAttrList(on);
+        return new RelationType(heading.project(on));
     }
 
     /**
@@ -158,6 +150,10 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
      * @return a subtype of this relation, by constraint `predicate`.
      */
     public RelationType restrict(Predicate predicate) {
+        if (predicate.isStaticallyAnalyzable()) {
+            AttrList on = predicate.getReferencedAttributes();
+            checkValidAttrList(on);
+        }
         return this;
     }
 
@@ -169,6 +165,17 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
      */
     public RelationType join(RelationType other) {
         return new RelationType(this.heading.join(other.heading));
+    }
+
+    private void checkValidAttrList(AttrList on) {
+        AttrList mine = toAttrList();
+        AttrList extra = on.difference(mine);
+        if (!extra.isEmpty()) {
+            String which = extra.stream()
+                    .map(a -> a.getName())
+                    .collect(Collectors.joining(", "));
+            throw new TypeException("No such attributes: " + which);
+        }
     }
 
     public AttrList toAttrList() {

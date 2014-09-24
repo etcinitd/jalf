@@ -4,6 +4,7 @@ import jalf.AttrName;
 import jalf.Predicate;
 import jalf.Tuple;
 
+import java.util.Set;
 import java.util.function.BiFunction;
 
 public abstract class ComparisonPredicate<T> extends Predicate {
@@ -23,6 +24,14 @@ public abstract class ComparisonPredicate<T> extends Predicate {
         T atLeft = getFor(left, tuple);
         T atRight = getFor(right, tuple);
         return op.apply(atLeft, atRight);
+    }
+
+    @Override
+    protected void fillReferencedAttributes(Set<AttrName> attrNames) {
+        if (left instanceof AttrName)
+          attrNames.add((AttrName)left);
+        if (right instanceof AttrName)
+          attrNames.add((AttrName)right);
     }
 
     // TODO Do we need to make this method protected?

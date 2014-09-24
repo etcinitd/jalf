@@ -1,9 +1,10 @@
 package jalf.predicate;
 
+import java.util.Set;
+
 import jalf.AttrName;
 import jalf.Predicate;
 import jalf.Tuple;
-
 import static jalf.util.CollectionUtils.parallelStreamOf;
 
 public class Among extends Predicate {
@@ -20,4 +21,10 @@ public class Among extends Predicate {
         Object attrVal = tuple.get(attrName);
         return parallelStreamOf(vals).anyMatch(val -> val.equals(attrVal));
     }
+
+    @Override
+    protected void fillReferencedAttributes(Set<AttrName> attrNames) {
+        attrNames.add(attrName);
+    }
+
 }
