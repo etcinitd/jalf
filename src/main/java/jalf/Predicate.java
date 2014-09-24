@@ -99,9 +99,9 @@ public abstract class Predicate implements java.util.function.Predicate<Tuple> {
     }
 
     /**
-     * Checks whether this predicate supports static analysis.
+     * Checks whether this predicate fully supports static analysis.
      *
-     * @return true if this predicate can be analyzed statically, false
+     * @return true if this predicate can be fully analyzed statically, false
      * otherwise.
      */
     public boolean isStaticallyAnalyzable() {
@@ -111,8 +111,10 @@ public abstract class Predicate implements java.util.function.Predicate<Tuple> {
     /**
      * Returns the list of attribute names referenced by this predicate.
      *
-     * @pre the predicate must be statically available.
      * @return a list of all attribute names referenced by this predicate.
+     * @post When the predicate is fully analyzable statically, the returned set
+     * must include all attribute names referenced by the predicate. Otherwise,
+     * it may return a subset of them.
      */
     public AttrList getReferencedAttributes() {
         Set<AttrName> attrNames = new TreeSet<AttrName>();
