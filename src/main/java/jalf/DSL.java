@@ -52,33 +52,27 @@ public class DSL {
     }
 
     public static Predicate eq(Object left, Object right) {
-        return new Eq(left, right);
-    }
-
-    //TODO Is there a clean way to make Comparable predicates more Java type-safe?
-
-    @SuppressWarnings("unchecked")
-    public static Predicate gt(Comparable<?> left, Comparable<?> right) {
-        return new Gt((Comparable<Object>) left, (Comparable<Object>) right);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static Predicate gte(Comparable<?> left, Comparable<?> right) {
-        return new Gte((Comparable<Object>) left, (Comparable<Object>) right);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static Predicate lt(Comparable<?> left, Comparable<?> right) {
-        return new Lt((Comparable<Object>) left, (Comparable<Object>) right);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static Predicate lte(Comparable<?> left, Comparable<?> right) {
-        return new Lte((Comparable<Object>) left, (Comparable<Object>) right);
+        return Predicate.eq(left, right);
     }
 
     public static Predicate neq(Object left, Object right) {
-        return new Neq(left, right);
+        return Predicate.neq(left, right);
+    }
+
+    public static Predicate gt(Comparable<?> left, Comparable<?> right) {
+        return Predicate.gt(left, right);
+    }
+
+    public static Predicate gte(Comparable<?> left, Comparable<?> right) {
+        return Predicate.gte(left, right);
+    }
+
+    public static Predicate lt(Comparable<?> left, Comparable<?> right) {
+        return Predicate.lt(left, right);
+    }
+
+    public static Predicate lte(Comparable<?> left, Comparable<?> right) {
+        return Predicate.lte(left, right);
     }
 
     // Tuple
