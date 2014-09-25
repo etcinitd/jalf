@@ -1,32 +1,36 @@
 package jalf;
 
-import static jalf.util.CollectionUtils.parallelStreamOf;
-import static java.util.Collections.unmodifiableSortedSet;
+import static java.util.Collections.unmodifiableSet;
 
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * A list of attributes.
  *
- * AttrList actually captures an ordered set of attribute names. It is used,
- * for instance for `project(Relation, AttrList)`. Most of the time, the order
- * of attribute names does not matter but some operators may depend on it.
- * Their documentation will make that clear.
+ * AttrList actually captures an ordered set of attribute names, where the
+ * order is the one provided at construction time (see factory methods). The
+ * order is not significant when it comes to `equals` and `hashCode`; that is,
+ * the value semantics is in terms of a set, not of a list. However, the order
+ * is guaranteed when iterating attribute names. The order is mostly maintained
+ * for convenience and principle of least surprise (POLS). Indeed, any concrete
+ * syntax implemented in top of JAlf would lead users to dislike a pure set
+ * semantics (think about a projection that would shuffle attributes); JAlf
+ * implements a best effort strategy towards POLS.
  *
  * Instances of this class can be obtained either through factory methods or
  * through JAlf's DSL.
  */
 public class AttrList implements Iterable<AttrName> {
 
-    private SortedSet<AttrName> names;
+    private Set<AttrName> names;
 
-    private AttrList(SortedSet<AttrName> names){
-        this.names = unmodifiableSortedSet(names);
+    private AttrList(LinkedHashSet<AttrName> names){
+        this.names = unmodifiableSet(names);
     }
 
     /**
@@ -35,21 +39,12 @@ public class AttrList implements Iterable<AttrName> {
      * @param attrNames a stream of attribute names.
      * @return an attribute list.
      */
-    public static AttrList stream(Stream<AttrName> attrNames) {
-        SortedSet<AttrName> set = attrNames
+    public static AttrList attrs(Stream<AttrName> attrNames) {
+        // TODO use a concurrent WeakHashMap to keep immutable AttrList(s)
+        LinkedHashSet<AttrName> list = attrNames
                 .distinct()
-                .collect(Collectors.toCollection(TreeSet::new));
-        return new AttrList(set);
-    }
-
-    /**
-     * Builds an list from any collection of attribute names.
-     *
-     * @param attrNames a collection of attribute names.
-     * @return an attribute list.
-     */
-    public static AttrList collection(Collection<AttrName> attrNames) {
-        return stream(attrNames.stream());
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+        return new AttrList(list);
     }
 
     /**
@@ -60,10 +55,8 @@ public class AttrList implements Iterable<AttrName> {
      * @return the built attribute list
      */
     public static AttrList attrs(Iterable<AttrName> attrNames) {
-        // TODO use a concurrent WeakHashMap to keep immutable AttrList(s)
-        SortedSet<AttrName> set = parallelStreamOf(attrNames)
-                .collect(Collectors.toCollection(TreeSet::new));
-        return new AttrList(set);
+        return AttrList.attrs(StreamSupport.stream(attrNames.spliterator(),
+                false));
     }
 
     /**
@@ -74,7 +67,7 @@ public class AttrList implements Iterable<AttrName> {
      * @return the built attribute list
      */
     public static AttrList attrs(AttrName... attrNames) {
-        return stream(Stream.of(attrNames));
+        return attrs(Stream.of(attrNames));
     }
 
     /**
@@ -85,7 +78,7 @@ public class AttrList implements Iterable<AttrName> {
      * @return the built attribute list
      */
     public static AttrList attrs(String... attrNames) {
-        return stream(Stream.of(attrNames).map(AttrName::attr));
+        return attrs(Stream.of(attrNames).map(AttrName::attr));
     }
 
     /**
@@ -116,7 +109,7 @@ public class AttrList implements Iterable<AttrName> {
      * also in `other`.
      */
     public AttrList difference(AttrList other) {
-        SortedSet<AttrName> diff = new TreeSet<>(this.names);
+        LinkedHashSet<AttrName> diff = new LinkedHashSet<>(this.names);
         diff.removeAll(other.names);
         return new AttrList(diff);
     }
@@ -129,9 +122,9 @@ public class AttrList implements Iterable<AttrName> {
      * `other`.
      */
     public AttrList intersect(AttrList other) {
-        SortedSet<AttrName> intr = new TreeSet<>(this.names);
+        LinkedHashSet<AttrName> intr = new LinkedHashSet<>(this.names);
         intr.retainAll(other.names);
-        return AttrList.attrs(intr);
+        return new AttrList(intr);
     }
 
     @Override

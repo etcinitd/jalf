@@ -1,5 +1,9 @@
 package jalf;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -16,7 +20,14 @@ public class AttrListTest {
 
         // it is equal to an equivalent
         assertEquals(s1, AttrList.attrs(SID, NAME, STATUS));
+
+        // the order has no significance
         assertEquals(s1, AttrList.attrs(NAME, SID, STATUS));
+
+        // it is not equal to projections/extensions/updates
+        assertNotEquals(s1, AttrList.attrs(SID, NAME));
+        assertNotEquals(s1, AttrList.attrs(SID, NAME, STATUS, CITY));
+        assertNotEquals(s1, AttrList.attrs(SID, NAME, CITY));
     }
 
     @Test
@@ -34,6 +45,16 @@ public class AttrListTest {
 
         assertTrue(l.contains(SID));
         assertFalse(l.contains(WEIGHT));
+    }
+
+    @Test
+    public void testStream() {
+        // it keeps the original ordering of names
+        AttrList l = AttrList.attrs(SID, NAME, STATUS);
+
+        List<AttrName> got = l.stream().collect(Collectors.toList());
+        List<AttrName> expected = Arrays.asList(SID, NAME, STATUS);
+        assertEquals(expected, got);
     }
 
     @Test

@@ -119,7 +119,7 @@ public abstract class Predicate implements java.util.function.Predicate<Tuple> {
     public AttrList getReferencedAttributes() {
         Set<AttrName> attrNames = new TreeSet<AttrName>();
         fillReferencedAttributes(attrNames);
-        return AttrList.collection(attrNames);
+        return AttrList.attrs(attrNames);
     }
 
     protected abstract void fillReferencedAttributes(Set<AttrName> attrNames);

@@ -114,7 +114,7 @@ public class Heading {
      * @return an attribute list.
      */
     public AttrList toAttrList() {
-        return AttrList.collection(this.attributes.keySet());
+        return AttrList.attrs(this.attributes.keySet());
     }
 
     /**
