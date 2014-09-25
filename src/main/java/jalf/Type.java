@@ -17,7 +17,7 @@ import jalf.type.TupleType;
  * implement so-called value objects. In particular, the objects must be
  * immutable (or not mutated in practice) and their class must provide
  * consistent implementations of `hashCode` and `equals`. Provided those
- * requirements ae met, any class/object can be used for capturing values in
+ * requirements are met, any class/object can be used for capturing values in
  * JAlf tuples and relations.
  *
  * This interface is not intended to be instantiated directly. Instances may be
