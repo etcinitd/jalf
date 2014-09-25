@@ -5,7 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static jalf.fixtures.SuppliersAndParts.*;
 
-public class TestAttrList {
+public class AttrListTest {
 
     @Test
     public void tesEquals() {
@@ -29,6 +29,14 @@ public class TestAttrList {
     }
 
     @Test
+    public void testContains() {
+        AttrList l = AttrList.attrs(SID, NAME, STATUS);
+
+        assertTrue(l.contains(SID));
+        assertFalse(l.contains(WEIGHT));
+    }
+
+    @Test
     public void testDifference() {
         AttrList s1 = AttrList.attrs(SID, NAME, STATUS);
         AttrList s2 = AttrList.attrs(CITY, NAME);
@@ -36,4 +44,11 @@ public class TestAttrList {
         assertEquals(expected, s1.difference(s2));
     }
 
+    @Test
+    public void testIntersect() {
+        AttrList s1 = AttrList.attrs(SID, NAME, STATUS);
+        AttrList s2 = AttrList.attrs(CITY, NAME);
+        AttrList expected = AttrList.attrs(NAME);
+        assertEquals(expected, s1.intersect(s2));
+    }
 }
