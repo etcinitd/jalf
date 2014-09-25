@@ -5,7 +5,6 @@ import static jalf.util.ValidationUtils.validateNotNull;
 import static java.util.Collections.unmodifiableMap;
 import jalf.type.TupleType;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -102,7 +101,7 @@ public class Tuple {
      * @post `resultingType.contains(project(on, resultingType))` is true
      */
     public Tuple project(AttrList on, TupleType resultingType) {
-        Map<AttrName, Object> p = new HashMap<>();
+        Map<AttrName, Object> p = new ConcurrentHashMap<>();
         on.forEach(attrName -> p.put(attrName, attrs.get(attrName)));
         return new Tuple(resultingType, p);
     }
@@ -121,7 +120,7 @@ public class Tuple {
      * @post `resultingType.contains(rename(r, resultingType))` is true
      */
     public Tuple rename(Renaming r, TupleType resultingType) {
-        Map<AttrName, Object> renamed = new HashMap<>();
+        Map<AttrName, Object> renamed = new ConcurrentHashMap<>();
         attrs.entrySet().forEach(attribute -> {
             AttrName attrName = attribute.getKey();
             AttrName as = r.apply(attrName);
@@ -137,7 +136,7 @@ public class Tuple {
      * It should not be used by end users.
      * TODO: how to fix this without hurting performance too much?
      *
-     * @pre this and other should agree on the values on common attributes.
+     * @pre this and other should agree on values of common attributes.
      * @pre `resultingType` should be faithful to the actual result, that it
      * it must guarantee the post condition.
      * @param other another tuple to join on.
