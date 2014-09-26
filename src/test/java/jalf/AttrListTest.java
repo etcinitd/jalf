@@ -72,4 +72,11 @@ public class AttrListTest {
         AttrList expected = AttrList.attrs(NAME);
         assertEquals(expected, s1.intersect(s2));
     }
+
+    @Test
+    public void testToList() {
+        AttrList l = AttrList.attrs(SID, NAME, STATUS);
+        List<AttrName> expected = Arrays.asList(SID, NAME, STATUS);
+        assertEquals(expected, l.toList());
+    }
 }

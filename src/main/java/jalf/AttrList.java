@@ -4,6 +4,7 @@ import static java.util.Collections.unmodifiableSet;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -157,6 +158,10 @@ public class AttrList implements Iterable<AttrName> {
                 .map(a -> a.getName())
                 .collect(Collectors.joining(", "))
                 + ")";
+    }
+
+    public List<AttrName> toList() {
+        return names.stream().collect(Collectors.toList());
     }
 
 }
