@@ -9,6 +9,7 @@ import jalf.Type;
 import jalf.TypeException;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,7 +40,7 @@ public class Heading {
         validateNotNull("Parameter 'keyValuePairs' must be non-null.", nameTypePairs);
         validate("Length of key-value pairs must be even.", nameTypePairs.length % 2, 0);
 
-        Map<AttrName, Type<?>> attrs = new HashMap<>();
+        Map<AttrName, Type<?>> attrs = new LinkedHashMap<>();
         for (int i = 0; i < nameTypePairs.length; i++) {
             AttrName attr = AttrName.dress(nameTypePairs[i++]);
             Type<?> type = Type.dress(nameTypePairs[i]);
@@ -56,7 +57,7 @@ public class Heading {
      * @return a Heading instance.
      */
     public static Heading infer(Map<AttrName, Object> nameValuePairs) {
-        Map<AttrName, Type<?>> attributes = new HashMap<>();
+        Map<AttrName, Type<?>> attributes = new LinkedHashMap<>();
         nameValuePairs.forEach((attr, value) -> {
             Type<?> type = Type.infer(value);
             attributes.put(attr, type);
@@ -155,14 +156,14 @@ public class Heading {
      * @return the joined heading.
      */
     public Heading join(Heading other) {
-        Map<AttrName, Type<?>> joined =  new HashMap<>(this.attributes);
+        Map<AttrName, Type<?>> joined =  new LinkedHashMap<>(this.attributes);
         other.attributes.forEach((name, rightType) -> {
             Type<?> leftType = joined.get(name);
             if (leftType != null) {
                 Type<?> lcst = Type.leastCommonSupertype(leftType, rightType);
                 joined.put(name, lcst);
             } else {
-                joined.put(name, leftType);
+                joined.put(name, rightType);
             }
         });
         return new Heading(joined);
