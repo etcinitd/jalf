@@ -2,9 +2,10 @@ package jalf.type;
 
 import static org.junit.Assert.*;
 import static jalf.fixtures.SuppliersAndParts.*;
-import jalf.*;
 import static jalf.DSL.*;
 
+import java.util.*;
+import jalf.*;
 import org.junit.Test;
 
 public class TestRelationType {
@@ -16,6 +17,23 @@ public class TestRelationType {
         Relation suppliers = suppliers();
         RelationType inferred = RelationType.infer(suppliers.stream());
         assertEquals(suppliers.getType(), inferred);
+    }
+
+    @Test
+    public void testToTupleType() {
+        TupleType expected = TupleType.varargs(SID, String.class);
+        assertEquals(expected, type.toTupleType());
+    }
+
+    @Test
+    public void testToAttrList() {
+        RelationType type = RelationType.varargs(STATUS, Integer.class, SID, String.class);
+        AttrList expected = AttrList.attrs(STATUS, SID);
+        assertEquals(expected, type.toAttrList());
+
+        // it preserves the insertion order
+        List<AttrName> list = Arrays.asList(STATUS, SID);
+        assertEquals(list, expected.toList());
     }
 
     @Test
@@ -67,4 +85,15 @@ public class TestRelationType {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testJoin() {
+        RelationType r1 = RelationType.varargs(SID, String.class, STATUS, Integer.class);
+        RelationType r2 = RelationType.varargs(SID, String.class, CITY, String.class);
+        RelationType expected = RelationType.varargs(SID, String.class, STATUS, Integer.class, CITY, String.class);
+        assertEquals(expected, r1.join(r2));
+
+        // it keeps a natural order
+        List<AttrName> list = Arrays.asList(SID, STATUS, CITY);
+        assertEquals(list, expected.toAttrList().toList());
+    }
 }

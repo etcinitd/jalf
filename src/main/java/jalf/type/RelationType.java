@@ -150,10 +150,8 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
      * @return a subtype of this relation, by constraint `predicate`.
      */
     public RelationType restrict(Predicate predicate) {
-        if (predicate.isStaticallyAnalyzable()) {
-            AttrList on = predicate.getReferencedAttributes();
-            checkValidAttrList(on);
-        }
+        AttrList on = predicate.getReferencedAttributes();
+        checkValidAttrList(on);
         return this;
     }
 
@@ -165,17 +163,6 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
      */
     public RelationType join(RelationType other) {
         return new RelationType(this.heading.join(other.heading));
-    }
-
-    private void checkValidAttrList(AttrList on) {
-        AttrList mine = toAttrList();
-        AttrList extra = on.difference(mine);
-        if (!extra.isEmpty()) {
-            String which = extra.stream()
-                    .map(a -> a.getName())
-                    .collect(Collectors.joining(", "));
-            throw new TypeException("No such attributes: " + which);
-        }
     }
 
     public AttrList toAttrList() {
@@ -195,6 +182,23 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
             return false;
         RelationType other = (RelationType) obj;
         return heading.equals(other.heading);
+    }
+
+    ///
+
+    /**
+     * Checks that `on` is a subset of this relation type attributes or throws
+     * a TypeException with a friendly message.
+     */
+    private void checkValidAttrList(AttrList on) {
+        AttrList mine = toAttrList();
+        AttrList extra = on.difference(mine);
+        if (!extra.isEmpty()) {
+            String which = extra.stream()
+                    .map(a -> a.getName())
+                    .collect(Collectors.joining(", "));
+            throw new TypeException("No such attributes: " + which);
+        }
     }
 
 }
