@@ -79,8 +79,23 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
     }
 
     /**
+     * Builds a Renaming instance by an intension, using a user function and
+     * its inverse.
+     *
+     * @param fn a total function from AttrName -> AttrName.
+     * @param nf the reverse function.
+     * @return A decoration of `fn` as a proper Renaming instance.
+     */
+    public static Renaming intension(UnaryOperator<AttrName> fn, UnaryOperator<AttrName> nf) {
+        validateNotNull("Parameter 'fn' must be non-null.", fn);
+        validateNotNull("Parameter 'nf' must be non-null.", nf);
+
+        return new Intension(fn, nf);
+    }
+
+    /**
      * Builds a Renaming instance by an intension, using a user function.
-     * 
+     *
      * @param fn a total function from AttrName -> AttrName.
      * @return A decoration of `fn` as a proper Renaming instance.
      */
@@ -101,7 +116,12 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
     public static Renaming prefix(String prefix) {
         validateNotNull("Parameter 'prefix' must be non-null.", prefix);
 
-        return intension(a -> attr(prefix + a.getName()));
+        UnaryOperator<AttrName> fn = a -> attr(prefix + a.getName());
+        UnaryOperator<AttrName> nf = a -> {
+            String name = a.getName();
+            return attr(name.substring(prefix.length()));
+        };
+        return intension(fn, nf);
     }
 
     /**
@@ -114,8 +134,30 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
     public static Renaming suffix(String suffix) {
         validateNotNull("Parameter 'suffix' must be non-null.", suffix);
 
-        return intension(a -> attr(a.getName() + suffix));
+        UnaryOperator<AttrName> fn = a -> attr(a.getName() + suffix);
+        UnaryOperator<AttrName> nf = a -> {
+            String name = a.getName();
+            int length = a.getName().length();
+            return attr(name.substring(0, length - suffix.length()));
+        };
+        return intension(fn, nf);
     }
+
+    /**
+     * Checks whether this renaming is reversible.
+     *
+     * @return true if this renaming is reversible, false otherwise.
+     */
+    public abstract boolean isReversible();
+
+    /**
+     * Returns the inverse renaming of this.
+     *
+     * @pre the renaming must be reversible.
+     * @return a Renaming instance that applies the inverse transformation to
+     * attribute names.
+     */
+    public abstract Renaming reverse();
 
     static class Extension extends Renaming {
 
@@ -131,6 +173,18 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
                 return renamings.get(t);
             else
                 return t;
+        }
+
+        @Override
+        public boolean isReversible() {
+            return true;
+        }
+
+        @Override
+        public Renaming reverse() {
+            Map<AttrName, AttrName> reverseMap = new HashMap<>();
+            renamings.forEach((a,b) -> reverseMap.put(b, a));
+            return new Extension(reverseMap);
         }
 
         @Override
@@ -153,14 +207,34 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
     static class Intension extends Renaming {
 
         private UnaryOperator<AttrName> fn;
+        private UnaryOperator<AttrName> nf;
 
-        Intension(UnaryOperator<AttrName> fn) {
+        Intension(UnaryOperator<AttrName> fn, UnaryOperator<AttrName> nf) {
             this.fn = fn;
+            this.nf = nf;
+        }
+
+        public Intension(UnaryOperator<AttrName> fn) {
+            this(fn, null);
         }
 
         @Override
         public AttrName apply(AttrName t) {
             return fn.apply(t);
+        }
+
+        @Override
+        public boolean isReversible() {
+            return (nf != null);
+        }
+
+        @Override
+        public Renaming reverse() {
+            if (nf == null) {
+                throw new UnsupportedOperationException();
+            } else {
+                return new Intension(nf, fn);
+            }
         }
 
         @Override
