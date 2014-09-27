@@ -1,7 +1,6 @@
 package jalf;
 
 import jalf.predicate.*;
-import jalf.relation.algebra.Join;
 import jalf.relation.materialized.SetMemoryRelation;
 import jalf.type.Heading;
 import jalf.type.RelationType;
@@ -114,6 +113,6 @@ public class DSL {
     }
 
     public static Relation join(Relation left, Relation right) {
-        return new Join(left, right);
+        return left.join(right);
     }
 }

@@ -1,6 +1,7 @@
 package jalf.compiler;
 
 import jalf.*;
+import jalf.relation.algebra.Join;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
@@ -44,6 +45,11 @@ public abstract class AbstractRelation implements Relation {
     @Override
     public Relation restrict(Predicate predicate) {
         return new Restrict(this, predicate);
+    }
+
+    @Override
+    public Relation join(Relation right) {
+        return new Join(this, right);
     }
 
     ///
