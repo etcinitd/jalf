@@ -1,7 +1,6 @@
 package jalf.relation.materialized;
 
 import jalf.*;
-import jalf.relation.algebra.*;
 import jalf.type.RelationType;
 
 import org.junit.*;
@@ -40,11 +39,11 @@ public class TestSetMemoryRelation {
 
     @Test
     public void testEqualsAgainstAStream() {
-        assertTrue(s1.equals(new Identity(s1)));
-        assertTrue(s1.equals(new Identity(s1bis)));
-        assertFalse(s1.equals(new Identity(s2)));
-        assertFalse(s1.equals(new Identity(dum)));
-        assertFalse(dum.equals(new Identity(s1)));
+        assertTrue(s1.equals(rename(s1, renaming(SID, SID))));
+        assertTrue(s1.equals(rename(s1bis, renaming(SID, SID))));
+        assertFalse(s1.equals(rename(s2, renaming(SID, SID))));
+        assertFalse(s1.equals(rename(dum, renaming(SID, SID))));
+        assertFalse(dum.equals(rename(s1, renaming(SID, SID))));
     }
 
 }
