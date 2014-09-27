@@ -2,7 +2,7 @@ package jalf.relation.algebra;
 
 import jalf.AttrList;
 import jalf.Relation;
-import jalf.compiler.Cog;
+import jalf.Visitor;
 import jalf.type.RelationType;
 
 /**
@@ -61,8 +61,8 @@ public class Join extends BinaryOperator {
     }
 
     @Override
-    protected Cog compile(Cog left, Cog right) {
-        return left.join(this, left, right);
+    public <R> R accept(Visitor<R> visitor) {
+        return visitor.visit(this);
     }
 
 }

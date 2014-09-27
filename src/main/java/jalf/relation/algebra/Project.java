@@ -1,7 +1,8 @@
 package jalf.relation.algebra;
 
-import jalf.*;
-import jalf.compiler.Cog;
+import jalf.AttrList;
+import jalf.Relation;
+import jalf.Visitor;
 import jalf.type.RelationType;
 
 /**
@@ -46,7 +47,8 @@ public class Project extends UnaryOperator {
     }
 
     @Override
-    protected Cog compile(Cog compiled) {
-        return compiled.project(this, compiled);
+    public <R> R accept(Visitor<R> visitor) {
+        return visitor.visit(this);
     }
+
 }

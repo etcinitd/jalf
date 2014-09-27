@@ -73,6 +73,8 @@ public interface Relation {
      */
     Relation restrict(Predicate predicate);
 
+    public abstract <R> R accept(Visitor<R> visitor);
+
     /**
      * Returns a stream over this relation's tuples.
      *
@@ -91,4 +93,5 @@ public interface Relation {
      * @return the size of the relation.
      */
     public long count();
+
 }

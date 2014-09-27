@@ -2,7 +2,7 @@ package jalf.relation.algebra;
 
 import jalf.Relation;
 import jalf.Renaming;
-import jalf.compiler.Cog;
+import jalf.Visitor;
 import jalf.type.RelationType;
 
 /**
@@ -48,7 +48,8 @@ public class Rename extends UnaryOperator {
     }
 
     @Override
-    protected Cog compile(Cog compiled) {
-        return compiled.rename(this, compiled);
+    public <R> R accept(Visitor<R> visitor) {
+        return visitor.visit(this);
     }
+
 }

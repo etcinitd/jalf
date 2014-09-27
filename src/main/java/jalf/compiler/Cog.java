@@ -25,7 +25,9 @@ import java.util.stream.Stream;
  * expressions. It is a middleware between logic expressions and streams
  * providing access to the list of tuples of a relation. Cogs implement stream
  * manipulation algorithms while also providing the compilation context in
- * terms of the source expression and actual compiler used.
+ * terms of the source expression and actual compiler used. Also, unlike
+ * Java streams, Cog may be consumed multiple times, thereby providing a real
+ * reusable compilation result.
  *
  * This parent class implements the default compilation mechanism using Java
  * streams. It is intended to be subclassed for specific compilation schemes
@@ -51,12 +53,12 @@ public class Cog {
     }
 
     /** Default compilation of `project`. */
-    public Cog project(Project projection, Cog compiled){
+    public Cog project(Project projection){
         AttrList on = projection.getAttributes();
         TupleType tt = projection.getTupleType();
 
         // stream compilation: map projection + distinct
-        Supplier<Stream<Tuple>> supplier = () -> compiled.stream()
+        Supplier<Stream<Tuple>> supplier = () -> this.stream()
                 .map(t -> t.project(on, tt))
                 .distinct();
 
@@ -64,60 +66,60 @@ public class Cog {
     }
 
     /** Default compilation of `rename`. */
-    public Cog rename(Rename rename, Cog compiled){
+    public Cog rename(Rename rename){
         Renaming renaming = rename.getRenaming();
         TupleType tt = rename.getTupleType();
 
         // stream compilation: simple renaming
-        Supplier<Stream<Tuple>> supplier = () -> compiled.stream()
+        Supplier<Stream<Tuple>> supplier = () -> this.stream()
                 .map(t -> t.rename(renaming, tt));
 
         return new Cog(rename, supplier);
     }
 
     /** Default compilation of `restrict`. */
-    public Cog restrict(Restrict restrict, Cog compiled) {
+    public Cog restrict(Restrict restrict) {
         Predicate predicate = restrict.getPredicate();
 
         // stream compilation: simple filtering
-        Supplier<Stream<Tuple>> supplier = () -> compiled.stream()
+        Supplier<Stream<Tuple>> supplier = () -> this.stream()
                 .filter(t -> predicate.test(t));
 
         return new Cog(restrict, supplier);
     }
 
     /** Default compilation of `join`. */
-    public Cog join(Join join, Cog left, Cog right) {
+    public Cog join(Join join, Cog right) {
         AttrList on = join.getJoinAttrList();
 
         if (on.isEmpty()) {
-            return crossJoin(join, left, right);
+            return crossJoin(join, right);
         } else {
-            return hashJoin(join, left, right);
+            return hashJoin(join, right);
         }
     }
 
     /** Compiles a join with a nested loop */
-    private Cog crossJoin(Join join, Cog left, Cog right) {
+    private Cog crossJoin(Join join, Cog right) {
         // get some info about the join to apply
         final TupleType tt = join.getTupleType();
 
         // build a supplier that does the cross join
         Supplier<Stream<Tuple>> supplier = () -> {
-            return left.stream().flatMap(leftTuple -> right.stream()
+            return this.stream().flatMap(leftTuple -> right.stream()
                         .map(rightTuple -> leftTuple.join(rightTuple, tt)));
         };
         return new Cog(join, supplier);
     }
 
-    private Cog hashJoin(Join join, Cog left, Cog right) {
+    private Cog hashJoin(Join join, Cog right) {
         // get some info about the join to apply
         final AttrList on = join.getJoinAttrList();
         final TupleType tt = join.getTupleType();
 
         // build a supplier that does the join
         Supplier<Stream<Tuple>> supplier = () -> {
-            Stream<Tuple> leftStream = left.stream();
+            Stream<Tuple> leftStream = this.stream();
             Stream<Tuple> rightStream = right.stream();
 
             // build an index on left tuples and do the hash join

@@ -12,11 +12,10 @@ import java.util.stream.Stream;
 /**
  * Parent (abstract) class of all relation implementations.
  *
- * Abstract relations are able to compile themselves as Cogs that encapsulate
- * a stream of tuples, which is the one served by `stream()`. The actual
- * compilation process depends on the kind of Relation (e.g. expressions
- * vs. in-memory relations). See documentation of those for more about the
- * compilation process.
+ * This class provides a base implementation for the Relation contract,
+ * especially regarding the Object-Oriented algebra API. The stream of tuples
+ * is offered through a compilation process implemented by JAlf default
+ * compiler.
  */
 public abstract class AbstractRelation implements Relation {
 
@@ -66,7 +65,9 @@ public abstract class AbstractRelation implements Relation {
 
     ///
 
-    public abstract Cog compile();
+    private Cog compile() {
+        return accept(new Compiler());
+    }
 
     ///
 

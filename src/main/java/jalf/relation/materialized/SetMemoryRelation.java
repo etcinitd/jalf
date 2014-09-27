@@ -4,7 +4,9 @@ import static jalf.util.CollectionUtils.setOf;
 import jalf.Relation;
 import jalf.Tuple;
 import jalf.TypeException;
+import jalf.Visitor;
 import jalf.compiler.Cog;
+import jalf.compiler.Compiler;
 import jalf.type.RelationType;
 import jalf.type.TupleType;
 import jalf.util.CollectionUtils;
@@ -65,13 +67,19 @@ public class SetMemoryRelation extends MemoryRelation {
         return type;
     }
 
-    public Cog compile(){
+    @Override
+    public Cog toCog(Compiler compiler) {
         return new Cog(this, () -> tuples.stream());
     }
 
     @Override
     public long count() {
         return tuples.size();
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+        return visitor.visit(this);
     }
 
     public int hashCode(){
