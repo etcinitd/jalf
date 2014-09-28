@@ -1,0 +1,47 @@
+package jalf.util;
+
+import jalf.Visitor;
+import jalf.relation.algebra.BinaryOperator;
+import jalf.relation.algebra.Join;
+import jalf.relation.algebra.LeafOperand;
+import jalf.relation.algebra.Project;
+import jalf.relation.algebra.Rename;
+import jalf.relation.algebra.Restrict;
+import jalf.relation.algebra.UnaryOperator;
+
+public class DefaultVisitor<T> implements Visitor<T> {
+
+    public T visit(UnaryOperator relation) {
+        throw new UnsupportedOperationException();
+    }
+
+        @Override
+    public T visit(Project relation) {
+        return visit((UnaryOperator)relation);
+    }
+
+    @Override
+    public T visit(Rename relation) {
+        return visit((UnaryOperator)relation);
+    }
+
+    @Override
+    public T visit(Restrict relation) {
+        return visit((UnaryOperator)relation);
+    }
+
+    public T visit(BinaryOperator relation) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public T visit(Join relation) {
+        return visit((BinaryOperator)relation);
+    }
+
+    @Override
+    public T visit(LeafOperand relation) {
+        throw new UnsupportedOperationException();
+    }
+
+}
