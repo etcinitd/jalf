@@ -1,5 +1,8 @@
 package jalf.relation.algebra;
 
+import java.util.Arrays;
+import java.util.List;
+
 import jalf.AttrList;
 import jalf.Relation;
 import jalf.Visitor;
@@ -58,6 +61,11 @@ public class Join extends BinaryOperator {
     @Override
     protected RelationType typeCheck() {
         return left.getType().join(right.getType());
+    }
+
+    @Override
+   public List<Object> getArguments() {
+        return Arrays.asList();
     }
 
     @Override

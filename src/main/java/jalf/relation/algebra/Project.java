@@ -1,5 +1,8 @@
 package jalf.relation.algebra;
 
+import java.util.Arrays;
+import java.util.List;
+
 import jalf.AttrList;
 import jalf.Relation;
 import jalf.Visitor;
@@ -44,6 +47,11 @@ public class Project extends UnaryOperator {
 
     public AttrList getAttributes() {
         return attributes;
+    }
+
+    @Override
+    public List<Object> getArguments() {
+        return Arrays.asList(attributes);
     }
 
     @Override

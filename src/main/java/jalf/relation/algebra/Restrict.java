@@ -1,5 +1,8 @@
 package jalf.relation.algebra;
 
+import java.util.Arrays;
+import java.util.List;
+
 import jalf.Predicate;
 import jalf.Relation;
 import jalf.Visitor;
@@ -44,6 +47,11 @@ public class Restrict extends UnaryOperator {
 
     public Predicate getPredicate() {
         return predicate;
+    }
+
+    @Override
+    public List<Object> getArguments() {
+        return Arrays.asList(predicate);
     }
 
     @Override
