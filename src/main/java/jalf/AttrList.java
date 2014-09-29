@@ -128,6 +128,16 @@ public class AttrList implements Iterable<AttrName> {
         return new AttrList(intr);
     }
 
+    /**
+     * Renames some attributes, returning the resulting attribute list.
+     *
+     * @param r a Renaming instance.
+     * @return an attribute list with attributes renamed according to `r`.
+     */
+    public AttrList rename(Renaming r) {
+        return AttrList.attrs(names.stream().map(a -> r.apply(a)));
+    }
+
     @Override
     public Iterator<AttrName> iterator() {
         return names.iterator();
