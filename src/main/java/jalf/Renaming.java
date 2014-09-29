@@ -159,6 +159,22 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
      */
     public abstract Renaming reverse();
 
+    /**
+     * Projects this Renaming function by restricting its domain to a subset
+     * of its attributes.
+     *
+     * When the renaming is not an extension, this methods may simply return
+     * the source renaming itself, that is, not applying a domain restriction
+     * per se but a compatible function.
+     *
+     * Also, attributes should already be a subset of the function domain; this
+     * method is however robust to violations of that precondition.
+     *
+     * @param attributes some attribute names.
+     * @return another Renaming instance with a restricted domain.
+     */
+    public abstract Renaming project(AttrList attributes);
+
     static class Extension extends Renaming {
 
         private Map<AttrName, AttrName> renamings;
@@ -187,6 +203,17 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
             return new Extension(reverseMap);
         }
 
+        public Renaming project(AttrList attributes) {
+            Map<AttrName, AttrName> r = new HashMap<>();
+            attributes.forEach(a -> {
+                AttrName renamed = renamings.get(a);
+                if (renamed != null) {
+                    r.put(a, renamed);
+                }
+            });
+            return new Extension(r);
+        }
+
         @Override
         public int hashCode() {
             return 31*Extension.class.hashCode() + renamings.hashCode();
@@ -200,6 +227,11 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
                 return false;
             Extension other = (Extension) obj;
             return renamings.equals(other.renamings);
+        }
+
+        @Override
+        public String toString() {
+            return "renaming(" + renamings + ")";
         }
 
     }
@@ -235,6 +267,11 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
             } else {
                 return new Intension(nf, fn);
             }
+        }
+
+        @Override
+        public Renaming project(AttrList attributes) {
+            return this;
         }
 
         @Override

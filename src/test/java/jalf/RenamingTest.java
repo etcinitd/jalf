@@ -35,6 +35,22 @@ public class RenamingTest {
     }
 
     @Test
+    public void testProjectOnExtension() {
+        Renaming r = Renaming.extension(sid, ssid, name, sname);
+        Renaming expected = Renaming.extension(name, sname);
+
+        // it works with a subset of original attributes
+        AttrList list = AttrList.attrs(name);
+        Renaming got = r.project(list);
+        assertEquals(expected, got);
+
+        // it is robust to a superset too (city was not part of it)
+        list = AttrList.attrs(name, city);
+        got = r.project(list);
+        assertEquals(expected, got);
+    }
+
+    @Test
     public void testItSupportsIntensionRenaming() {
         AttrName SID = attr("SID");
         Renaming r = Renaming.intension(a -> attr(a.getName().toUpperCase()));
