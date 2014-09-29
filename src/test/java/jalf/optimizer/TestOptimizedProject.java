@@ -2,32 +2,11 @@ package jalf.optimizer;
 
 import static jalf.DSL.*;
 import static jalf.fixtures.SuppliersAndParts.*;
-import static org.junit.Assert.*;
-
-import java.util.List;
 
 import jalf.*;
-import jalf.util.ToAstVisitor;
-
 import org.junit.Test;
 
-public class TestOptimizedProject {
-
-    private Optimizer optimizer;
-
-    public TestOptimizedProject() {
-        this.optimizer = new Optimizer();
-    }
-
-    private Relation optimized(Relation operator) {
-        return optimizer.optimized(operator);
-    }
-
-    private void assertSameExpression(Relation expected, Relation optimized) {
-        List<Object> refAst = expected.accept(new ToAstVisitor());
-        List<Object> optAst = optimized.accept(new ToAstVisitor());
-        assertEquals(refAst, optAst);
-    }
+public class TestOptimizedProject extends OptimizerTest {
 
     ///
 
