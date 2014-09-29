@@ -163,12 +163,11 @@ public abstract class Renaming implements UnaryOperator<AttrName> {
      * Projects this Renaming function by restricting its domain to a subset
      * of its attributes.
      *
-     * When the renaming is not an extension, this methods may simply return
-     * the source renaming itself, that is, not applying a domain restriction
-     * per se but a compatible function.
+     * When the renaming is not an extension, this method may return the source
+     * renaming itself, that is, not applying the domain restriction at all.
      *
-     * Also, attributes should already be a subset of the function domain; this
-     * method is however robust to violations of that precondition.
+     * When the renaming is an extension, attributes should capture a subset of
+     * the function domain. This method does not require it, however.
      *
      * @param attributes some attribute names.
      * @return another Renaming instance with a restricted domain.
