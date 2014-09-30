@@ -47,7 +47,7 @@ public class DSL {
     // Predicate
 
     public static Predicate among(AttrName val, Iterable<?> vals) {
-        return new Among(val, vals);
+        return Predicate.among(val, vals);
     }
 
     public static Predicate eq(Object left, Object right) {

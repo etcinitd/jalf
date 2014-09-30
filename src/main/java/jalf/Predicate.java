@@ -1,5 +1,6 @@
 package jalf;
 
+import jalf.predicate.Among;
 import jalf.predicate.Eq;
 import jalf.predicate.Gt;
 import jalf.predicate.Gte;
@@ -24,6 +25,18 @@ public abstract class Predicate implements java.util.function.Predicate<Tuple> {
      */
     public static Predicate java(java.util.function.Predicate<Tuple> fn) {
         return new JavaPredicate(fn);
+    }
+
+    /**
+     * Factors a predicate checking that `attr` equals one of the values
+     * specified in `values`.
+     *
+     * @param attr an attribute name.
+     * @param values a set of values.
+     * @return a Predicate checking if attr is among values.
+     */
+    public static Among among(AttrName attr, Iterable<?> values) {
+        return new Among(attr, values);
     }
 
     /**
