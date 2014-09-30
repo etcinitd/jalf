@@ -1,6 +1,7 @@
 package jalf.optimizer;
 
 import jalf.AttrList;
+import jalf.Predicate;
 import jalf.Relation;
 import jalf.Renaming;
 import jalf.relation.algebra.Rename;
@@ -36,6 +37,29 @@ public class OptimizedRename extends Optimized<Rename> {
         Relation r = operator.getOperand();
         r = optimized(r).project(rAttributes);
         r = optimized(r).rename(outRenaming);
+        return r;
+    }
+
+    /**
+     * restrict(rename(r, n), p) => rename(restrict(r, p|n), n)
+     * where
+     *   - p|n is the predicate where attribute references have been renamed
+     *     the other way round.
+     */
+    @Override
+    public Relation restrict(Predicate predicate) {
+        if (!predicate.isStaticallyAnalyzable()) {
+            return super.restrict(predicate);
+        }
+
+        // rename the predicate with the inversed renaming
+        Renaming renaming = operator.getRenaming();
+        Renaming rRenaming = renaming.reverse();
+        Predicate rPredicate = predicate.rename(rRenaming);
+
+        Relation r = operator.getOperand();
+        r = optimized(r).restrict(rPredicate);
+        r = optimized(r).rename(renaming);
         return r;
     }
 
