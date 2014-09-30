@@ -2,6 +2,7 @@ package jalf.predicate;
 
 import jalf.AttrName;
 import jalf.Predicate;
+import jalf.Renaming;
 import jalf.Tuple;
 
 import java.util.Set;
@@ -44,5 +45,34 @@ public abstract class ComparisonPredicate<T> extends Predicate {
         } else {
             return what;
         }
+    }
+
+    protected T renameOperand(T op, Renaming r) {
+        if (op instanceof AttrName)
+            return (T) r.apply((AttrName) op);
+        else
+            return op;
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 31*getClass().hashCode();
+        if (left != null)
+            hashCode += left.hashCode();
+        if (right != null)
+            hashCode += right.hashCode();
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!getClass().equals(obj.getClass()))
+            return false;
+        ComparisonPredicate<?> other = (ComparisonPredicate<?>) obj;
+        return left.equals(other.left) && right.equals(other.right);
     }
 }

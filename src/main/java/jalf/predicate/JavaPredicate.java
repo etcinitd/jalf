@@ -2,6 +2,7 @@ package jalf.predicate;
 
 import jalf.AttrName;
 import jalf.Predicate;
+import jalf.Renaming;
 import jalf.Tuple;
 
 import java.util.Set;
@@ -26,6 +27,11 @@ public class JavaPredicate extends Predicate {
     @Override
     public boolean test(Tuple t) {
         return fn.test(t);
+    }
+
+    @Override
+    public Predicate rename(Renaming renaming) {
+        throw new UnsupportedOperationException();
     }
 
 }

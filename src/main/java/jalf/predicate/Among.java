@@ -4,6 +4,7 @@ import java.util.Set;
 
 import jalf.AttrName;
 import jalf.Predicate;
+import jalf.Renaming;
 import jalf.Tuple;
 import static jalf.util.CollectionUtils.parallelStreamOf;
 
@@ -25,6 +26,28 @@ public class Among extends Predicate {
     @Override
     protected void fillReferencedAttributes(Set<AttrName> attrNames) {
         attrNames.add(attrName);
+    }
+
+    @Override
+    public Predicate rename(Renaming renaming) {
+        return new Among(renaming.apply(attrName), vals);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31*attrName.hashCode() + vals.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof Among))
+            return false;
+        Among other = (Among) obj;
+        return attrName.equals(other.attrName) && vals.equals(other.vals);
     }
 
 }

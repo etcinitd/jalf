@@ -1,5 +1,8 @@
 package jalf.predicate;
 
+import jalf.Predicate;
+import jalf.Renaming;
+
 public class Eq extends ComparisonPredicate<Object> {
 
     public Eq(Object left, Object right) {
@@ -11,4 +14,8 @@ public class Eq extends ComparisonPredicate<Object> {
         });
     }
 
+    @Override
+    public Predicate rename(Renaming r) {
+        return new Eq(renameOperand(left, r), renameOperand(right, r));
+    }
 }

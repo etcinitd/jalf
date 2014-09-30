@@ -137,4 +137,13 @@ public abstract class Predicate implements java.util.function.Predicate<Tuple> {
 
     protected abstract void fillReferencedAttributes(Set<AttrName> attrNames);
 
+    /**
+     * Returns an equivalent predicate where attribute names have been renamed
+     * according to `renaming`.
+     *
+     * @param renaming a renaming instance.
+     * @return an equivalent predicate formulae where some renamings have been
+     * applied.
+     */
+    public abstract Predicate rename(Renaming renaming);
 }
