@@ -1,9 +1,11 @@
 package jalf.predicate;
 
+import jalf.AttrList;
 import jalf.AttrName;
 import jalf.Predicate;
 import jalf.Renaming;
 import jalf.Tuple;
+import jalf.util.Pair;
 
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -33,6 +35,17 @@ public abstract class ComparisonPredicate<T> extends Predicate {
           attrNames.add((AttrName)left);
         if (right instanceof AttrName)
           attrNames.add((AttrName)right);
+    }
+
+    @Override
+    public Pair<Predicate> split(AttrList list) {
+        AttrList references = this.getReferencedAttributes();
+        AttrList invalidOnLeft = references.difference(list);
+        if (invalidOnLeft.isEmpty()) {
+            return new Pair<>(this, TRUE);
+        } else {
+            return new Pair<>(TRUE, this);
+        }
     }
 
     // TODO Do we need to make this method protected?

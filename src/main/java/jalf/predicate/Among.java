@@ -2,10 +2,12 @@ package jalf.predicate;
 
 import java.util.Set;
 
+import jalf.AttrList;
 import jalf.AttrName;
 import jalf.Predicate;
 import jalf.Renaming;
 import jalf.Tuple;
+import jalf.util.Pair;
 import static jalf.util.CollectionUtils.parallelStreamOf;
 
 public class Among extends Predicate {
@@ -31,6 +33,15 @@ public class Among extends Predicate {
     @Override
     public Predicate rename(Renaming renaming) {
         return new Among(renaming.apply(attrName), vals);
+    }
+
+    @Override
+    public Pair<Predicate> split(AttrList list) {
+        if (list.contains(attrName)) {
+            return new Pair<>(this, TRUE);
+        } else {
+            return new Pair<>(TRUE, this);
+        }
     }
 
     @Override

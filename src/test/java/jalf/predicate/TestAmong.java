@@ -1,7 +1,10 @@
 package jalf.predicate;
 
 import jalf.*;
+import jalf.util.Pair;
+
 import java.util.*;
+
 import org.junit.Test;
 
 import static jalf.fixtures.SuppliersAndParts.*;
@@ -17,6 +20,25 @@ public class TestAmong {
         Predicate expected = Predicate.among(SUPPLIER_ID, values);
         Predicate got = source.rename(r);
         assertEquals(expected, got);
+    }
+
+    @Test
+    public void testSplit() {
+        Among source = Predicate.among(SID, Arrays.asList("S1", "S2"));
+        AttrList list = null;
+        Pair<Predicate> split = null;
+
+        // it splits correctly when list contains referenced attribute
+        list = AttrList.attrs(SID, NAME);
+        split = source.split(list);
+        assertEquals(source, split.left);
+        assertEquals(Predicate.TRUE, split.right);
+
+        // it splits correctly when list does not
+        list = AttrList.attrs(NAME, CITY);
+        split = source.split(list);
+        assertEquals(Predicate.TRUE, split.left);
+        assertEquals(source, split.right);
     }
 
     @Test

@@ -1,6 +1,8 @@
 package jalf.predicate;
 
 import jalf.*;
+import jalf.util.Pair;
+
 import org.junit.Test;
 
 import static jalf.fixtures.SuppliersAndParts.*;
@@ -29,6 +31,43 @@ public class TestComparisonPredicate {
         expected = Predicate.eq(NAME, SUPPLIER_ID);
         got = source.rename(r);
         assertEquals(expected, got);
+    }
+
+    @Test
+    public void testSplit() {
+        Predicate source = null;
+        AttrList list = null;
+        Pair<Predicate> split = null;
+
+        // when the source contains only one attribute...
+        source = Predicate.eq(SID, "S1");
+
+        // it splits correctly when list contains referenced attribute
+        list = AttrList.attrs(SID, NAME);
+        split = source.split(list);
+        assertEquals(source, split.left);
+        assertEquals(Predicate.TRUE, split.right);
+
+        // it splits correctly when list does not
+        list = AttrList.attrs(NAME, CITY);
+        split = source.split(list);
+        assertEquals(Predicate.TRUE, split.left);
+        assertEquals(source, split.right);
+
+        // when the source contains multiple attributes...
+        source = Predicate.eq(SID, PID);
+
+        // it splits correctly when list does contains all referenced attribute
+        list = AttrList.attrs(SID, PID, NAME);
+        split = source.split(list);
+        assertEquals(source, split.left);
+        assertEquals(Predicate.TRUE, split.right);
+
+        // it splits correctly when list does not
+        list = AttrList.attrs(SID, NAME);
+        split = source.split(list);
+        assertEquals(Predicate.TRUE, split.left);
+        assertEquals(source, split.right);
     }
 
     @Test

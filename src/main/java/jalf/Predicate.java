@@ -2,12 +2,15 @@ package jalf;
 
 import jalf.predicate.Among;
 import jalf.predicate.Eq;
+import jalf.predicate.False;
 import jalf.predicate.Gt;
 import jalf.predicate.Gte;
 import jalf.predicate.JavaPredicate;
 import jalf.predicate.Lt;
 import jalf.predicate.Lte;
 import jalf.predicate.Neq;
+import jalf.predicate.True;
+import jalf.util.Pair;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -16,6 +19,10 @@ import java.util.TreeSet;
  * Tuple predicate, i.e. evaluating boolean expressions on tuples.
  */
 public abstract class Predicate implements java.util.function.Predicate<Tuple> {
+
+    public static final Predicate TRUE = True.INSTANCE;
+
+    public static final Predicate FALSE = False.INSTANCE;
 
     /**
      * Factors a predicate from a native java one.
@@ -146,4 +153,28 @@ public abstract class Predicate implements java.util.function.Predicate<Tuple> {
      * applied.
      */
     public abstract Predicate rename(Renaming renaming);
+
+    /**
+     * Split this predicate in two, say pLeft and pRight, according to `list`.
+     *
+     * This method must guarantee that the splitting meets the following
+     * conditions:
+     *   - `this = pLeft & pRight`, i.e. this is a logical equivalent AND split
+     *   - pLeft only makes references to attributes in `list`, but may
+     *   reference a subset of them.
+     *
+     * This method is provided to help the optimizer rewrite expressions by
+     * pushing restrictions as deep as possible, splitting them adequately
+     * when facing binary operators. Observe that the split below is always
+     * correct according to the specification above. Subclasses are intended
+     * to implement smarter strategies, though:
+     *
+     *  - pLeft = true
+     *  - pRight = this
+     *
+     * @param list a list of attribute names.
+     * @return two predicates, that meet the method specification.
+     */
+    public abstract Pair<Predicate> split(AttrList list);
+
 }

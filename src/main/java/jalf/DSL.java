@@ -12,6 +12,10 @@ import java.util.stream.Stream;
  */
 public class DSL {
 
+    public static final Predicate TRUE = True.INSTANCE;
+
+    public static final Predicate FALSE = False.INSTANCE;
+
     // AttrName
 
     public static AttrName attr(String attr) {
