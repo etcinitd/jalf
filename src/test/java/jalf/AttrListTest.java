@@ -83,6 +83,15 @@ public class AttrListTest {
     }
 
     @Test
+    public void testUnion() {
+        AttrList l1 = AttrList.attrs(SID, NAME);
+        AttrList l2 = AttrList.attrs(SID, CITY);
+        AttrList expected = AttrList.attrs(SID, NAME, CITY);
+        AttrList got = l1.union(l2);
+        assertEquals(expected, got);
+    }
+
+    @Test
     public void testToList() {
         AttrList l = AttrList.attrs(SID, NAME, STATUS);
         List<AttrName> expected = Arrays.asList(SID, NAME, STATUS);

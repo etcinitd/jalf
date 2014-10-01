@@ -129,6 +129,18 @@ public class AttrList implements Iterable<AttrName> {
     }
 
     /**
+     * Computes the union of this and `other`.
+     *
+     * @param other another attribute list.
+     * @return an attribute list haves names belonging to self or to other.
+     */
+    public AttrList union(AttrList other) {
+        LinkedHashSet<AttrName> union = new LinkedHashSet<>(this.names);
+        union.addAll(other.names);
+        return new AttrList(union );
+    }
+
+    /**
      * Renames some attributes, returning the resulting attribute list.
      *
      * @param r a Renaming instance.
