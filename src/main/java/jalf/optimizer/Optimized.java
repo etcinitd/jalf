@@ -12,9 +12,9 @@ import jalf.type.RelationType;
  * Decorates a relation operator <R> that has been optimized and expose the
  * algebra as optimization methods.
  *
- * This class implements the identity decorator, that is, its algebra methods
- * perform no optimization but a simple AST cloning. The class is intended to
- * be subclassed per-operator.
+ * This class implements basic optimization strategies shared by all operators
+ * and operands (such as removing unnecessary projections). It is intended to
+ * be subclassed per-operator to provide smarter strategies.
  *
  * @param <R> the type of the optimized operator.
  */
@@ -51,7 +51,14 @@ public class Optimized<R extends Relation> extends AbstractRelation {
 
     @Override
     public Relation project(AttrList attributes) {
-        return operator.project(attributes);
+        AttrList opAttrs = operator.getType().toAttrList();
+        if (opAttrs.equals(attributes)) {
+            // the projection does not project anything away, just
+            // bypass it
+            return operator;
+        } else {
+            return operator.project(attributes);
+        }
     }
 
     @Override

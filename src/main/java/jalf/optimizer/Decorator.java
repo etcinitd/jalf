@@ -49,7 +49,7 @@ public class Decorator implements Visitor<Relation> {
     ///
 
     public Relation visit(LeafOperand relation) {
-        return relation;
+        return new Optimized<Relation>(optimizer, relation);
     }
 
 }
