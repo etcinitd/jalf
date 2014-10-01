@@ -43,7 +43,7 @@ public class Decorator implements Visitor<Relation> {
     ///
 
     public Relation visit(Join relation) {
-        return new Optimized<Join>(optimizer, relation);
+        return new OptimizedJoin(optimizer, relation);
     }
 
     ///
