@@ -6,6 +6,7 @@ import jalf.Relation;
 import jalf.Renaming;
 import jalf.Visitor;
 import jalf.compiler.AbstractRelation;
+import jalf.relation.materialized.EmptyRelation;
 import jalf.type.RelationType;
 
 /**
@@ -52,13 +53,13 @@ public class Optimized<R extends Relation> extends AbstractRelation {
     @Override
     public Relation project(AttrList attributes) {
         AttrList opAttrs = operator.getType().toAttrList();
+
+        // the projection does not project anything away? just bypass it.
         if (opAttrs.equals(attributes)) {
-            // the projection does not project anything away, just
-            // bypass it
             return operator;
-        } else {
-            return operator.project(attributes);
         }
+
+        return operator.project(attributes);
     }
 
     @Override
@@ -68,11 +69,27 @@ public class Optimized<R extends Relation> extends AbstractRelation {
 
     @Override
     public Relation restrict(Predicate predicate) {
+        // restrict(r, TRUE) -> r
+        if (predicate == Predicate.TRUE)
+            return operator;
+
+        // restrict(r, FALSE) -> empty relation, same type of r
+        if (predicate == Predicate.FALSE)
+            return EmptyRelation.factor(operator.getType());
+
         return operator.restrict(predicate);
     }
 
     @Override
     public Relation join(Relation right) {
+        // join(r, DUM) -> DUM
+        if (right == Relation.DUM)
+            return right;
+
+        // join(r, DEE) -> r
+        if (right == Relation.DEE)
+            return operator;
+
         return operator.join(right);
     }
 
