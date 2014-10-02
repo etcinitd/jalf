@@ -2,6 +2,8 @@ package jalf.optimizer;
 
 import jalf.Relation;
 import jalf.Visitor;
+import jalf.relation.algebra.Dee;
+import jalf.relation.algebra.Dum;
 import jalf.relation.algebra.Join;
 import jalf.relation.algebra.LeafOperand;
 import jalf.relation.algebra.Project;
@@ -50,6 +52,16 @@ public class Decorator implements Visitor<Relation> {
 
     public Relation visit(LeafOperand relation) {
         return new Optimized<Relation>(optimizer, relation);
+    }
+
+    @Override
+    public Relation visit(Dee relation) {
+        return new OptimizedDee(optimizer, relation);
+    }
+
+    @Override
+    public Relation visit(Dum relation) {
+        return new OptimizedDum(optimizer, relation);
     }
 
 }

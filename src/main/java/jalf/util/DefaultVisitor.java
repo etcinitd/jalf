@@ -2,6 +2,8 @@ package jalf.util;
 
 import jalf.Visitor;
 import jalf.relation.algebra.BinaryOperator;
+import jalf.relation.algebra.Dee;
+import jalf.relation.algebra.Dum;
 import jalf.relation.algebra.Join;
 import jalf.relation.algebra.LeafOperand;
 import jalf.relation.algebra.Project;
@@ -41,6 +43,16 @@ public class DefaultVisitor<T> implements Visitor<T> {
 
     @Override
     public T visit(LeafOperand relation) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public T visit(Dee dee) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public T visit(Dum dum) {
         throw new UnsupportedOperationException();
     }
 

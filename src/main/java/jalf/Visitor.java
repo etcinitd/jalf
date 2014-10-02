@@ -20,4 +20,10 @@ public interface Visitor<R> {
 
     public R visit(LeafOperand relation);
 
+    ///
+
+    public R visit(Dee dee);
+
+    public R visit(Dum dum);
+
 }

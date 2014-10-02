@@ -1,6 +1,8 @@
 package jalf.util;
 
 import jalf.relation.algebra.BinaryOperator;
+import jalf.relation.algebra.Dee;
+import jalf.relation.algebra.Dum;
 import jalf.relation.algebra.LeafOperand;
 import jalf.relation.algebra.UnaryOperator;
 
@@ -31,5 +33,14 @@ public class ToAstVisitor extends DefaultVisitor<List<Object>> {
         return Arrays.asList("leaf", relation);
     }
 
+    @Override
+    public List<Object> visit(Dee dee) {
+        return Arrays.asList("DEE");
+    }
+
+    @Override
+    public List<Object> visit(Dum dum) {
+        return Arrays.asList("DUM");
+    }
 
 }

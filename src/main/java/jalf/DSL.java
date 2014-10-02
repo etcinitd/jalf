@@ -16,6 +16,10 @@ public class DSL {
 
     public static final Predicate FALSE = False.INSTANCE;
 
+    public static final Relation DUM = Relation.DUM;
+
+    public static final Relation DEE = Relation.DEE;
+
     // AttrName
 
     public static AttrName attr(String attr) {
