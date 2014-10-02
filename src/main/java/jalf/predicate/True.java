@@ -14,9 +14,16 @@ import jalf.util.Pair;
  */
 public class True extends Predicate {
 
-    public static final True INSTANCE = new True();
+    private static True INSTANCE;
 
     private True() {
+    }
+
+    public static synchronized Predicate instance() {
+        if (INSTANCE == null) {
+            INSTANCE = new True();
+        }
+        return INSTANCE;
     }
 
     @Override

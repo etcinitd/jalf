@@ -11,9 +11,16 @@ import jalf.util.Pair;
 
 public class False extends Predicate {
 
-    public static final False INSTANCE = new False();
+    public static False INSTANCE;
 
     private False() {
+    }
+
+    public static synchronized Predicate instance() {
+        if (INSTANCE == null) {
+            INSTANCE = new False();
+        }
+        return INSTANCE;
     }
 
     @Override

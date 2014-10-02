@@ -1,6 +1,5 @@
 package jalf;
 
-import jalf.predicate.*;
 import jalf.relation.materialized.SetMemoryRelation;
 import jalf.type.Heading;
 import jalf.type.RelationType;
@@ -12,9 +11,9 @@ import java.util.stream.Stream;
  */
 public class DSL {
 
-    public static final Predicate TRUE = True.INSTANCE;
+    public static final Predicate TRUE = Predicate.TRUE;
 
-    public static final Predicate FALSE = False.INSTANCE;
+    public static final Predicate FALSE = Predicate.FALSE;
 
     public static final Relation DUM = Relation.DUM;
 

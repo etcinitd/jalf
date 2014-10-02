@@ -20,9 +20,9 @@ import java.util.TreeSet;
  */
 public abstract class Predicate implements java.util.function.Predicate<Tuple> {
 
-    public static final Predicate TRUE = True.INSTANCE;
+    public static final Predicate TRUE = True.instance();
 
-    public static final Predicate FALSE = False.INSTANCE;
+    public static final Predicate FALSE = False.instance();
 
     /**
      * Factors a predicate from a native java one.
