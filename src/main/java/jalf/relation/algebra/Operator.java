@@ -15,6 +15,8 @@ public abstract class Operator extends AbstractRelation {
 
     protected abstract RelationType typeCheck();
 
+    public abstract List<Relation> getOperands();
+
     public abstract List<Object> getArguments();
 
     public boolean equals(Relation other) {

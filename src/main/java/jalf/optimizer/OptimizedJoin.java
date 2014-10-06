@@ -1,13 +1,53 @@
 package jalf.optimizer;
 
 import jalf.AttrList;
+import jalf.Predicate;
 import jalf.Relation;
 import jalf.relation.algebra.Join;
+import jalf.util.Pair;
 
 public class OptimizedJoin extends Optimized<Join> {
 
     public OptimizedJoin(Optimizer optimizer, Join operator) {
         super(optimizer, operator);
+    }
+
+    /**
+     * restrict(join(l,r),p) => restrict(join(restrict(l,p/l),restrict(r,p/r)), p\(r+l))
+     * where
+     *   - p/l is the largest part of the predicate that applies to left operand
+     *   - p/r is the one that applies to right operand
+     *   - p\(r+l) is what cannot be pushed down
+     */
+    @Override
+    public Relation restrict(Predicate predicate) {
+        Relation r = Relation.DEE;
+
+        // this will be p\(r+l). We will successively refine it, starting with
+        // the first operand's unpushed predicate and removing what the other
+        // operands are able to push.
+        Predicate rPredicate = null;
+
+        for (Relation op: operator.getOperands()) {
+            AttrList attrList = op.getType().toAttrList();
+
+            // split the predicate
+            Pair<Predicate> pair = predicate.split(attrList);
+
+            // join the result with the restriction with left predicate
+            r = optimized(r).join(optimized(op).restrict(pair.left));
+
+            // keep the unpushed predicate or refine the previous one
+            if (rPredicate == null)
+                rPredicate = pair.right;
+            else
+              rPredicate = rPredicate.split(attrList).right;
+        };
+
+        // apply the rest of the predicate now
+        if (!Predicate.TRUE.equals(rPredicate))
+            r = r.restrict(rPredicate);
+        return r;
     }
 
     /**

@@ -45,4 +45,63 @@ public class TestOptimizedJoin extends OptimizerTest {
         assertSameExpression(expected, optimized);
     }
 
+    @Test
+    public void testRestrict() {
+        Relation suppliers = suppliers();
+        Relation shipments = shipments();
+        Relation operator = join(suppliers, shipments);
+
+        Relation optimized = null;
+        Relation expected = null;
+
+        // when the restriction applies to left only
+        optimized = optimized(operator)
+                .restrict(eq(CITY, "London"));
+        expected = suppliers
+                .restrict(eq(CITY, "London"))
+                .join(shipments);
+        assertSameExpression(expected, optimized);
+
+        // when the restriction applies to left and right
+        optimized = optimized(operator)
+                .restrict(eq(SID, "S1"));
+        expected = suppliers
+                .restrict(eq(SID, "S1"))
+                .join(shipments.restrict(eq(SID, "S1")));
+        assertSameExpression(expected, optimized);
+
+        // when the restriction cannot be pushed down
+        optimized = optimized(operator)
+                .restrict(eq(STATUS, QTY));
+        expected = suppliers
+                .join(shipments)
+                .restrict(eq(STATUS, QTY));
+        assertSameExpression(expected, optimized);
+
+        // when the restriction is a splittable AND
+        optimized = optimized(operator)
+                .restrict(eq(CITY, "LONDON").and(eq(QTY, 200)));
+        expected = suppliers
+                .restrict(eq(CITY, "LONDON"))
+                .join(shipments.restrict(eq(QTY, 200)));
+        assertSameExpression(expected, optimized);
+
+        // when the restriction is a splittable NOT(OR)
+        optimized = optimized(operator)
+                .restrict(eq(CITY, "London").or(eq(QTY, 200)).not());
+        expected = suppliers
+                .restrict(eq(CITY, "London").not())
+                .join(shipments.restrict(eq(QTY, 200).not()));
+        assertSameExpression(expected, optimized);
+
+        // when the restriction is a semi splittable NOT(OR)
+        optimized = optimized(operator)
+                .restrict(eq(CITY, "London").or(eq(QTY, STATUS)).not());
+        expected = suppliers
+                .restrict(eq(CITY, "London").not())
+                .join(shipments)
+                .restrict(eq(QTY, STATUS).not());
+        assertSameExpression(expected, optimized);
+    }
+
 }
