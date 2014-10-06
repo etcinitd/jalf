@@ -10,7 +10,7 @@ import jalf.relation.materialized.EmptyRelation;
 import jalf.type.RelationType;
 
 /**
- * Decorates a relation operator <R> that has been optimized and expose the
+ * Decorates a relation operator <R> that has been optimized and exposes the
  * algebra as optimization methods.
  *
  * This class implements basic optimization strategies shared by all operators
