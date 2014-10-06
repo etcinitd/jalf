@@ -1,6 +1,7 @@
 package jalf;
 
 import jalf.predicate.Among;
+import jalf.predicate.And;
 import jalf.predicate.Eq;
 import jalf.predicate.False;
 import jalf.predicate.Gt;
@@ -9,6 +10,8 @@ import jalf.predicate.JavaPredicate;
 import jalf.predicate.Lt;
 import jalf.predicate.Lte;
 import jalf.predicate.Neq;
+import jalf.predicate.Not;
+import jalf.predicate.Or;
 import jalf.predicate.True;
 import jalf.util.Pair;
 
@@ -119,6 +122,35 @@ public abstract class Predicate implements java.util.function.Predicate<Tuple> {
     }
 
     /**
+     * Factors an AND predicate with `this` and `other`.
+     */
+    public Predicate and(Predicate other) {
+        if (other == TRUE)
+            return this;
+        if (other == FALSE)
+            return other;
+        return new And(this, other);
+    }
+
+    /**
+     * Factors an OR predicate with `this` and `other`.
+     */
+    public Predicate or(Predicate other) {
+        if (other == TRUE)
+            return other;
+        if (other == FALSE)
+            return this;
+        return new Or(this, other);
+    }
+
+    /**
+     * Factors a NOT predicate from `this`.
+     */
+    public Predicate not() {
+        return new Not(this);
+    }
+
+    /**
      * Checks whether this predicate fully supports static analysis.
      *
      * @return true if this predicate can be fully analyzed statically, false
@@ -142,7 +174,7 @@ public abstract class Predicate implements java.util.function.Predicate<Tuple> {
         return AttrList.attrs(attrNames);
     }
 
-    protected abstract void fillReferencedAttributes(Set<AttrName> attrNames);
+    public abstract void fillReferencedAttributes(Set<AttrName> attrNames);
 
     /**
      * Returns an equivalent predicate where attribute names have been renamed
@@ -160,14 +192,16 @@ public abstract class Predicate implements java.util.function.Predicate<Tuple> {
      * This method must guarantee that the splitting meets the following
      * conditions:
      *   - `this = pLeft & pRight`, i.e. this is a logical equivalent AND split
-     *   - pLeft only makes references to attributes in `list`, but may
-     *   reference a subset of them.
+     *   - `pLeft` only makes references to attributes in `list`, but may
+     *     reference a subset of them.
+     *   - `pLeft` is as large as possible.
      *
      * This method is provided to help the optimizer rewrite expressions by
      * pushing restrictions as deep as possible, splitting them adequately
      * when facing binary operators. Observe that the split below is always
-     * correct according to the specification above. Subclasses are intended
-     * to implement smarter strategies, though:
+     * correct according to the specification above, but the third condition.
+     * Subclasses are intended to implement smarter strategies, though, and to
+     * ensure that the third condition is met too.
      *
      *  - pLeft = true
      *  - pRight = this

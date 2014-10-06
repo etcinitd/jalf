@@ -1,14 +1,16 @@
 package jalf.predicate;
 
-import java.util.Set;
-
+import static jalf.util.CollectionUtils.parallelStreamOf;
 import jalf.AttrList;
 import jalf.AttrName;
 import jalf.Predicate;
 import jalf.Renaming;
 import jalf.Tuple;
 import jalf.util.Pair;
-import static jalf.util.CollectionUtils.parallelStreamOf;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class Among extends Predicate {
     private AttrName attrName;
@@ -26,7 +28,7 @@ public class Among extends Predicate {
     }
 
     @Override
-    protected void fillReferencedAttributes(Set<AttrName> attrNames) {
+    public void fillReferencedAttributes(Set<AttrName> attrNames) {
         attrNames.add(attrName);
     }
 
@@ -59,6 +61,14 @@ public class Among extends Predicate {
             return false;
         Among other = (Among) obj;
         return attrName.equals(other.attrName) && vals.equals(other.vals);
+    }
+
+    @Override
+    public String toString() {
+        String valsStr = StreamSupport.stream(vals.spliterator(), false)
+            .map(Object::toString)
+            .collect(Collectors.joining(","));
+        return "among(" + attrName + "," + "[" + valsStr + "])";
     }
 
 }

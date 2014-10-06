@@ -18,4 +18,9 @@ public class Gte extends ComparisonPredicate<Comparable<Object>> {
     public Predicate rename(Renaming r) {
         return new Gte(renameOperand(left, r), renameOperand(right, r));
     }
+
+    @Override
+    public String toString() {
+        return left.toString() + ">=" + right.toString();
+    }
 }

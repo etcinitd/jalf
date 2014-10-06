@@ -19,4 +19,9 @@ public class Gt extends ComparisonPredicate<Comparable<Object>> {
     public Predicate rename(Renaming r) {
         return new Gt(renameOperand(left, r), renameOperand(right, r));
     }
+
+    @Override
+    public String toString() {
+        return left.toString() + ">" + right.toString();
+    }
 }

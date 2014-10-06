@@ -30,7 +30,7 @@ public abstract class ComparisonPredicate<T> extends Predicate {
     }
 
     @Override
-    protected void fillReferencedAttributes(Set<AttrName> attrNames) {
+    public void fillReferencedAttributes(Set<AttrName> attrNames) {
         if (left instanceof AttrName)
           attrNames.add((AttrName)left);
         if (right instanceof AttrName)
@@ -39,7 +39,7 @@ public abstract class ComparisonPredicate<T> extends Predicate {
 
     @Override
     public Pair<Predicate> split(AttrList list) {
-        AttrList references = this.getReferencedAttributes();
+        AttrList references = getReferencedAttributes();
         AttrList invalidOnLeft = references.difference(list);
         if (invalidOnLeft.isEmpty()) {
             return new Pair<>(this, TRUE);

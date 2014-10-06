@@ -18,4 +18,9 @@ public class Neq extends ComparisonPredicate<Object> {
     public Predicate rename(Renaming r) {
         return new Neq(renameOperand(left, r), renameOperand(right, r));
     }
+
+    @Override
+    public String toString() {
+        return left.toString() + "!=" + right.toString();
+    }
 }

@@ -23,7 +23,7 @@ public class JavaPredicate extends Predicate {
     }
 
     @Override
-    protected void fillReferencedAttributes(Set<AttrName> attrNames) {
+    public void fillReferencedAttributes(Set<AttrName> attrNames) {
     }
 
     @Override

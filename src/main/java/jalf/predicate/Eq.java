@@ -18,4 +18,9 @@ public class Eq extends ComparisonPredicate<Object> {
     public Predicate rename(Renaming r) {
         return new Eq(renameOperand(left, r), renameOperand(right, r));
     }
+
+    @Override
+    public String toString() {
+        return left.toString() + "==" + right.toString();
+    }
 }

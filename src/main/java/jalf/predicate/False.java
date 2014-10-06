@@ -24,12 +24,21 @@ public class False extends Predicate {
     }
 
     @Override
+    public Predicate and(Predicate other) {
+        return this;
+    }
+
+    public Predicate not() {
+        return TRUE;
+    }
+
+    @Override
     public boolean test(Tuple t) {
         return false;
     }
 
     @Override
-    protected void fillReferencedAttributes(Set<AttrName> attrNames) {
+    public void fillReferencedAttributes(Set<AttrName> attrNames) {
     }
 
     @Override
@@ -42,4 +51,8 @@ public class False extends Predicate {
         return new Pair<>(this, this);
     }
 
+    @Override
+    public String toString() {
+        return "false";
+    }
 }

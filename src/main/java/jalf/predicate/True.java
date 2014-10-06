@@ -27,12 +27,21 @@ public class True extends Predicate {
     }
 
     @Override
+    public Predicate and(Predicate other) {
+        return other;
+    }
+
+    public Predicate not() {
+        return FALSE;
+    }
+
+    @Override
     public boolean test(Tuple t) {
         return true;
     }
 
     @Override
-    protected void fillReferencedAttributes(Set<AttrName> attrNames) {
+    public void fillReferencedAttributes(Set<AttrName> attrNames) {
     }
 
     @Override
@@ -45,4 +54,8 @@ public class True extends Predicate {
         return new Pair<>(this, this);
     }
 
+    @Override
+    public String toString() {
+        return "true";
+    }
 }
