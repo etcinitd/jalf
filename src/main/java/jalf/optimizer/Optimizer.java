@@ -1,5 +1,7 @@
 package jalf.optimizer;
 
+import java.util.function.Function;
+
 import jalf.Relation;
 import jalf.Visitor;
 import jalf.relation.algebra.Dee;
@@ -28,14 +30,18 @@ import jalf.relation.algebra.Restrict;
  */
 public class Optimizer implements Visitor<Relation> {
 
-    private Decorator mapper;
+    private Function<Relation,Optimized<?>> mapper;
+
+    public Optimizer(Function<Relation,Optimized<?>> mapper) {
+        this.mapper = mapper;
+    }
 
     public Optimizer() {
-        this.mapper = new Decorator(this);
+        this.mapper = new DefaultMapper(this);
     }
 
     protected Relation optimized(Relation relation) {
-        return mapper.decorate(relation);
+        return mapper.apply(relation);
     }
 
     ///

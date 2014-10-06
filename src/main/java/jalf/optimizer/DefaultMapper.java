@@ -16,51 +16,52 @@ import jalf.relation.algebra.Restrict;
  * delegation but is not a visitor per-se, as it does not properly visit the
  * AST.
  */
-public class Decorator implements Visitor<Relation> {
+public class DefaultMapper implements Visitor<Optimized<?>> {
 
     private Optimizer optimizer;
 
-    public Decorator(Optimizer optimizer) {
+    public DefaultMapper(Optimizer optimizer) {
         this.optimizer = optimizer;
     }
 
-    public Relation decorate(Relation relation) {
+    @Override
+    public Optimized<?> apply(Relation relation) {
         return relation.accept(this);
     }
 
     ///
 
-    public Relation visit(Project relation) {
+    public Optimized<?> visit(Project relation) {
         return new OptimizedProject(optimizer, relation);
     }
 
-    public Relation visit(Rename relation) {
+    public Optimized<?> visit(Rename relation) {
         return new OptimizedRename(optimizer, relation);
     }
 
-    public Relation visit(Restrict relation) {
+    public Optimized<?> visit(Restrict relation) {
         return new OptimizedRestrict(optimizer, relation);
     }
 
     ///
 
-    public Relation visit(Join relation) {
+    public Optimized<?> visit(Join relation) {
         return new OptimizedJoin(optimizer, relation);
     }
 
     ///
 
-    public Relation visit(LeafOperand relation) {
+    public Optimized<?> visit(LeafOperand relation) {
         return new Optimized<Relation>(optimizer, relation);
     }
 
     @Override
-    public Relation visit(Dee relation) {
+    public Optimized<?> visit(Dee relation) {
         return new OptimizedDee(optimizer, relation);
     }
 
     @Override
-    public Relation visit(Dum relation) {
+    public Optimized<?> visit(Dum relation) {
         return new OptimizedDum(optimizer, relation);
     }
 
