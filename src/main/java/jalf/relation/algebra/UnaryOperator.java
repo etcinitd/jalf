@@ -1,5 +1,8 @@
 package jalf.relation.algebra;
 
+import java.util.Arrays;
+import java.util.List;
+
 import jalf.Relation;
 
 /**
@@ -8,5 +11,10 @@ import jalf.Relation;
 public abstract class UnaryOperator extends Operator {
 
     public abstract Relation getOperand();
+
+    @Override
+    public List<Relation> getOperands() {
+        return Arrays.asList(getOperand());
+    }
 
 }

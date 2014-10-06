@@ -1,5 +1,7 @@
 package jalf;
 
+import jalf.relation.algebra.Dee;
+import jalf.relation.algebra.Dum;
 import jalf.type.RelationType;
 import jalf.type.TupleType;
 
@@ -22,6 +24,12 @@ import java.util.stream.Stream;
  * needed for JAlf' compiler infrastructure to work.
  */
 public interface Relation {
+
+    /** Dum, the relation with no attributes and no tuple. */
+    public static final Relation DUM = Dum.instance();
+
+    /** Dee, the relation with no attributes but one tuple. */
+    public static final Relation DEE = Dee.instance();
 
     /**
      * Returns the type of this relation.

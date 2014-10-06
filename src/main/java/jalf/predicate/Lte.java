@@ -1,5 +1,8 @@
 package jalf.predicate;
 
+import jalf.Predicate;
+import jalf.Renaming;
+
 public class Lte extends ComparisonPredicate<Comparable<Object>> {
 
     public Lte(Comparable<Object> left, Comparable<Object> right) {
@@ -11,4 +14,13 @@ public class Lte extends ComparisonPredicate<Comparable<Object>> {
         });
     }
 
+    @Override
+    public Predicate rename(Renaming r) {
+        return new Lte(renameOperand(left, r), renameOperand(right, r));
+    }
+
+    @Override
+    public String toString() {
+        return left.toString() + "<=" + right.toString();
+    }
 }

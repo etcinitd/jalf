@@ -49,7 +49,7 @@ public class SetMemoryRelation extends MemoryRelation {
      * @param tuples the body of the relation as a set of tuples.
      * @return the built Relation.
      */
-    public static Relation tuples(RelationType type, Tuple[] tuples) {
+    public static Relation tuples(RelationType type, Tuple...tuples) {
         TupleType ttype = type.toTupleType();
         Optional<Tuple> fail = Stream.of(tuples)
             .filter(t -> !ttype.contains(t))

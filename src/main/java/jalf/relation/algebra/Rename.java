@@ -1,5 +1,8 @@
 package jalf.relation.algebra;
 
+import java.util.Arrays;
+import java.util.List;
+
 import jalf.Relation;
 import jalf.Renaming;
 import jalf.Visitor;
@@ -45,6 +48,11 @@ public class Rename extends UnaryOperator {
 
     public Renaming getRenaming() {
         return renaming;
+    }
+
+    @Override
+    public List<Object> getArguments() {
+        return Arrays.asList(renaming);
     }
 
     @Override

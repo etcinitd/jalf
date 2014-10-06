@@ -1,6 +1,5 @@
 package jalf;
 
-import jalf.predicate.*;
 import jalf.relation.materialized.SetMemoryRelation;
 import jalf.type.Heading;
 import jalf.type.RelationType;
@@ -11,6 +10,14 @@ import java.util.stream.Stream;
  * @author amirm
  */
 public class DSL {
+
+    public static final Predicate TRUE = Predicate.TRUE;
+
+    public static final Predicate FALSE = Predicate.FALSE;
+
+    public static final Relation DUM = Relation.DUM;
+
+    public static final Relation DEE = Relation.DEE;
 
     // AttrName
 
@@ -47,7 +54,7 @@ public class DSL {
     // Predicate
 
     public static Predicate among(AttrName val, Iterable<?> vals) {
-        return new Among(val, vals);
+        return Predicate.among(val, vals);
     }
 
     public static Predicate eq(Object left, Object right) {

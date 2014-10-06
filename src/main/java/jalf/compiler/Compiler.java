@@ -55,4 +55,16 @@ public class Compiler implements Visitor<Cog> {
         return relation.toCog(this);
     }
 
+    ///
+
+    @Override
+    public Cog visit(Dee dee) {
+        return dee.toCog();
+    }
+
+    @Override
+    public Cog visit(Dum dum) {
+        return dum.toCog();
+    }
+
 }

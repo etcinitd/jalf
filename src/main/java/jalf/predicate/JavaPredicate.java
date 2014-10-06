@@ -1,8 +1,11 @@
 package jalf.predicate;
 
+import jalf.AttrList;
 import jalf.AttrName;
 import jalf.Predicate;
+import jalf.Renaming;
 import jalf.Tuple;
+import jalf.util.Pair;
 
 import java.util.Set;
 
@@ -20,12 +23,22 @@ public class JavaPredicate extends Predicate {
     }
 
     @Override
-    protected void fillReferencedAttributes(Set<AttrName> attrNames) {
+    public void fillReferencedAttributes(Set<AttrName> attrNames) {
+    }
+
+    @Override
+    public Pair<Predicate> split(AttrList list) {
+        return new Pair<>(TRUE, this);
     }
 
     @Override
     public boolean test(Tuple t) {
         return fn.test(t);
+    }
+
+    @Override
+    public Predicate rename(Renaming renaming) {
+        throw new UnsupportedOperationException();
     }
 
 }

@@ -1,12 +1,19 @@
 package jalf;
 
+import jalf.predicate.Among;
+import jalf.predicate.And;
 import jalf.predicate.Eq;
+import jalf.predicate.False;
 import jalf.predicate.Gt;
 import jalf.predicate.Gte;
 import jalf.predicate.JavaPredicate;
 import jalf.predicate.Lt;
 import jalf.predicate.Lte;
 import jalf.predicate.Neq;
+import jalf.predicate.Not;
+import jalf.predicate.Or;
+import jalf.predicate.True;
+import jalf.util.Pair;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -16,6 +23,10 @@ import java.util.TreeSet;
  */
 public abstract class Predicate implements java.util.function.Predicate<Tuple> {
 
+    public static final Predicate TRUE = True.instance();
+
+    public static final Predicate FALSE = False.instance();
+
     /**
      * Factors a predicate from a native java one.
      *
@@ -24,6 +35,18 @@ public abstract class Predicate implements java.util.function.Predicate<Tuple> {
      */
     public static Predicate java(java.util.function.Predicate<Tuple> fn) {
         return new JavaPredicate(fn);
+    }
+
+    /**
+     * Factors a predicate checking that `attr` equals one of the values
+     * specified in `values`.
+     *
+     * @param attr an attribute name.
+     * @param values a set of values.
+     * @return a Predicate checking if attr is among values.
+     */
+    public static Among among(AttrName attr, Iterable<?> values) {
+        return new Among(attr, values);
     }
 
     /**
@@ -99,6 +122,35 @@ public abstract class Predicate implements java.util.function.Predicate<Tuple> {
     }
 
     /**
+     * Factors an AND predicate with `this` and `other`.
+     */
+    public Predicate and(Predicate other) {
+        if (other == TRUE)
+            return this;
+        if (other == FALSE)
+            return other;
+        return new And(this, other);
+    }
+
+    /**
+     * Factors an OR predicate with `this` and `other`.
+     */
+    public Predicate or(Predicate other) {
+        if (other == TRUE)
+            return other;
+        if (other == FALSE)
+            return this;
+        return new Or(this, other);
+    }
+
+    /**
+     * Factors a NOT predicate from `this`.
+     */
+    public Predicate not() {
+        return new Not(this);
+    }
+
+    /**
      * Checks whether this predicate fully supports static analysis.
      *
      * @return true if this predicate can be fully analyzed statically, false
@@ -122,6 +174,41 @@ public abstract class Predicate implements java.util.function.Predicate<Tuple> {
         return AttrList.attrs(attrNames);
     }
 
-    protected abstract void fillReferencedAttributes(Set<AttrName> attrNames);
+    public abstract void fillReferencedAttributes(Set<AttrName> attrNames);
+
+    /**
+     * Returns an equivalent predicate where attribute names have been renamed
+     * according to `renaming`.
+     *
+     * @param renaming a renaming instance.
+     * @return an equivalent predicate formulae where some renamings have been
+     * applied.
+     */
+    public abstract Predicate rename(Renaming renaming);
+
+    /**
+     * Split this predicate in two, say pLeft and pRight, according to `list`.
+     *
+     * This method must guarantee that the splitting meets the following
+     * conditions:
+     *   - `this = pLeft & pRight`, i.e. this is a logical equivalent AND split
+     *   - `pLeft` only makes references to attributes in `list`, but may
+     *     reference a subset of them.
+     *   - `pLeft` is as large as possible.
+     *
+     * This method is provided to help the optimizer rewrite expressions by
+     * pushing restrictions as deep as possible, splitting them adequately
+     * when facing binary operators. Observe that the split below is always
+     * correct according to the specification above, but the third condition.
+     * Subclasses are intended to implement smarter strategies, though, and to
+     * ensure that the third condition is met too.
+     *
+     *  - pLeft = true
+     *  - pRight = this
+     *
+     * @param list a list of attribute names.
+     * @return two predicates, that meet the method specification.
+     */
+    public abstract Pair<Predicate> split(AttrList list);
 
 }

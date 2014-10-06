@@ -1,8 +1,14 @@
 package jalf;
 
+import java.util.function.Function;
+
 import jalf.relation.algebra.*;
 
-public interface Visitor<R> {
+public interface Visitor<R> extends Function<Relation,R> {
+
+    default R apply(Relation r) {
+        return r.accept(this);
+    }
 
     ///
 
@@ -19,5 +25,11 @@ public interface Visitor<R> {
     ///
 
     public R visit(LeafOperand relation);
+
+    ///
+
+    public R visit(Dee dee);
+
+    public R visit(Dum dum);
 
 }
