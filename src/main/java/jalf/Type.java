@@ -33,7 +33,7 @@ public interface Type<T> {
      * @param representation the Java class used to represent values.
      * @return a Type instance.
      */
-    public static <U> Type<U> scalarType(Class<U> representation) {
+    static <U> Type<U> scalarType(Class<U> representation) {
         validateNotNull("Argument representation must not be null", representation);
 
         // TODO use a concurrent WeakHashMap to avoid creating the same type a million times
@@ -46,7 +46,7 @@ public interface Type<T> {
      * @param heading a heading.
      * @return factored tuple type instance.
      */
-    public static TupleType tupleType(Heading heading) {
+    static TupleType tupleType(Heading heading) {
         return TupleType.heading(heading);
     }
 
@@ -58,7 +58,7 @@ public interface Type<T> {
      * @param nameTypePairs the list of pairs to convert to a tuple type.
      * @return factored tuple type.
      */
-    public static TupleType tupleType(Object... nameTypePairs) {
+    static TupleType tupleType(Object... nameTypePairs) {
         return TupleType.varargs(nameTypePairs);
     }
 
@@ -68,7 +68,7 @@ public interface Type<T> {
      * @param heading a heading instance.
      * @return the factored relation type.
      */
-    public static RelationType relationType(Heading heading) {
+    static RelationType relationType(Heading heading) {
         return RelationType.heading(heading);
     }
 
@@ -80,7 +80,7 @@ public interface Type<T> {
      * @param nameTypePairs the list of pairs to convert to a relation type.
      * @return factored relation type.
      */
-    public static RelationType relationType(Object... nameTypePairs) {
+    static RelationType relationType(Object... nameTypePairs) {
         return RelationType.varargs(nameTypePairs);
     }
 
@@ -91,7 +91,7 @@ public interface Type<T> {
      * @param obj an object to dress as a Type.
      * @return a Type instance.
      */
-    public static Type<?> dress(Object obj) {
+    static Type<?> dress(Object obj) {
         if (obj instanceof Type)
             return (Type<?>) obj;
         if (obj instanceof Class)
@@ -105,7 +105,7 @@ public interface Type<T> {
      * @param value any java object.
      * @return a JAlf type to use for `value`
      */
-    public static Type<?> infer(Object value) {
+    static Type<?> infer(Object value) {
         validateNotNull("Argument value must not be null", value);
 
         if (value instanceof Tuple)
@@ -127,7 +127,7 @@ public interface Type<T> {
      * @return the first common type in the hierarchy of t1 and t2.
      * @throws TypeException of no such type can be found.
      */
-    public static Type<?> leastCommonSupertype(Type<?> t1, Type<?> t2) throws TypeException {
+    static Type<?> leastCommonSupertype(Type<?> t1, Type<?> t2) throws TypeException {
         validateNotNull("Argument t1 must not be null", t1);
         validateNotNull("Argument t2 must not be null", t2);
 
@@ -145,7 +145,7 @@ public interface Type<T> {
      * @param c2 any java class.
      * @return the first common class in the hierarchy of c1 and c2.
      */
-    public static Class<?> leastCommonSuperclass(Class<?> c1, Class<?> c2) {
+    static Class<?> leastCommonSuperclass(Class<?> c1, Class<?> c2) {
         validateNotNull("Argument c1 must not be null", c1);
         validateNotNull("Argument c2 must not be null", c2);
 
@@ -173,7 +173,7 @@ public interface Type<T> {
      *
      * @return the representation class.
      */
-    public Class<T> getRepresentationClass();
+    Class<T> getRepresentationClass();
 
     /**
      * Checks if this type contains `value`, that is, if `value` belongs to the
@@ -188,6 +188,6 @@ public interface Type<T> {
      * @param value an arbitrary value (null supported)
      * @return true if `value` belongs to this, false otherwise.
      */
-    public boolean contains(Object value);
+    boolean contains(Object value);
 
 }

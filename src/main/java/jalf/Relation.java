@@ -26,24 +26,24 @@ import java.util.stream.Stream;
 public interface Relation {
 
     /** Dum, the relation with no attributes and no tuple. */
-    public static final Relation DUM = Dum.instance();
+    Relation DUM = Dum.instance();
 
     /** Dee, the relation with no attributes but one tuple. */
-    public static final Relation DEE = Dee.instance();
+    Relation DEE = Dee.instance();
 
     /**
      * Returns the type of this relation.
      *
      * @return the type of the relation.
      */
-    public RelationType getType();
+    RelationType getType();
 
     /**
      * Returns the type of the tuples belonging to this relation.
      *
      * @return the type of the relation's tuples
      */
-    public TupleType getTupleType();
+    TupleType getTupleType();
 
     /**
      * Projects this relation on a subset of its attributes.
@@ -81,14 +81,14 @@ public interface Relation {
      */
     Relation restrict(Predicate predicate);
 
-    public abstract <R> R accept(Visitor<R> visitor);
+    <R> R accept(Visitor<R> visitor);
 
     /**
      * Returns a stream over this relation's tuples.
      *
      * @return a stream of tuples.
      */
-    public Stream<Tuple> stream();
+    Stream<Tuple> stream();
 
     /**
      * Returns the size of this relation, as its number of tuples.
@@ -100,6 +100,6 @@ public interface Relation {
      *
      * @return the size of the relation.
      */
-    public long count();
+    long count();
 
 }

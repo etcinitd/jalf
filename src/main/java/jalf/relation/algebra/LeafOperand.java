@@ -19,6 +19,6 @@ public interface LeafOperand extends Relation {
      *
      * @return a Cog instance.
      */
-    public Cog toCog(Compiler compiler);
+    Cog toCog(Compiler compiler);
 
 }

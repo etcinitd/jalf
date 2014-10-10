@@ -12,24 +12,24 @@ public interface Visitor<R> extends Function<Relation,R> {
 
     ///
 
-    public R visit(Project relation);
+    R visit(Project relation);
 
-    public R visit(Rename relation);
+    R visit(Rename relation);
 
-    public R visit(Restrict relation);
-
-    ///
-
-    public R visit(Join relation);
+    R visit(Restrict relation);
 
     ///
 
-    public R visit(LeafOperand relation);
+    R visit(Join relation);
 
     ///
 
-    public R visit(Dee dee);
+    R visit(LeafOperand relation);
 
-    public R visit(Dum dum);
+    ///
+
+    R visit(Dee dee);
+
+    R visit(Dum dum);
 
 }
