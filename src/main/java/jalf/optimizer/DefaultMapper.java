@@ -9,6 +9,7 @@ import jalf.relation.algebra.LeafOperand;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
+import jalf.relation.algebra.Select;
 
 /**
  * This class decorates relational operators as their optimized counterparts.
@@ -30,6 +31,10 @@ public class DefaultMapper implements Visitor<Optimized<?>> {
     }
 
     ///
+
+    public Optimized<?> visit(Select relation) {
+        return new OptimizedSelect(optimizer, relation);
+    }
 
     public Optimized<?> visit(Project relation) {
         return new OptimizedProject(optimizer, relation);

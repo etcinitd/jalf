@@ -103,6 +103,10 @@ public class DSL {
 
     // Relational algebra
 
+    public static Relation select(Relation relation, Selection selection) {
+        return relation.select(selection);
+    }
+
     public static Relation project(Relation relation, AttrList attrNames) {
         return relation.project(attrNames);
     }

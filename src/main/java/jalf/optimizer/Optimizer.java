@@ -9,6 +9,7 @@ import jalf.relation.algebra.LeafOperand;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
+import jalf.relation.algebra.Select;
 
 import java.util.function.Function;
 
@@ -45,6 +46,11 @@ public class Optimizer implements Visitor<Relation> {
     }
 
     ///
+
+    public Relation visit(Select relation) {
+        Relation optimized = relation.getOperand().accept(this);
+        return optimized(optimized).select(relation.getSelection());
+    }
 
     public Relation visit(Project relation) {
         Relation optimized = relation.getOperand().accept(this);

@@ -45,6 +45,8 @@ public interface Relation {
      */
     TupleType getTupleType();
 
+    Relation select(Selection selection);
+
     /**
      * Projects this relation on a subset of its attributes.
      *

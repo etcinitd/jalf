@@ -25,7 +25,7 @@ public class Heading {
 
     private Map<AttrName, Type<?>> attributes;
 
-    protected Heading(Map<AttrName, Type<?>> attributes) {
+    public Heading(Map<AttrName, Type<?>> attributes) {
         this.attributes = attributes;
     }
 

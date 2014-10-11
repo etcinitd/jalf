@@ -14,6 +14,8 @@ public interface Visitor<R> extends Function<Relation,R> {
 
     R visit(Project relation);
 
+    R visit(Select select);
+
     R visit(Rename relation);
 
     R visit(Restrict relation);

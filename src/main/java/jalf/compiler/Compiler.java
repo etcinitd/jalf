@@ -22,6 +22,12 @@ public class Compiler implements Visitor<Cog> {
     ///
 
     @Override
+    public Cog visit(Select relation) {
+        Cog compiled = relation.getOperand().accept(this);
+        return compiled.select(relation);
+    }
+
+    @Override
     public Cog visit(Project relation) {
         Cog compiled = relation.getOperand().accept(this);
         return compiled.project(relation);

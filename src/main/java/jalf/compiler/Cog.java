@@ -6,11 +6,13 @@ import jalf.AttrList;
 import jalf.Predicate;
 import jalf.Relation;
 import jalf.Renaming;
+import jalf.Selection;
 import jalf.Tuple;
 import jalf.relation.algebra.Join;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
+import jalf.relation.algebra.Select;
 import jalf.type.TupleType;
 
 import java.util.List;
@@ -47,6 +49,16 @@ public abstract class Cog {
     }
 
     public abstract Stream<Tuple> stream();
+
+    public Cog select(Select relation) {
+        Selection selection = relation.getSelection();
+
+        Supplier<Stream<Tuple>> supplier = () -> this.stream()
+                .map(t -> selection.apply(t))
+                .distinct();
+
+        return new BaseCog(relation, supplier);
+    }
 
     /** Default compilation of `project`. */
     public Cog project(Project projection) {
@@ -128,4 +140,6 @@ public abstract class Cog {
         };
         return new BaseCog(join, supplier);
     }
+
 }
+

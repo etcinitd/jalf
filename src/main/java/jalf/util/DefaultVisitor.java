@@ -9,6 +9,7 @@ import jalf.relation.algebra.LeafOperand;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
+import jalf.relation.algebra.Select;
 import jalf.relation.algebra.UnaryOperator;
 
 public class DefaultVisitor<T> implements Visitor<T> {
@@ -17,7 +18,12 @@ public class DefaultVisitor<T> implements Visitor<T> {
         throw new UnsupportedOperationException();
     }
 
-        @Override
+    @Override
+    public T visit(Select relation) {
+        return visit((UnaryOperator)relation);
+    }
+
+    @Override
     public T visit(Project relation) {
         return visit((UnaryOperator)relation);
     }

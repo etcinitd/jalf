@@ -28,7 +28,7 @@ public class Tuple {
 
     private final TupleType type;
 
-    private Tuple(TupleType type, Map<AttrName, Object> attrs) {
+    public Tuple(TupleType type, Map<AttrName, Object> attrs) {
         this.type = type;
         this.attrs = unmodifiableMap(attrs);
     }
