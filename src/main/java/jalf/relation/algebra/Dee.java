@@ -4,6 +4,7 @@ import jalf.Relation;
 import jalf.Tuple;
 import jalf.Visitor;
 import jalf.compiler.AbstractRelation;
+import jalf.compiler.BaseCog;
 import jalf.compiler.Cog;
 import jalf.type.RelationType;
 
@@ -40,7 +41,7 @@ public class Dee extends AbstractRelation {
     }
 
     public Cog toCog() {
-        return new Cog(this, () -> Collections.singleton(EMPTY_TUPLE).stream());
+        return new BaseCog(this, () -> Collections.singleton(EMPTY_TUPLE).stream());
     }
 
     @Override

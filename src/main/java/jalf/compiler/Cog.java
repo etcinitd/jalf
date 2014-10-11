@@ -33,27 +33,23 @@ import java.util.stream.Stream;
  * streams. It is intended to be subclassed for specific compilation schemes
  * (e.g. SQL compilation), specific optimizations and/or algorithms.
  */
-public class Cog {
+public abstract class Cog {
 
-    private Relation expr;
+    protected Relation expr;
 
-    private Supplier<Stream<Tuple>> streamSupplier;
-
-    public Cog(Relation expr, Supplier<Stream<Tuple>> streamSupplier) {
+    public Cog(Relation expr) {
+        super();
         this.expr = expr;
-        this.streamSupplier = streamSupplier;
     }
 
     public Relation getExpr() {
         return expr;
     }
 
-    public Stream<Tuple> stream() {
-        return streamSupplier.get();
-    }
+    public abstract Stream<Tuple> stream();
 
     /** Default compilation of `project`. */
-    public Cog project(Project projection){
+    public Cog project(Project projection) {
         AttrList on = projection.getAttributes();
         TupleType tt = projection.getTupleType();
 
@@ -62,11 +58,11 @@ public class Cog {
                 .map(t -> t.project(on, tt))
                 .distinct();
 
-        return new Cog(projection, supplier);
+        return new BaseCog(projection, supplier);
     }
 
     /** Default compilation of `rename`. */
-    public Cog rename(Rename rename){
+    public Cog rename(Rename rename) {
         Renaming renaming = rename.getRenaming();
         TupleType tt = rename.getTupleType();
 
@@ -74,7 +70,7 @@ public class Cog {
         Supplier<Stream<Tuple>> supplier = () -> this.stream()
                 .map(t -> t.rename(renaming, tt));
 
-        return new Cog(rename, supplier);
+        return new BaseCog(rename, supplier);
     }
 
     /** Default compilation of `restrict`. */
@@ -85,7 +81,7 @@ public class Cog {
         Supplier<Stream<Tuple>> supplier = () -> this.stream()
                 .filter(t -> predicate.test(t));
 
-        return new Cog(restrict, supplier);
+        return new BaseCog(restrict, supplier);
     }
 
     /** Default compilation of `join`. */
@@ -109,7 +105,7 @@ public class Cog {
             return this.stream().flatMap(leftTuple -> right.stream()
                         .map(rightTuple -> leftTuple.join(rightTuple, tt)));
         };
-        return new Cog(join, supplier);
+        return new BaseCog(join, supplier);
     }
 
     private Cog hashJoin(Join join, Cog right) {
@@ -130,6 +126,6 @@ public class Cog {
                 return leftTuples.stream().map(t -> t.join(rightTuple, tt));
             });
         };
-        return new Cog(join, supplier);
+        return new BaseCog(join, supplier);
     }
 }

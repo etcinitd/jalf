@@ -5,6 +5,7 @@ import jalf.Relation;
 import jalf.Tuple;
 import jalf.TypeException;
 import jalf.Visitor;
+import jalf.compiler.BaseCog;
 import jalf.compiler.Cog;
 import jalf.compiler.Compiler;
 import jalf.type.RelationType;
@@ -69,7 +70,7 @@ public class SetMemoryRelation extends MemoryRelation {
 
     @Override
     public Cog toCog(Compiler compiler) {
-        return new Cog(this, () -> tuples.stream());
+        return new BaseCog(this, () -> tuples.stream());
     }
 
     @Override

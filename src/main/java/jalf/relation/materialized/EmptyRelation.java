@@ -1,13 +1,14 @@
 package jalf.relation.materialized;
 
-import java.util.Collections;
-
 import jalf.Relation;
 import jalf.Tuple;
 import jalf.Visitor;
+import jalf.compiler.BaseCog;
 import jalf.compiler.Cog;
 import jalf.compiler.Compiler;
 import jalf.type.RelationType;
+
+import java.util.Collections;
 
 public class EmptyRelation extends MemoryRelation {
 
@@ -34,7 +35,7 @@ public class EmptyRelation extends MemoryRelation {
 
     @Override
     public Cog toCog(Compiler compiler) {
-        return new Cog(this, () -> Collections.<Tuple>emptyList().stream());
+        return new BaseCog(this, () -> Collections.<Tuple>emptyList().stream());
     }
 
     @Override

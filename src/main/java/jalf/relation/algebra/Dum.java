@@ -4,6 +4,7 @@ import jalf.Relation;
 import jalf.Tuple;
 import jalf.Visitor;
 import jalf.compiler.AbstractRelation;
+import jalf.compiler.BaseCog;
 import jalf.compiler.Cog;
 import jalf.type.RelationType;
 
@@ -38,7 +39,7 @@ public class Dum extends AbstractRelation {
     }
 
     public Cog toCog() {
-        return new Cog(this, () -> Collections.<Tuple>emptyList().stream());
+        return new BaseCog(this, () -> Collections.<Tuple>emptyList().stream());
     }
 
     @Override
