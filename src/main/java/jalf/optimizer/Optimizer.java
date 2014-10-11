@@ -13,8 +13,6 @@ import jalf.relation.algebra.Select;
 
 import java.util.function.Function;
 
-import java.util.function.Function;
-
 /**
  * Logical optimizer of relational expressions.
  *
