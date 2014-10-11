@@ -1,9 +1,9 @@
 package jalf.util;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 import static java.util.Collections.*;
 
@@ -48,6 +48,24 @@ public final class CollectionUtils {
         map.put(k2, v2);
         map.put(k3, v3);
         return unmodifiableMap(map);
+    }
+
+    public static <K,V,W> Map<K,W> remap(Map<K,V> map, BiFunction<K,V,W> remapper) {
+        Map<K,W> remapped = new ConcurrentHashMap<>();
+        map.forEach((k,v) -> {
+            W newVal = remapper.apply(k, v);
+            remapped.put(k, newVal);
+        });
+        return remapped;
+    }
+
+    public static <K,V,L> Map<L,V> rekey(Map<K,V> map, BiFunction<K,V,L> rekeyer) {
+        Map<L,V> rekeyed = new ConcurrentHashMap<>();
+        map.forEach((k,v) -> {
+            L newKey = rekeyer.apply(k, v);
+            rekeyed.put(newKey, v);
+        });
+        return rekeyed;
     }
 
     public static <E> ConcurrentHashSet<E> newConcurrentHashSet() {

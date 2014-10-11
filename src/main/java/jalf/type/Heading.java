@@ -1,5 +1,6 @@
 package jalf.type;
 
+import static jalf.util.CollectionUtils.rekey;
 import static jalf.util.ValidationUtils.validate;
 import static jalf.util.ValidationUtils.validateNotNull;
 import jalf.AttrList;
@@ -142,9 +143,7 @@ public class Heading {
      * @return the heading obtained by renaming the attributes.
      */
     public Heading rename(Renaming renaming) {
-        Map<AttrName, Type<?>> renamed = new HashMap<>();
-        attributes.forEach((name, type) -> renamed.put(renaming.apply(name), type));
-        return new Heading(renamed);
+        return new Heading(rekey(attributes, (k,v) -> renaming.apply(k)));
     }
 
     /**

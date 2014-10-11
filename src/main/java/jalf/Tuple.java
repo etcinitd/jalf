@@ -3,6 +3,7 @@ package jalf;
 import static jalf.util.ValidationUtils.validate;
 import static jalf.util.ValidationUtils.validateNotNull;
 import static java.util.Collections.unmodifiableMap;
+import static jalf.util.CollectionUtils.rekey;
 import jalf.type.TupleType;
 
 import java.util.List;
@@ -120,13 +121,7 @@ public class Tuple {
      * @post `resultingType.contains(rename(r, resultingType))` is true
      */
     public Tuple rename(Renaming r, TupleType resultingType) {
-        Map<AttrName, Object> renamed = new ConcurrentHashMap<>();
-        attrs.entrySet().forEach(attribute -> {
-            AttrName attrName = attribute.getKey();
-            AttrName as = r.apply(attrName);
-            renamed.put(as, attribute.getValue());
-        });
-        return new Tuple(resultingType, renamed);
+        return new Tuple(resultingType, rekey(attrs, (k,v) -> r.apply(k)));
     }
 
     /**
