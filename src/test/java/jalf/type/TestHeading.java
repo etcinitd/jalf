@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class TestHeading {
 
-    Heading h = Heading.varargs(SID, String.class);
+    Heading h = Heading.dress(SID, String.class);
 
     @Test
     public void testInfer() {
@@ -17,7 +17,7 @@ public class TestHeading {
         t.put(SID,  "S1");
         t.put(STATUS, 20);
         Heading h = Heading.infer(t);
-        assertEquals(h, Heading.varargs(SID, String.class, STATUS, Integer.class));
+        assertEquals(h, Heading.dress(SID, String.class, STATUS, Integer.class));
     }
 
     @Test
@@ -28,7 +28,7 @@ public class TestHeading {
                   Type.scalarType(String.class) :
                   Type.scalarType(Integer.class);
         });
-        Heading expected = Heading.varargs(SID, String.class, STATUS, Integer.class);
+        Heading expected = Heading.dress(SID, String.class, STATUS, Integer.class);
         assertEquals(expected, got);
     }
 
@@ -39,8 +39,8 @@ public class TestHeading {
 
         // it throws when not having the same attributes
         try {
-            Heading h1 = Heading.varargs(SID, String.class);
-            Heading h2 = Heading.varargs(PID, String.class);
+            Heading h1 = Heading.dress(SID, String.class);
+            Heading h2 = Heading.dress(PID, String.class);
             Heading.leastCommonSuperHeading(h1, h2);
             assertFalse(true);
         } catch (TypeException ex) {
@@ -57,28 +57,28 @@ public class TestHeading {
     @Test
     public void testToAttrList() {
         // it is as expected
-        Heading h = Heading.varargs(SID, String.class, STATUS, Integer.class);
+        Heading h = Heading.dress(SID, String.class, STATUS, Integer.class);
         AttrList expected = AttrList.attrs(SID, STATUS);
         assertEquals(expected, h.toAttrList());
 
         // it keeps the original 'insertion' order
-        h = Heading.varargs(STATUS, Integer.class, SID, String.class);
+        h = Heading.dress(STATUS, Integer.class, SID, String.class);
         List<AttrName> list = AttrList.attrs(STATUS, SID).toList();
         assertEquals(list, h.toAttrList().toList());
     }
 
     @Test
     public void testProject() {
-        Heading h = Heading.varargs(SID, String.class, STATUS, Integer.class);
-        Heading expected = Heading.varargs(STATUS, Integer.class);
+        Heading h = Heading.dress(SID, String.class, STATUS, Integer.class);
+        Heading expected = Heading.dress(STATUS, Integer.class);
         assertEquals(expected, h.project(AttrList.attrs(STATUS)));
     }
 
     @Test
     public void testJoin() {
-        Heading h1 = Heading.varargs(SID, String.class, STATUS, Integer.class);
-        Heading h2 = Heading.varargs(SID, String.class, CITY, String.class);
-        Heading expected = Heading.varargs(SID, String.class, STATUS, Integer.class, CITY, String.class);
+        Heading h1 = Heading.dress(SID, String.class, STATUS, Integer.class);
+        Heading h2 = Heading.dress(SID, String.class, CITY, String.class);
+        Heading expected = Heading.dress(SID, String.class, STATUS, Integer.class, CITY, String.class);
         assertEquals(expected, h1.join(h2));
 
         // it keeps a natural attribute names order
@@ -88,16 +88,16 @@ public class TestHeading {
 
     @Test
     public void testRename() {
-        Heading h = Heading.varargs(SID, String.class, STATUS, Integer.class);
-        Heading expected = Heading.varargs(PID, String.class, STATUS, Integer.class);
+        Heading h = Heading.dress(SID, String.class, STATUS, Integer.class);
+        Heading expected = Heading.dress(PID, String.class, STATUS, Integer.class);
         assertEquals(expected, h.rename(Renaming.extension(SID, PID)));
     }
 
     @Test
     public void testHashCode() {
         // it does not depend on the ordering
-        Heading h1 = Heading.varargs(SID, String.class, STATUS, Integer.class);
-        Heading h2 = Heading.varargs(STATUS, Integer.class, SID, String.class);
+        Heading h1 = Heading.dress(SID, String.class, STATUS, Integer.class);
+        Heading h2 = Heading.dress(STATUS, Integer.class, SID, String.class);
         assertEquals(h1.hashCode(), h2.hashCode());
     }
 
@@ -106,12 +106,12 @@ public class TestHeading {
         // it is equal to itself
         assertTrue(h.equals(h));
         // it is equal to an equivalent
-        assertTrue(h.equals(Heading.varargs(SID, String.class)));
+        assertTrue(h.equals(Heading.dress(SID, String.class)));
         // it is not equal to another ones
-        assertFalse(h.equals(Heading.varargs()));
-        assertFalse(h.equals(Heading.varargs(SID, String.class, STATUS, Integer.class)));
-        assertFalse(h.equals(Heading.varargs(SID, Integer.class)));
-        assertFalse(h.equals(Heading.varargs(NAME, String.class)));
+        assertFalse(h.equals(Heading.dress()));
+        assertFalse(h.equals(Heading.dress(SID, String.class, STATUS, Integer.class)));
+        assertFalse(h.equals(Heading.dress(SID, Integer.class)));
+        assertFalse(h.equals(Heading.dress(NAME, String.class)));
     }
 
 }

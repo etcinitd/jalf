@@ -47,7 +47,7 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
      * @return factored relation type.
      */
     public static RelationType varargs(Object... nameTypePairs) {
-        return new RelationType(Heading.varargs(nameTypePairs));
+        return new RelationType(Heading.dress(nameTypePairs));
     }
 
     /**

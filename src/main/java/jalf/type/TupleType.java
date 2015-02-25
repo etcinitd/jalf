@@ -33,7 +33,7 @@ public class TupleType extends HeadingBasedType implements Type<Tuple> {
      * @return factored tuple type.
      */
     public static TupleType varargs(Object... nameTypePairs) {
-        return heading(Heading.varargs(nameTypePairs));
+        return heading(Heading.dress(nameTypePairs));
     }
 
     /**

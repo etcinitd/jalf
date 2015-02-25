@@ -38,7 +38,7 @@ public class Heading {
      * @param nameTypePairs the list of pairs to convert to a heading.
      * @return factored heading.
      */
-    public static Heading varargs(Object... nameTypePairs) {
+    public static Heading dress(Object... nameTypePairs) {
         validateNotNull("Parameter 'keyValuePairs' must be non-null.", nameTypePairs);
         validate("Length of key-value pairs must be even.", nameTypePairs.length % 2, 0);
 
@@ -49,6 +49,25 @@ public class Heading {
             attrs.put(attr, type);
         }
         return new Heading(attrs);
+    }
+
+    /**
+     * Dresses some heading from an array of names and a function mapping each
+     * of them to a type.
+     *
+     * @param attrNames an array of attribute names.
+     * @param fn a function mapping each attribute name to the corresponding type.
+     * @return a Heading instance `{ name : fn(name) }` for every name.
+     */
+    public static Heading dress(AttrName[] attrNames, Function<AttrName, Type<?>> fn) {
+        validateNotNull("Parameter 'attrNames' must be non-null", attrNames);
+        validateNotNull("Parameter 'fn' must be non-null", fn);
+
+        Map<AttrName, Type<?>> attributes = new LinkedHashMap<>();
+        for (AttrName attrName : attrNames) {
+            attributes.put(attrName, fn.apply(attrName));
+        }
+        return new Heading(attributes);
     }
 
     /**
@@ -64,22 +83,6 @@ public class Heading {
             Type<?> type = Type.infer(value);
             attributes.put(attr, type);
         });
-        return new Heading(attributes);
-    }
-
-    /**
-     * Dresses some heading from an array of names and a function mapping each
-     * of them to a type.
-     *
-     * @param attrNames an array of attribute names.
-     * @param fn a function mapping each attribute name to the corresponding type.
-     * @return a Heading instance `{ name : fn(name) }` for every name.
-     */
-    public static Heading dress(AttrName[] attrNames, Function<AttrName, Type<?>> fn) {
-        Map<AttrName, Type<?>> attributes = new LinkedHashMap<>();
-        for (AttrName attrName : attrNames) {
-            attributes.put(attrName, fn.apply(attrName));
-        }
         return new Heading(attributes);
     }
 

@@ -38,7 +38,7 @@ public class DSL {
     // Heading and Types
 
     public static Heading heading(Object... pairs) {
-        return Heading.varargs(pairs);
+        return Heading.dress(pairs);
     }
 
     // Renaming
