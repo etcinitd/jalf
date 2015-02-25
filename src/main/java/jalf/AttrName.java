@@ -33,6 +33,20 @@ public class AttrName implements Comparable<AttrName> {
     }
 
     /**
+     * Builds an array of attribute names from their string representations.
+     *
+     * @param names Some attribute names as string
+     * @return same attribute names, but as AttrName instances properly.
+     */
+    public static AttrName[] attrs(String[] names) {
+        AttrName[] result = new AttrName[names.length];
+        for (int i=0; i<names.length; i++) {
+            result[i] = attr(names[i]);
+        }
+        return result;
+    }
+
+    /**
      * Dress `obj` as an attribute name, applying the necessary coercions.
      *
      * @pre the actual type of `obj` must match one the factory methods or

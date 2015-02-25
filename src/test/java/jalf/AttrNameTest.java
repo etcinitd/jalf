@@ -11,6 +11,12 @@ public class AttrNameTest {
     AttrName WID = AttrName.attr("wid");
 
     @Test
+    public void testAttrs() {
+        AttrName[] expected = new AttrName[]{ SID, RID };
+        assertArrayEquals(expected, AttrName.attrs(new String[]{ "sid", "rid" }));
+    }
+
+    @Test
     public void testGetName() {
         assertEquals("sid", SID.getName());
     }
