@@ -50,6 +50,27 @@ public final class CollectionUtils {
         return unmodifiableMap(map);
     }
 
+    public static <K, V> Map<K, V> mapOf(K[] keys, V[] values) {
+        int keysSize = (keys != null) ? keys.length : 0;
+        int valuesSize = (values != null) ? values.length : 0;
+
+        if (keysSize == 0 && valuesSize == 0) {
+            return new HashMap<>();
+        }
+
+        if (keysSize != valuesSize) {
+            throw new IllegalArgumentException(
+                    "The number of keys doesn't match the number of values.");
+        }
+
+        Map<K,V> map = new HashMap<>();
+        for (int i = 0; i < keysSize; i++) {
+            map.put(keys[i], values[i]);
+        }
+
+        return map;
+    }
+
     public static <K,V,W> Map<K,W> remap(Map<K,V> map, BiFunction<K,V,W> remapper) {
         Map<K,W> remapped = new ConcurrentHashMap<>();
         map.forEach((k,v) -> {
