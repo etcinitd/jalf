@@ -64,14 +64,14 @@ public class Selection implements Function<Tuple,Tuple> {
     protected TupleType tupleType;
     public TupleType toTupleType() {
         if (tupleType == null)
-        tupleType = TupleType.dress(toHeading());
+            tupleType = TupleType.dress(toHeading());
         return tupleType;
     }
 
     protected RelationType relationType;
     public RelationType toRelationType() {
         if (relationType == null)
-        relationType = RelationType.dress(toHeading());
+            relationType = RelationType.dress(toHeading());
         return relationType;
     }
 
