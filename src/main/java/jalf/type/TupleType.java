@@ -20,7 +20,7 @@ public class TupleType extends HeadingBasedType implements Type<Tuple> {
      * @param heading a heading instance.
      * @return the factored relation type.
      */
-    public static TupleType heading(Heading h) {
+    public static TupleType dress(Heading h) {
         return new TupleType(h);
     }
 
@@ -32,8 +32,8 @@ public class TupleType extends HeadingBasedType implements Type<Tuple> {
      * @param nameTypePairs the list of pairs to convert to a tuple type.
      * @return factored tuple type.
      */
-    public static TupleType varargs(Object... nameTypePairs) {
-        return heading(Heading.dress(nameTypePairs));
+    public static TupleType dress(Object... nameTypePairs) {
+        return dress(Heading.dress(nameTypePairs));
     }
 
     /**
@@ -63,7 +63,7 @@ public class TupleType extends HeadingBasedType implements Type<Tuple> {
         Heading h1 = t1.getHeading();
         Heading h2 = t2.getHeading();
         Heading h = Heading.leastCommonSuperHeading(h1, h2);
-        return TupleType.heading(h);
+        return TupleType.dress(h);
     }
 
     @Override

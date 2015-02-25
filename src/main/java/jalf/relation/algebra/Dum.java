@@ -15,7 +15,7 @@ import java.util.Collections;
  */
 public class Dum extends AbstractRelation {
 
-    private static final RelationType TYPE = RelationType.varargs();
+    private static final RelationType TYPE = RelationType.dress();
 
     private static Relation INSTANCE;
 

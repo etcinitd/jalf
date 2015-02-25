@@ -32,7 +32,7 @@ public class TupleTest {
         Tuple source = tuple(SID, "S1", NAME, "Smith", STATUS, 20, CITY, "London");
         Tuple expected = tuple(SID, "S1", NAME, "Smith");
 
-        TupleType type = TupleType.varargs(SID, String.class, NAME, String.class);
+        TupleType type = TupleType.dress(SID, String.class, NAME, String.class);
         Tuple actual = source.project(attrs(SID, NAME), type);
         assertEquals(expected, actual);
 
@@ -45,7 +45,7 @@ public class TupleTest {
         Tuple source = tuple(SID, "S1", NAME, "Smith");
         Tuple expected = tuple(SUPPLIER_ID, "S1", NAME, "Smith");
 
-        TupleType type = TupleType.varargs(SUPPLIER_ID, String.class, NAME, String.class);
+        TupleType type = TupleType.dress(SUPPLIER_ID, String.class, NAME, String.class);
         Tuple actual = source.rename(renaming(SID, SUPPLIER_ID), type);
         assertEquals(expected, actual);
 
@@ -59,7 +59,7 @@ public class TupleTest {
         Tuple right = tuple(SID, "S1", CITY, "London");
         Tuple expected = tuple(SID, "S1", NAME, "Smith", CITY, "London");
 
-        TupleType type = TupleType.varargs(SID, String.class, NAME,
+        TupleType type = TupleType.dress(SID, String.class, NAME,
                 String.class, CITY, String.class);
         Tuple actual = left.join(right, type);
         assertEquals(expected, actual);
@@ -77,7 +77,7 @@ public class TupleTest {
         Tuple left = tuple(SID, "S1", NAME, "Smith");
         Tuple right = tuple(SID, "S1", NAME, "Jones", CITY, "London");
 
-        TupleType type = TupleType.varargs(SID, String.class, NAME,
+        TupleType type = TupleType.dress(SID, String.class, NAME,
                 String.class, CITY, String.class);
         Tuple actual = left.join(right, type);
 

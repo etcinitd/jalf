@@ -16,8 +16,8 @@ public class Selection implements Function<Tuple,Tuple> {
 
     public Selection(Map<AttrName, SelectionMember> fns) {
         this.fns = fns;
-        tupleType = TupleType.heading(heading);
-        relationType = RelationType.heading(heading);
+        tupleType = TupleType.dress(heading);
+        relationType = RelationType.dress(heading);
     }
 
     public static Selection identity(RelationType type) {
@@ -64,14 +64,14 @@ public class Selection implements Function<Tuple,Tuple> {
     protected TupleType tupleType;
     public TupleType toTupleType() {
         if (tupleType == null)
-            tupleType = TupleType.heading(toHeading());
+            tupleType = TupleType.dress(toHeading());
         return tupleType;
     }
 
     protected RelationType relationType;
     public RelationType toRelationType() {
         if (relationType == null)
-            relationType = RelationType.heading(toHeading());
+            relationType = RelationType.dress(toHeading());
         return relationType;
     }
 

@@ -13,19 +13,19 @@ import static org.junit.Assert.*;
 public class TestSetMemoryRelation {
 
     Relation dum = new SetMemoryRelation(
-            RelationType.varargs(),
+            RelationType.dress(),
             setOf());
 
     Relation s1 = new SetMemoryRelation(
-            RelationType.varargs(SID, String.class),
+            RelationType.dress(SID, String.class),
             setOf(tuple(SID, "S1")));
 
     Relation s1bis = new SetMemoryRelation(
-            RelationType.varargs(SID, String.class),
+            RelationType.dress(SID, String.class),
             setOf(tuple(SID, "S1")));
     
     Relation s2 = new SetMemoryRelation(
-            RelationType.varargs(SID, String.class),
+            RelationType.dress(SID, String.class),
             setOf(tuple(SID, "S2")));
 
     @Test

@@ -14,7 +14,7 @@ public class TupleTest {
     @Test
     public void testItInfersTheTypeIfNotProvided() {
         Tuple t = tuple(SID, "S1", STATUS, 20);
-        TupleType expected = TupleType.varargs(SID, String.class, STATUS, Integer.class);
+        TupleType expected = TupleType.dress(SID, String.class, STATUS, Integer.class);
         assertEquals(expected, t.getType());
     }
 

@@ -14,7 +14,7 @@ public class RelationTest {
     @Test
     public void testItAllowsSpecifyingTheType() {
         Relation r = relation(
-            RelationType.varargs(SID, String.class),
+            RelationType.dress(SID, String.class),
             tuple(SID, "S1"),
             tuple(SID, "S2")
         );
@@ -24,7 +24,7 @@ public class RelationTest {
     @Test
     public void testItAllowsNoTupleProvidedTheTypeIsSpecified() {
         Relation r = relation(
-                RelationType.varargs(SID, String.class)
+                RelationType.dress(SID, String.class)
         );
         assertEquals(0, r.count());
     }
@@ -37,7 +37,7 @@ public class RelationTest {
     @Test(expected = TypeException.class)
     public void testItRaisesWhenTupleTypeMismatch() {
         relation(
-                RelationType.varargs(SID, String.class),
+                RelationType.dress(SID, String.class),
                 tuple(SID, "S1"),
                 tuple(SID, 10)
         );

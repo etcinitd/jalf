@@ -47,7 +47,7 @@ public interface Type<T> {
      * @return factored tuple type instance.
      */
     static TupleType tupleType(Heading heading) {
-        return TupleType.heading(heading);
+        return TupleType.dress(heading);
     }
 
     /**
@@ -59,7 +59,7 @@ public interface Type<T> {
      * @return factored tuple type.
      */
     static TupleType tupleType(Object... nameTypePairs) {
-        return TupleType.varargs(nameTypePairs);
+        return TupleType.dress(nameTypePairs);
     }
 
     /**
@@ -69,7 +69,7 @@ public interface Type<T> {
      * @return the factored relation type.
      */
     static RelationType relationType(Heading heading) {
-        return RelationType.heading(heading);
+        return RelationType.dress(heading);
     }
 
     /**
@@ -81,7 +81,7 @@ public interface Type<T> {
      * @return factored relation type.
      */
     static RelationType relationType(Object... nameTypePairs) {
-        return RelationType.varargs(nameTypePairs);
+        return RelationType.dress(nameTypePairs);
     }
 
     /**

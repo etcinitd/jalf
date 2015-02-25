@@ -25,7 +25,7 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
 
     private RelationType(Heading heading) {
         super(heading);
-        tupleType = TupleType.heading(heading);
+        tupleType = TupleType.dress(heading);
     }
 
     /**
@@ -34,7 +34,7 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
      * @param heading a heading instance.
      * @return the factored relation type.
      */
-    public static RelationType heading(Heading heading) {
+    public static RelationType dress(Heading heading) {
         return new RelationType(heading);
     }
 
@@ -46,7 +46,7 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
      * @param nameTypePairs the list of pairs to convert to a relation type.
      * @return factored relation type.
      */
-    public static RelationType varargs(Object... nameTypePairs) {
+    public static RelationType dress(Object... nameTypePairs) {
         return new RelationType(Heading.dress(nameTypePairs));
     }
 
@@ -70,7 +70,7 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
         Heading h1 = r1.getHeading();
         Heading h2 = r2.getHeading();
         Heading lcsh = Heading.leastCommonSuperHeading(h1, h2);
-        return RelationType.heading(lcsh);
+        return RelationType.dress(lcsh);
     }
 
     /**
@@ -96,7 +96,7 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
         if (r == null) {
             throw new TypeException("Unable to infer relation type: stream of tuples may not be empty");
         }
-        return RelationType.heading(r.getHeading());
+        return RelationType.dress(r.getHeading());
     }
 
     /**

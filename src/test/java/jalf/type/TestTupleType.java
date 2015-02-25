@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class TestTupleType {
 
-    TupleType type = TupleType.varargs(SID, String.class);
+    TupleType type = TupleType.dress(SID, String.class);
 
     @Test
     public void testContains() {
@@ -23,7 +23,7 @@ public class TestTupleType {
 
     @Test
     public void testToAttrList() {
-        TupleType type = TupleType.varargs(STATUS, Integer.class, SID, String.class);
+        TupleType type = TupleType.dress(STATUS, Integer.class, SID, String.class);
         AttrList expected = AttrList.attrs(STATUS, SID);
         assertEquals(expected, type.toAttrList());
 
@@ -35,8 +35,8 @@ public class TestTupleType {
     @Test
     public void testHashCode() {
         // it does not depend on the order
-        TupleType t1 = TupleType.varargs(SID, String.class, STATUS, Integer.class);
-        TupleType t2 = TupleType.varargs(STATUS, Integer.class, SID, String.class);
+        TupleType t1 = TupleType.dress(SID, String.class, STATUS, Integer.class);
+        TupleType t2 = TupleType.dress(STATUS, Integer.class, SID, String.class);
         assertEquals(t1.hashCode(), t2.hashCode());
     }
 
@@ -45,12 +45,12 @@ public class TestTupleType {
         // it is equal to itself
         assertTrue(type.equals(type));
         // it is equal to an equivalent
-        assertTrue(type.equals(TupleType.varargs(SID, String.class)));
+        assertTrue(type.equals(TupleType.dress(SID, String.class)));
         // it is not equal to another ones
-        assertFalse(type.equals(TupleType.varargs()));
-        assertFalse(type.equals(TupleType.varargs(SID, String.class, STATUS, Integer.class)));
-        assertFalse(type.equals(TupleType.varargs(SID, Integer.class)));
-        assertFalse(type.equals(TupleType.varargs(NAME, String.class)));
+        assertFalse(type.equals(TupleType.dress()));
+        assertFalse(type.equals(TupleType.dress(SID, String.class, STATUS, Integer.class)));
+        assertFalse(type.equals(TupleType.dress(SID, Integer.class)));
+        assertFalse(type.equals(TupleType.dress(NAME, String.class)));
     }
 
 }

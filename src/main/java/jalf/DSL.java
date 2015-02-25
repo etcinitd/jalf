@@ -94,7 +94,7 @@ public class DSL {
     }
 
     public static Relation relation(Heading heading, Tuple... tuples) {
-        return relation(RelationType.heading(heading), tuples);
+        return relation(RelationType.dress(heading), tuples);
     }
 
     public static Relation relation(Tuple... tuples) {

@@ -14,7 +14,7 @@ public class TestEmptyRelation {
 
     @Test
     public void testStream() {
-        RelationType type = RelationType.varargs(SID, String.class);
+        RelationType type = RelationType.dress(SID, String.class);
         Relation r = EmptyRelation.factor(type);
         Stream<Tuple> stream = r.stream();
         assertFalse(stream.findAny().isPresent());
@@ -22,7 +22,7 @@ public class TestEmptyRelation {
 
     @Test
     public void testEquals() {
-        RelationType type = RelationType.varargs(SID, String.class);
+        RelationType type = RelationType.dress(SID, String.class);
         Relation empty = EmptyRelation.factor(type);
 
         Relation other = SetMemoryRelation.tuples(type);
