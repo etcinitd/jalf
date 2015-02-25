@@ -13,10 +13,10 @@ public class TestTupleType {
 
     @Test
     public void testContains() {
-        assertTrue(type.contains(Tuple.varargs(SID, "S1")));
-        assertFalse(type.contains(Tuple.varargs()));
-        assertFalse(type.contains(Tuple.varargs(SID, 12)));
-        assertFalse(type.contains(Tuple.varargs(SID, "S1", STATUS, 12)));
+        assertTrue(type.contains(Tuple.dress(SID, "S1")));
+        assertFalse(type.contains(Tuple.dress()));
+        assertFalse(type.contains(Tuple.dress(SID, 12)));
+        assertFalse(type.contains(Tuple.dress(SID, "S1", STATUS, 12)));
         assertFalse(type.contains("hello"));
         assertFalse(type.contains(null));
     }

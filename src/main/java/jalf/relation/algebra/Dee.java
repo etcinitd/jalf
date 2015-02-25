@@ -19,7 +19,7 @@ public class Dee extends AbstractRelation {
 
     private static Relation INSTANCE;
 
-    private static final Tuple EMPTY_TUPLE = Tuple.varargs();
+    private static final Tuple EMPTY_TUPLE = Tuple.dress();
 
     private Dee() {}
 

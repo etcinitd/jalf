@@ -41,7 +41,7 @@ public class Tuple {
      * @param keyValuePairs the list of pairs to convert to a tuple.
      * @return factored tuple.
      */
-    public static Tuple varargs(Object... keyValuePairs) {
+    public static Tuple dress(Object... keyValuePairs) {
         validateNotNull("Parameter 'keyValuePairs' must be non-null.", keyValuePairs);
         validate("Length of key-value pairs must be even.", keyValuePairs.length % 2, 0);
 

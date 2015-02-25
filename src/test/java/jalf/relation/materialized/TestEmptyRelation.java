@@ -28,7 +28,7 @@ public class TestEmptyRelation {
         Relation other = SetMemoryRelation.tuples(type);
         assertEquals(empty, other);
 
-        other = SetMemoryRelation.tuples(type, Tuple.varargs(SID, "S1"));
+        other = SetMemoryRelation.tuples(type, Tuple.dress(SID, "S1"));
         assertNotEquals(empty, other);
     }
 

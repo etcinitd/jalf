@@ -58,7 +58,7 @@ public class TestRelationType {
         // it does not contain a non relation
         assertFalse(type.contains(null));
         assertFalse(type.contains(12));
-        assertFalse(type.contains(Tuple.varargs(SID, 12)));
+        assertFalse(type.contains(Tuple.dress(SID, 12)));
 
         // it does not contain a relation of another type
         r = relation(heading());

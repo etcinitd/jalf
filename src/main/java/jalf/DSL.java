@@ -84,7 +84,7 @@ public class DSL {
     // Tuple
 
     public static Tuple tuple(Object... keyValuePairs) {
-        return Tuple.varargs(keyValuePairs);
+        return Tuple.dress(keyValuePairs);
     }
 
     // Relation
