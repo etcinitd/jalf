@@ -21,6 +21,18 @@ public class TestHeading {
     }
 
     @Test
+    public void testDress() {
+        AttrName[] names = new AttrName[]{ SID, STATUS };
+        Heading got = Heading.dress(names, (name)-> {
+           return name.equals(SID) ?
+                  Type.scalarType(String.class) :
+                  Type.scalarType(Integer.class);
+        });
+        Heading expected = Heading.varargs(SID, String.class, STATUS, Integer.class);
+        assertEquals(expected, got);
+    }
+
+    @Test
     public void testLeastCommonSuperHeading() {
         // it simply returns an equal heading on identical
         assertEquals(h, Heading.leastCommonSuperHeading(h,  h));

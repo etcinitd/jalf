@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * A heading is a set of attribute (name, type) pairs, under the constraints
@@ -63,6 +64,22 @@ public class Heading {
             Type<?> type = Type.infer(value);
             attributes.put(attr, type);
         });
+        return new Heading(attributes);
+    }
+
+    /**
+     * Dresses some heading from an array of names and a function mapping each
+     * of them to a type.
+     *
+     * @param attrNames an array of attribute names.
+     * @param fn a function mapping each attribute name to the corresponding type.
+     * @return a Heading instance `{ name : fn(name) }` for every name.
+     */
+    public static Heading dress(AttrName[] attrNames, Function<AttrName, Type<?>> fn) {
+        Map<AttrName, Type<?>> attributes = new LinkedHashMap<>();
+        for (AttrName attrName : attrNames) {
+            attributes.put(attrName, fn.apply(attrName));
+        }
         return new Heading(attributes);
     }
 
