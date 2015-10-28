@@ -41,7 +41,7 @@ public class OptimizedJoin extends Optimized<Join> {
             if (rPredicate == null)
                 rPredicate = pair.right;
             else
-              rPredicate = rPredicate.split(attrList).right;
+                rPredicate = rPredicate.split(attrList).right;
         };
 
         // apply the rest of the predicate now
@@ -102,5 +102,5 @@ public class OptimizedJoin extends Optimized<Join> {
         }
         return operand;
     }
-    
+
 }

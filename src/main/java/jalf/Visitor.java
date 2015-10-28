@@ -23,6 +23,8 @@ public interface Visitor<R> extends Function<Relation,R> {
     ///
 
     R visit(Join relation);
+    
+    R visit(Union relation);
 
     ///
 

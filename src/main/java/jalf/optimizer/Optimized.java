@@ -22,7 +22,7 @@ import jalf.type.RelationType;
 public class Optimized<R extends Relation> extends AbstractRelation {
 
     protected Optimizer optimizer;
-    
+
     protected R operator;
 
     public Optimized(Optimizer optimizer, R operator) {
@@ -91,6 +91,11 @@ public class Optimized<R extends Relation> extends AbstractRelation {
             return operator;
 
         return operator.join(right);
+    }
+
+    @Override
+    public Relation union(Relation right){
+        return operator.union(right);
     }
 
     ///

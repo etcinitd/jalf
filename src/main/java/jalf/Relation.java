@@ -75,6 +75,14 @@ public interface Relation {
     Relation join(Relation right);
 
     /**
+     * Union this relation with `right` one.
+     *
+     * @param right another relation.
+     * @return the resulting relation.
+     */
+    Relation union(Relation right);
+
+    /**
      * Filters tuples of this relation based on the predicate.
      *
      * @pre predicate attribute names must belong to attributes of the relation.

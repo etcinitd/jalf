@@ -126,4 +126,9 @@ public class DSL {
     public static Relation join(Relation left, Relation right) {
         return left.join(right);
     }
+    
+    public static Relation union(Relation left, Relation right) {
+        return left.union(right);
+    }
+    
 }

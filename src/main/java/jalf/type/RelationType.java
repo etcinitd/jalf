@@ -165,6 +165,10 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
         return new RelationType(this.heading.join(other.heading));
     }
 
+    public RelationType union(RelationType other) {
+        return leastCommonSupertype(this,other);
+    }
+
     public AttrList toAttrList() {
         return heading.toAttrList();
     }

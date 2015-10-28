@@ -57,6 +57,13 @@ public class Compiler implements Visitor<Cog> {
     ///
 
     @Override
+    public Cog visit(Union relation) {
+        Cog left = relation.getLeft().accept(this);
+        Cog right = relation.getRight().accept(this);
+        return left.union(relation, right);
+    }
+
+    @Override
     public Cog visit(LeafOperand relation) {
         return relation.toCog(this);
     }

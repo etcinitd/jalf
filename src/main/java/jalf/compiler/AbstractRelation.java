@@ -7,6 +7,7 @@ import jalf.Renaming;
 import jalf.Selection;
 import jalf.Tuple;
 import jalf.relation.algebra.Join;
+import jalf.relation.algebra.Union;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
@@ -62,6 +63,11 @@ public abstract class AbstractRelation implements Relation {
         return new Join(this, right);
     }
 
+    @Override
+    public Relation union(Relation right) {
+        return new Union(this, right);
+    }
+
     ///
 
     @Override
@@ -107,6 +113,7 @@ public abstract class AbstractRelation implements Relation {
      * 2. avoid the delegation complexity by extracting equals responsibility
      *    to another abstraction (?)
      */
+    @Override
     public boolean equals(Object other) {
         if (other == this)
             return true;

@@ -10,6 +10,7 @@ import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
 import jalf.relation.algebra.Select;
+import jalf.relation.algebra.Union;
 
 import java.util.function.Function;
 
@@ -47,21 +48,25 @@ public class Optimizer implements Visitor<Relation> {
 
     ///
 
+    @Override
     public Relation visit(Select relation) {
         Relation optimized = relation.getOperand().accept(this);
         return optimized(optimized).select(relation.getSelection());
     }
 
+    @Override
     public Relation visit(Project relation) {
         Relation optimized = relation.getOperand().accept(this);
         return optimized(optimized).project(relation.getAttributes());
     }
 
+    @Override
     public Relation visit(Rename relation) {
         Relation optimized = relation.getOperand().accept(this);
         return optimized(optimized).rename(relation.getRenaming());
     }
 
+    @Override
     public Relation visit(Restrict relation) {
         Relation optimized = relation.getOperand().accept(this);
         return optimized(optimized).restrict(relation.getPredicate());
@@ -69,14 +74,23 @@ public class Optimizer implements Visitor<Relation> {
 
     ///
 
+    @Override
     public Relation visit(Join relation) {
         Relation left = relation.getLeft().accept(this);
         Relation right = relation.getRight().accept(this);
         return optimized(left).join(right);
     }
 
+    @Override
+    public Relation visit(Union relation) {
+        Relation left = relation.getLeft().accept(this);
+        Relation right = relation.getRight().accept(this);
+        return optimized(left).union(right);
+    }
+
     ///
 
+    @Override
     public Relation visit(LeafOperand relation) {
         return relation;
     }

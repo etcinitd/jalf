@@ -5,6 +5,7 @@ import jalf.Visitor;
 import jalf.relation.algebra.Dee;
 import jalf.relation.algebra.Dum;
 import jalf.relation.algebra.Join;
+import jalf.relation.algebra.Union;
 import jalf.relation.algebra.LeafOperand;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
@@ -32,30 +33,41 @@ public class DefaultMapper implements Visitor<Optimized<?>> {
 
     ///
 
+    @Override
     public Optimized<?> visit(Select relation) {
         return new OptimizedSelect(optimizer, relation);
     }
 
+    @Override
     public Optimized<?> visit(Project relation) {
         return new OptimizedProject(optimizer, relation);
     }
 
+    @Override
     public Optimized<?> visit(Rename relation) {
         return new OptimizedRename(optimizer, relation);
     }
 
+    @Override
     public Optimized<?> visit(Restrict relation) {
         return new OptimizedRestrict(optimizer, relation);
     }
 
     ///
 
+    @Override
     public Optimized<?> visit(Join relation) {
         return new OptimizedJoin(optimizer, relation);
     }
 
+    @Override
+    public Optimized<?> visit(Union relation) {
+        return new OptimizedUnion(optimizer, relation);
+    }
+
     ///
 
+    @Override
     public Optimized<?> visit(LeafOperand relation) {
         return new Optimized<Relation>(optimizer, relation);
     }

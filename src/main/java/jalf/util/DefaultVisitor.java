@@ -5,6 +5,7 @@ import jalf.relation.algebra.BinaryOperator;
 import jalf.relation.algebra.Dee;
 import jalf.relation.algebra.Dum;
 import jalf.relation.algebra.Join;
+import jalf.relation.algebra.Union;
 import jalf.relation.algebra.LeafOperand;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
@@ -40,6 +41,11 @@ public class DefaultVisitor<T> implements Visitor<T> {
 
     public T visit(BinaryOperator relation) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public T visit(Union relation) {
+        return visit((BinaryOperator)relation);
     }
 
     @Override

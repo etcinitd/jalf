@@ -1,11 +1,28 @@
 package jalf.type;
 
-import static org.junit.Assert.*;
-import static jalf.fixtures.SuppliersAndParts.*;
-import static jalf.DSL.*;
+import static jalf.DSL.attrs;
+import static jalf.DSL.heading;
+import static jalf.DSL.relation;
+import static jalf.DSL.renaming;
+import static jalf.DSL.tuple;
+import static jalf.fixtures.SuppliersAndParts.CITY;
+import static jalf.fixtures.SuppliersAndParts.NAME;
+import static jalf.fixtures.SuppliersAndParts.PID;
+import static jalf.fixtures.SuppliersAndParts.SID;
+import static jalf.fixtures.SuppliersAndParts.STATUS;
+import static jalf.fixtures.SuppliersAndParts.suppliers;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import jalf.AttrList;
+import jalf.AttrName;
+import jalf.Relation;
+import jalf.Tuple;
+import jalf.TypeException;
 
-import java.util.*;
-import jalf.*;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Test;
 
 public class TestRelationType {
@@ -95,5 +112,27 @@ public class TestRelationType {
         // it keeps a natural order
         List<AttrName> list = Arrays.asList(SID, STATUS, CITY);
         assertEquals(list, expected.toAttrList().toList());
+    }
+
+    @Test
+    public void testUnion() {
+        RelationType r1 = RelationType.dress(SID, String.class, STATUS, Integer.class);
+        RelationType r2 = RelationType.dress(SID, String.class, STATUS, Integer.class);
+        RelationType expected = RelationType.dress(SID, String.class, STATUS, Integer.class);
+        assertEquals(expected, r1.union(r2));
+    }
+
+    @Test(expected=TypeException.class)
+    public void testUnionDetectsTypeMismatches() {
+        RelationType r1 = RelationType.dress(SID, String.class, STATUS, Integer.class);
+        RelationType r2 = RelationType.dress(SID, String.class, STATUS, String.class);
+        r1.union(r2);
+    }
+
+    @Test(expected=TypeException.class)
+    public void testUnionDetectsIncompatibleHeadings() {
+        RelationType r1 = RelationType.dress(SID, String.class);
+        RelationType r2 = RelationType.dress(PID, String.class);
+        r1.union(r2);
     }
 }

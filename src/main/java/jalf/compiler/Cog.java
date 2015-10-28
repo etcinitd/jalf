@@ -2,6 +2,12 @@ package jalf.compiler;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+
 import jalf.AttrList;
 import jalf.Predicate;
 import jalf.Relation;
@@ -13,12 +19,8 @@ import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
 import jalf.relation.algebra.Select;
+import jalf.relation.algebra.Union;
 import jalf.type.TupleType;
-
-import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 /**
  * Compiled-version of a relation(al) expression, ready to be consumed.
@@ -115,7 +117,7 @@ public abstract class Cog {
         // build a supplier that does the cross join
         Supplier<Stream<Tuple>> supplier = () -> {
             return this.stream().flatMap(leftTuple -> right.stream()
-                        .map(rightTuple -> leftTuple.join(rightTuple, tt)));
+                    .map(rightTuple -> leftTuple.join(rightTuple, tt)));
         };
         return new BaseCog(join, supplier);
     }
@@ -141,5 +143,18 @@ public abstract class Cog {
         return new BaseCog(join, supplier);
     }
 
-}
+    /** Default compilation of `union`. */
+    public Cog union(Union union, Cog right) {
+        // stream compilation: concat + distinct
+        Supplier<Stream<Tuple>> supplier = () ->{
+            Stream<Tuple> leftStream = this.stream();
+            Stream<Tuple> rightStream = right.stream();
+            return Stream.of(leftStream,rightStream)
+                    .reduce(Stream::concat)
+                    .orElse(Stream.empty())
+                    .distinct();
+        };
+        return new BaseCog(union, supplier);
+    }
 
+}
