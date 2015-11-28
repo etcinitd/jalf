@@ -1,11 +1,11 @@
 package jalf;
 
+import java.util.stream.Stream;
+
 import jalf.relation.algebra.Dee;
 import jalf.relation.algebra.Dum;
 import jalf.type.RelationType;
 import jalf.type.TupleType;
-
-import java.util.stream.Stream;
 
 /**
  * A relation, aka a typed set of typed tuples/facts plus algebra.
@@ -81,6 +81,14 @@ public interface Relation {
      * @return the resulting relation.
      */
     Relation union(Relation right);
+
+    /**
+     * Intersect this relation with `right` one.
+     *
+     * @param right another relation.
+     * @return the resulting relation.
+     */
+    Relation intersect(Relation right);
 
     /**
      * Filters tuples of this relation based on the predicate.

@@ -98,6 +98,11 @@ public class Optimized<R extends Relation> extends AbstractRelation {
         return operator.union(right);
     }
 
+    @Override
+    public Relation intersect(Relation right){
+        return operator.intersect(right);
+    }
+
     ///
 
     @Override

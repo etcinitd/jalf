@@ -14,6 +14,7 @@ import static jalf.fixtures.SuppliersAndParts.suppliers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
 import jalf.AttrList;
 import jalf.AttrName;
 import jalf.Relation;
@@ -134,5 +135,27 @@ public class TestRelationType {
         RelationType r1 = RelationType.dress(SID, String.class);
         RelationType r2 = RelationType.dress(PID, String.class);
         r1.union(r2);
+    }
+
+    @Test
+    public void testIntersect() {
+        RelationType r1 = RelationType.dress(SID, String.class, STATUS, Integer.class);
+        RelationType r2 = RelationType.dress(SID, String.class, STATUS, Integer.class);
+        RelationType expected = RelationType.dress(SID, String.class, STATUS, Integer.class);
+        assertEquals(expected, r1.intersect(r2));
+    }
+
+    @Test(expected=TypeException.class)
+    public void testIntersectDetectsTypeMismatches() {
+        RelationType r1 = RelationType.dress(SID, String.class, STATUS, Integer.class);
+        RelationType r2 = RelationType.dress(SID, String.class, STATUS, String.class);
+        r1.intersect(r2);
+    }
+
+    @Test(expected=TypeException.class)
+    public void testIntersectDetectsIncompatibleHeadings() {
+        RelationType r1 = RelationType.dress(SID, String.class);
+        RelationType r2 = RelationType.dress(PID, String.class);
+        r1.intersect(r2);
     }
 }

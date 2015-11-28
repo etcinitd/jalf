@@ -6,6 +6,7 @@ import static java.util.stream.Collectors.groupingBy;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jalf.AttrList;
@@ -14,6 +15,7 @@ import jalf.Relation;
 import jalf.Renaming;
 import jalf.Selection;
 import jalf.Tuple;
+import jalf.relation.algebra.Intersect;
 import jalf.relation.algebra.Join;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
@@ -155,6 +157,21 @@ public abstract class Cog {
                     .distinct();
         };
         return new BaseCog(union, supplier);
+    }
+    /** Default compilation of `intersect`. */
+    public Cog intersect(Intersect intersect, Cog right) {
+        // stream compilation: concat + distinct
+
+        Supplier<Stream<Tuple>> supplier = () ->{
+            Stream<Tuple> leftStream = this.stream();
+            Stream<Tuple> rightStream = right.stream();
+            List<Tuple> leftList = leftStream.collect(Collectors.toList());
+            Stream<Tuple>intersectStream =rightStream
+                    .filter(x -> leftList.contains(x));
+            return intersectStream ;
+
+        };
+        return new BaseCog(intersect, supplier);
     }
 
 }

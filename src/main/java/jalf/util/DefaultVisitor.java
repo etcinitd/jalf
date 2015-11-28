@@ -4,14 +4,15 @@ import jalf.Visitor;
 import jalf.relation.algebra.BinaryOperator;
 import jalf.relation.algebra.Dee;
 import jalf.relation.algebra.Dum;
+import jalf.relation.algebra.Intersect;
 import jalf.relation.algebra.Join;
-import jalf.relation.algebra.Union;
 import jalf.relation.algebra.LeafOperand;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
 import jalf.relation.algebra.Select;
 import jalf.relation.algebra.UnaryOperator;
+import jalf.relation.algebra.Union;
 
 public class DefaultVisitor<T> implements Visitor<T> {
 
@@ -50,6 +51,11 @@ public class DefaultVisitor<T> implements Visitor<T> {
 
     @Override
     public T visit(Join relation) {
+        return visit((BinaryOperator)relation);
+    }
+
+    @Override
+    public T visit(Intersect relation) {
         return visit((BinaryOperator)relation);
     }
 

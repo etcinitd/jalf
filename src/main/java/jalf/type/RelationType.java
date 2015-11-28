@@ -1,6 +1,12 @@
 package jalf.type;
 
 import static jalf.util.ValidationUtils.validateNotNull;
+
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import jalf.AttrList;
 import jalf.Predicate;
 import jalf.Relation;
@@ -8,11 +14,6 @@ import jalf.Renaming;
 import jalf.Tuple;
 import jalf.Type;
 import jalf.TypeException;
-
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Relation type, captures the possible types of relations.
@@ -166,6 +167,10 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
     }
 
     public RelationType union(RelationType other) {
+        return leastCommonSupertype(this,other);
+    }
+
+    public RelationType intersect(RelationType other) {
         return leastCommonSupertype(this,other);
     }
 

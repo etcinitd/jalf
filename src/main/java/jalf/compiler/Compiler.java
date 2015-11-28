@@ -1,7 +1,16 @@
 package jalf.compiler;
 
 import jalf.Visitor;
-import jalf.relation.algebra.*;
+import jalf.relation.algebra.Dee;
+import jalf.relation.algebra.Dum;
+import jalf.relation.algebra.Intersect;
+import jalf.relation.algebra.Join;
+import jalf.relation.algebra.LeafOperand;
+import jalf.relation.algebra.Project;
+import jalf.relation.algebra.Rename;
+import jalf.relation.algebra.Restrict;
+import jalf.relation.algebra.Select;
+import jalf.relation.algebra.Union;
 
 /**
  * Compiles algebra expressions as Cog, taken as JAlf intermediate language.
@@ -61,6 +70,13 @@ public class Compiler implements Visitor<Cog> {
         Cog left = relation.getLeft().accept(this);
         Cog right = relation.getRight().accept(this);
         return left.union(relation, right);
+    }
+
+    @Override
+    public Cog visit(Intersect relation) {
+        Cog left = relation.getLeft().accept(this);
+        Cog right = relation.getRight().accept(this);
+        return left.intersect(relation, right);
     }
 
     @Override

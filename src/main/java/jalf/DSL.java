@@ -1,10 +1,10 @@
 package jalf;
 
+import java.util.stream.Stream;
+
 import jalf.relation.materialized.SetMemoryRelation;
 import jalf.type.Heading;
 import jalf.type.RelationType;
-
-import java.util.stream.Stream;
 
 /**
  * @author amirm
@@ -126,9 +126,13 @@ public class DSL {
     public static Relation join(Relation left, Relation right) {
         return left.join(right);
     }
-    
+
     public static Relation union(Relation left, Relation right) {
         return left.union(right);
     }
-    
+
+    public static Relation intersect(Relation left, Relation right) {
+        return left.intersect(right);
+    }
+
 }
