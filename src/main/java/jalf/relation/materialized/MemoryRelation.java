@@ -12,8 +12,7 @@ import java.util.stream.Collector;
  * Parent (abstract) class of all relations captured as in-memory tuple sets,
  * whatever their actual representation.
  */
-public abstract class MemoryRelation extends AbstractRelation
-    implements LeafOperand {
+public abstract class MemoryRelation extends AbstractRelation implements LeafOperand {
 
     public static Collector<Tuple, ?, Relation> collector(RelationType type) {
         return SetMemoryRelation.collector(type);

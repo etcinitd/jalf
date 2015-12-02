@@ -53,8 +53,8 @@ public class SetMemoryRelation extends MemoryRelation {
     public static Relation tuples(RelationType type, Tuple...tuples) {
         TupleType ttype = type.toTupleType();
         Optional<Tuple> fail = Stream.of(tuples)
-            .filter(t -> !ttype.contains(t))
-            .findAny();
+                .filter(t -> !ttype.contains(t))
+                .findAny();
         if (fail.isPresent()) {
             Tuple t = fail.get();
             throw new TypeException("Relation type mismatch: " + t);
@@ -83,10 +83,12 @@ public class SetMemoryRelation extends MemoryRelation {
         return visitor.visit(this);
     }
 
+    @Override
     public int hashCode(){
         return tuples.hashCode();
     }
 
+    @Override
     public boolean equals(Relation other) {
         if (!(other instanceof SetMemoryRelation))
             other = other.stream().collect(SetMemoryRelation.collector(other.getType()));
