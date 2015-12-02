@@ -99,9 +99,18 @@ public class SetMemoryRelation extends MemoryRelation {
         return tuples.equals(other.tuples);
     }
 
+    public static Collector<Tuple, ?, Relation> collector() {
+        return collector(null);
+    }
+
     public static Collector<Tuple, ?, Relation> collector(RelationType type) {
         Function<Set<Tuple>, Relation> finisher = (tuples) -> {
-            return new SetMemoryRelation(type, tuples);
+            if (type == null) {
+                RelationType type2 = RelationType.infer(tuples.stream());
+                return new SetMemoryRelation(type2, tuples);
+            } else {
+                return new SetMemoryRelation(type, tuples);
+            }
         };
         return Collector.of(
                 CollectionUtils::newConcurrentHashSet,

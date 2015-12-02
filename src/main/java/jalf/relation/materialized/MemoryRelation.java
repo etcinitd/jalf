@@ -18,4 +18,8 @@ public abstract class MemoryRelation extends AbstractRelation implements LeafOpe
         return SetMemoryRelation.collector(type);
     }
 
+    public static Collector<Tuple, ?, Relation> collector() {
+        return SetMemoryRelation.collector();
+    }
+
 }
