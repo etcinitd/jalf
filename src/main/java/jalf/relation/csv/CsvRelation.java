@@ -91,19 +91,25 @@ public class CsvRelation extends AbstractRelation implements LeafOperand {
 
         private CSVReader reader;
 
+        private boolean closed = false;
+
         public CsvSpliterator(Supplier<CSVReader> supplier) {
             readerSupplier = supplier;
         }
 
         @Override
         public boolean tryAdvance(Consumer<? super String[]> action) {
+            if (closed) { return false; }
             try {
                 String[] line = getReader().readNext();
                 if (line != null) {
                     action.accept(line);
                     return true;
+                } else {
+                    reader.close();
+                    closed = true;
+                    return false;
                 }
-                return false;
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -128,6 +134,7 @@ public class CsvRelation extends AbstractRelation implements LeafOperand {
             if (reader == null) {
                 reader = readerSupplier.get();
                 reader.readNext();
+                closed = false;
             }
             return reader;
         }
