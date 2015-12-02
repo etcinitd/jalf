@@ -27,8 +27,7 @@ import java.util.stream.StreamSupport;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-public class CsvRelation extends AbstractRelation
-    implements LeafOperand {
+public class CsvRelation extends AbstractRelation implements LeafOperand {
 
     private Supplier<InputStream> csvStreamSupplier;
 
@@ -76,10 +75,10 @@ public class CsvRelation extends AbstractRelation
     private Stream<Tuple> getCsvTupleStream() {
         TupleType tupleType = getType().toTupleType();
         return StreamSupport
-          .stream(new CsvSpliterator(() -> getCsvReader()), false)
-          .map((attrValues) -> {
-              return new Tuple(tupleType, mapOf(attrNames, attrValues));
-          });
+                .stream(new CsvSpliterator(() -> getCsvReader()), false)
+                .map((attrValues) -> {
+                    return new Tuple(tupleType, mapOf(attrNames, attrValues));
+                });
     }
 
     private CSVReader getCsvReader() {
