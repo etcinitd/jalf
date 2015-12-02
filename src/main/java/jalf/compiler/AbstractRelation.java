@@ -14,6 +14,7 @@ import jalf.relation.algebra.Restrict;
 import jalf.relation.algebra.Select;
 import jalf.type.TupleType;
 
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -123,5 +124,15 @@ public abstract class AbstractRelation implements Relation {
     }
 
     public abstract boolean equals(Relation other);
+
+    @Override
+    public String toString() {
+        String s = "relation(\n  ";
+        s += stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(",\n  "));
+        s += "\n)";
+        return s;
+    }
 
 }
