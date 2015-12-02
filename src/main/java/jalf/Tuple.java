@@ -145,6 +145,10 @@ public class Tuple {
         return new Tuple(resultingType, joined);
     }
 
+    public boolean isEmpty() {
+        return this.attrs.isEmpty();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
