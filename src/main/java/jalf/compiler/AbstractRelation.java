@@ -89,7 +89,7 @@ public abstract class AbstractRelation implements Relation {
     }
 
     @Override
-    public long count() {
+    public long cardinality() {
         return stream().count();
     }
 

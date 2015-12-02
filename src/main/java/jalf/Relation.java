@@ -117,15 +117,15 @@ public interface Relation {
     Stream<Tuple> stream();
 
     /**
-     * Returns the size of this relation, as its number of tuples.
+     * Returns the cardinality of this relation, as its number of tuples.
      *
      * This method is a terminal operation. Note that its actual complexity/cost
      * depends on the kind of relation you are facing. For instance, an entire
      * stream of tuples may be consumed for the size of a complex relational
      * expression to be computed in practice.
      *
-     * @return the size of the relation.
+     * @return the cardinality of the relation, i.e. the number of tuples.
      */
-    long count();
+    long cardinality();
 
 }

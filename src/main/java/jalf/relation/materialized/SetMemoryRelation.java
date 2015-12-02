@@ -74,7 +74,7 @@ public class SetMemoryRelation extends MemoryRelation {
     }
 
     @Override
-    public long count() {
+    public long cardinality() {
         return tuples.size();
     }
 

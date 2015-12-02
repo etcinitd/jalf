@@ -1,13 +1,15 @@
 package jalf.dsl;
 
+import static jalf.DSL.relation;
+import static jalf.DSL.tuple;
+import static jalf.DSL.union;
+import static jalf.fixtures.SuppliersAndParts.PID;
+import static jalf.fixtures.SuppliersAndParts.SID;
+import static org.junit.Assert.assertEquals;
 import jalf.Relation;
 import jalf.TypeException;
 
 import org.junit.Test;
-
-import static jalf.DSL.*;
-import static jalf.fixtures.SuppliersAndParts.*;
-import static org.junit.Assert.*;
 
 public class UnionTest {
 
@@ -34,7 +36,7 @@ public class UnionTest {
         // equals() is complex and might be buggy when the input stream contains
         // duplicates (hence, is not a relation). So we count tuples as a second
         // check.
-        assertEquals(3, actual.count());
+        assertEquals(3, actual.cardinality());
     }
 
     @Test(expected=TypeException.class)

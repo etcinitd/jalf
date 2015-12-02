@@ -18,7 +18,7 @@ public class RelationTest {
             tuple(SID, "S1"),
             tuple(SID, "S2")
         );
-        assertEquals(2, r.count());
+        assertEquals(2, r.cardinality());
     }
 
     @Test
@@ -26,7 +26,7 @@ public class RelationTest {
         Relation r = relation(
                 RelationType.dress(SID, String.class)
         );
-        assertEquals(0, r.count());
+        assertEquals(0, r.cardinality());
     }
 
     @Test(expected = TypeException.class)
