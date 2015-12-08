@@ -135,4 +135,8 @@ public class DSL {
         return left.intersect(right);
     }
 
+    public static Relation minus(Relation left, Relation right) {
+        return left.minus(right);
+    }
+
 }

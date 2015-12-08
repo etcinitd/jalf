@@ -7,6 +7,7 @@ import jalf.relation.algebra.Dum;
 import jalf.relation.algebra.Intersect;
 import jalf.relation.algebra.Join;
 import jalf.relation.algebra.LeafOperand;
+import jalf.relation.algebra.Minus;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
@@ -46,6 +47,11 @@ public class DefaultVisitor<T> implements Visitor<T> {
 
     @Override
     public T visit(Union relation) {
+        return visit((BinaryOperator)relation);
+    }
+
+    @Override
+    public T visit(Minus relation) {
         return visit((BinaryOperator)relation);
     }
 

@@ -9,6 +9,7 @@ import jalf.relation.algebra.Dum;
 import jalf.relation.algebra.Intersect;
 import jalf.relation.algebra.Join;
 import jalf.relation.algebra.LeafOperand;
+import jalf.relation.algebra.Minus;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
@@ -96,6 +97,13 @@ public class Optimizer implements Visitor<Relation> {
         return optimized(left).intersect(right);
     }
 
+    @Override
+    public Relation visit(Minus relation) {
+        Relation left = relation.getLeft().accept(this);
+        Relation right = relation.getRight().accept(this);
+        return optimized(left).minus(right);
+    }
+
     ///
 
     @Override
@@ -112,5 +120,7 @@ public class Optimizer implements Visitor<Relation> {
     public Relation visit(Dum relation) {
         return relation;
     }
+
+
 
 }

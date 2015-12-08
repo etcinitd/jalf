@@ -174,6 +174,10 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
         return leastCommonSupertype(this,other);
     }
 
+    public RelationType minus(RelationType other) {
+        return leastCommonSupertype(this,other);
+    }
+
     public AttrList toAttrList() {
         return heading.toAttrList();
     }

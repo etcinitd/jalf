@@ -158,4 +158,27 @@ public class TestRelationType {
         RelationType r2 = RelationType.dress(PID, String.class);
         r1.intersect(r2);
     }
+
+    @Test
+    public void testMinus() {
+        RelationType r1 = RelationType.dress(SID, String.class, STATUS, Integer.class);
+        RelationType r2 = RelationType.dress(SID, String.class, STATUS, Integer.class);
+        RelationType expected = RelationType.dress(SID, String.class, STATUS, Integer.class);
+        assertEquals(expected, r1.minus(r2));
+    }
+
+    @Test(expected=TypeException.class)
+    public void testMinusDetectsTypeMismatches() {
+        RelationType r1 = RelationType.dress(SID, String.class, STATUS, Integer.class);
+        RelationType r2 = RelationType.dress(SID, String.class, STATUS, String.class);
+        r1.minus(r2);
+    }
+
+    @Test(expected=TypeException.class)
+    public void testMinusDetectsIncompatibleHeadings() {
+        RelationType r1 = RelationType.dress(SID, String.class);
+        RelationType r2 = RelationType.dress(PID, String.class);
+        r1.minus(r2);
+    }
+
 }

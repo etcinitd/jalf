@@ -17,6 +17,7 @@ import jalf.Selection;
 import jalf.Tuple;
 import jalf.relation.algebra.Intersect;
 import jalf.relation.algebra.Join;
+import jalf.relation.algebra.Minus;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
@@ -172,6 +173,19 @@ public abstract class Cog {
 
         };
         return new BaseCog(intersect, supplier);
+    }
+
+    /** Default compilation of `minus`. */
+    public Cog minus(Minus minus, Cog right) {
+        Supplier<Stream<Tuple>> supplier = () ->{
+            Stream<Tuple> leftStream = this.stream();
+            Stream<Tuple> rightStream = right.stream();
+            List<Tuple> rightList = rightStream.collect(Collectors.toList());
+            Stream<Tuple> minusStream = leftStream
+                    .filter(x -> !rightList.contains(x));
+            return minusStream;
+        };
+        return new BaseCog(minus, supplier);
     }
 
 }

@@ -8,6 +8,7 @@ import jalf.Selection;
 import jalf.Tuple;
 import jalf.relation.algebra.Intersect;
 import jalf.relation.algebra.Join;
+import jalf.relation.algebra.Minus;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
@@ -73,6 +74,11 @@ public abstract class AbstractRelation implements Relation {
     @Override
     public Relation intersect(Relation right){
         return new Intersect(this, right);
+    }
+
+    @Override
+    public Relation minus(Relation right) {
+        return new Minus(this, right);
     }
 
     ///

@@ -103,6 +103,11 @@ public class Optimized<R extends Relation> extends AbstractRelation {
         return operator.intersect(right);
     }
 
+    @Override
+    public Relation minus(Relation right){
+        return operator.minus(right);
+    }
+
     ///
 
     @Override

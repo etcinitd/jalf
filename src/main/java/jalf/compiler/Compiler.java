@@ -6,6 +6,7 @@ import jalf.relation.algebra.Dum;
 import jalf.relation.algebra.Intersect;
 import jalf.relation.algebra.Join;
 import jalf.relation.algebra.LeafOperand;
+import jalf.relation.algebra.Minus;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
@@ -77,6 +78,13 @@ public class Compiler implements Visitor<Cog> {
         Cog left = relation.getLeft().accept(this);
         Cog right = relation.getRight().accept(this);
         return left.intersect(relation, right);
+    }
+
+    @Override
+    public Cog visit(Minus relation) {
+        Cog left = relation.getLeft().accept(this);
+        Cog right = relation.getRight().accept(this);
+        return left.minus(relation, right);
     }
 
     @Override

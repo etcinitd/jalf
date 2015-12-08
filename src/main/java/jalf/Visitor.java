@@ -1,17 +1,18 @@
 package jalf;
 
-import java.util.function.Function;
-
 import jalf.relation.algebra.Dee;
 import jalf.relation.algebra.Dum;
-import jalf.relation.algebra.Intersect;
 import jalf.relation.algebra.Join;
 import jalf.relation.algebra.LeafOperand;
+import jalf.relation.algebra.Minus;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
 import jalf.relation.algebra.Select;
 import jalf.relation.algebra.Union;
+
+import jalf.relation.algebra.Intersect;
+import java.util.function.Function;
 
 public interface Visitor<R> extends Function<Relation,R> {
 
@@ -37,6 +38,8 @@ public interface Visitor<R> extends Function<Relation,R> {
     R visit(Union relation);
 
     R visit(Intersect relation);
+
+    R visit(Minus relation);
 
     ///
 

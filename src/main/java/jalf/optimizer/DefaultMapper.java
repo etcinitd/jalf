@@ -7,6 +7,7 @@ import jalf.relation.algebra.Dum;
 import jalf.relation.algebra.Intersect;
 import jalf.relation.algebra.Join;
 import jalf.relation.algebra.LeafOperand;
+import jalf.relation.algebra.Minus;
 import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
@@ -86,6 +87,11 @@ public class DefaultMapper implements Visitor<Optimized<?>> {
     @Override
     public Optimized<?> visit(Dum relation) {
         return new OptimizedDum(optimizer, relation);
+    }
+
+    @Override
+    public Optimized<?> visit(Minus relation) {
+        return new OptimizedMinus(optimizer, relation);
     }
 
 }
