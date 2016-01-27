@@ -11,6 +11,7 @@ import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
 import jalf.relation.algebra.Select;
+import jalf.relation.algebra.Summarize;
 import jalf.relation.algebra.Union;
 
 /**
@@ -41,6 +42,12 @@ public class Compiler implements Visitor<Cog> {
     public Cog visit(Project relation) {
         Cog compiled = relation.getOperand().accept(this);
         return compiled.project(relation);
+    }
+
+    @Override
+    public Cog visit(Summarize relation) {
+        Cog compiled = relation.getOperand().accept(this);
+        return compiled.summarize(relation);
     }
 
     @Override

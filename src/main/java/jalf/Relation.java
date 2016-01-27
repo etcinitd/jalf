@@ -2,6 +2,7 @@ package jalf;
 
 import java.util.stream.Stream;
 
+import jalf.aggregator.Aggregator;
 import jalf.relation.algebra.Dee;
 import jalf.relation.algebra.Dum;
 import jalf.type.RelationType;
@@ -55,6 +56,17 @@ public interface Relation {
      * @return the resulting relation.
      */
     Relation project(AttrList attributes);
+
+    /**
+     * Summarize this relation on a subset of its attributes.
+     *
+     * @pre attributes must be a subset of relation's attribute names.
+     * @param attributes the list of attributes to summarize by.
+     * @param un aggregat
+     * @param nom de la colonne de l'aggrgegat as
+     * @return the resulting relation.
+     */
+    Relation summarize(AttrList by,Aggregator<?> agg,AttrName as);
 
     /**
      * Rename some attributes of this relation.

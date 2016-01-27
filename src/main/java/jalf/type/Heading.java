@@ -156,6 +156,24 @@ public class Heading {
     }
 
     /**
+     * Computes the heading resulting from a summarization on `by`, leading
+     * to a new attribute named `as`, of type `t`.
+     *
+     * @pre `by` should be a subset of the heading attribute names.
+     * @pre `as` should not be included in `by`
+     * @return the summarized heading obtained
+     */
+    public Heading summarize(AttrList by, AttrName as, Type<?> t) {
+        Map<AttrName, Type<?>> summarized = new HashMap<>();
+        attributes.forEach((name, type) -> {
+            if (by.contains(name))
+                summarized.put(name, type);
+        });
+        summarized.put(as, t);
+        return new Heading(summarized);
+    }
+
+    /**
      * Computes the heading obtained by renaming some of the attributes using
      * `renaming`.
      *
