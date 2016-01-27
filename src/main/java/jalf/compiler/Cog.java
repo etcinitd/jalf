@@ -24,6 +24,7 @@ import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
 import jalf.relation.algebra.Select;
+import jalf.relation.algebra.Summarize;
 import jalf.relation.algebra.Union;
 import jalf.type.TupleType;
 
@@ -78,6 +79,16 @@ public abstract class Cog {
                 .distinct();
 
         return new BaseCog(projection, supplier);
+    }
+
+    /** Default compilation of `summarize`. */
+    public Cog summarize(Summarize summarized) {
+        Supplier<Stream<Tuple>> supplier = () ->{
+            Stream<Tuple> tuples = this.stream();
+            List<Tuple> newTuple = summarized.apply(tuples);
+            return newTuple.stream();
+        };
+        return new BaseCog(summarized, supplier);
     }
 
     /** Default compilation of `rename`. */

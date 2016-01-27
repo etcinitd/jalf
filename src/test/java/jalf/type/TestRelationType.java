@@ -8,6 +8,7 @@ import static jalf.DSL.tuple;
 import static jalf.fixtures.SuppliersAndParts.CITY;
 import static jalf.fixtures.SuppliersAndParts.NAME;
 import static jalf.fixtures.SuppliersAndParts.PID;
+import static jalf.fixtures.SuppliersAndParts.QTY;
 import static jalf.fixtures.SuppliersAndParts.SID;
 import static jalf.fixtures.SuppliersAndParts.STATUS;
 import static jalf.fixtures.SuppliersAndParts.suppliers;
@@ -15,16 +16,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Test;
+
 import jalf.AttrList;
 import jalf.AttrName;
 import jalf.Relation;
 import jalf.Tuple;
 import jalf.TypeException;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Test;
+import jalf.aggregator.Avg;
+import jalf.aggregator.Count;
+import jalf.aggregator.Max;
 
 public class TestRelationType {
 
@@ -181,4 +185,81 @@ public class TestRelationType {
         r1.minus(r2);
     }
 
+    // relationtype tests for summarize
+
+    @Test(expected=TypeException.class)
+    public void testSummarizeMismatchesAttrBy() {
+        RelationType r = RelationType.dress(SID, String.class, NAME, String.class, STATUS, Integer.class);
+        AttrList by = AttrList.attrs(PID);
+        AttrName as = AttrName.attr("NEW");
+        Count agg = new Count();
+        r.summarize(by, agg, as);
+    }
+
+    @Test(expected=TypeException.class)
+    public void testSummarizeByNotContainAs() {
+        RelationType r = RelationType.dress(SID, String.class, NAME, String.class, QTY, Integer.class);
+        AttrList by = AttrList.attrs(SID, NAME);
+        AttrName as = NAME;
+        Avg agg = new Avg(QTY);
+        r.summarize(by, agg, as);
+    }
+
+    @Test(expected=TypeException.class)
+    public void testSummarizeOnIncorrectAggAttrForAvg() {
+        RelationType r = RelationType.dress(SID, String.class, NAME, String.class, QTY, Integer.class);
+        AttrList by = AttrList.attrs(SID);
+        AttrName as = AttrName.attr("NEW");
+        Avg agg = new Avg(NAME);
+        r.summarize(by, agg, as);
+    }
+
+    @Test(expected=TypeException.class)
+    public void testSummarizeOnIncorrectAggAttrForMax() {
+        RelationType r = RelationType.dress(SID, String.class, STATUS, Number.class, QTY, Integer.class);
+        AttrList by = AttrList.attrs(SID);
+        AttrName as = AttrName.attr("NEW");
+        Max agg = new Max(STATUS);
+        r.summarize(by, agg, as);
+    }
+
+    @Test
+    public void testSummarizeOnCount() {
+        RelationType r = RelationType.dress(SID, String.class, NAME, String.class, STATUS, Integer.class);
+        AttrList by = AttrList.attrs(SID);
+        AttrName as = AttrName.attr("NEW");
+        Count agg = new Count();
+        RelationType expected = RelationType.dress(SID, String.class, "NEW", Long.class);
+        assertEquals(expected, r.summarize(by, agg, as));
+    }
+
+    @Test
+    public void testSummarizeOnMaxString() {
+        RelationType r = RelationType.dress(SID, String.class, NAME, String.class, STATUS, Integer.class);
+        AttrList by = AttrList.attrs(SID);
+        AttrName as = AttrName.attr("NEW");
+        Max agg = new Max(NAME);
+        RelationType expected = RelationType.dress(SID, String.class, "NEW", String.class);
+        assertEquals(expected, r.summarize(by, agg, as));
+    }
+
+    @Test
+    public void testSummarizeOnMaxInteger() {
+        RelationType r = RelationType.dress(SID, String.class, NAME, String.class, STATUS, Integer.class);
+        AttrList by = AttrList.attrs(SID);
+        AttrName as = AttrName.attr("NEW");
+        Max agg = new Max(STATUS);
+        RelationType expected = RelationType.dress(SID, String.class, "NEW", Integer.class);
+        assertEquals(expected, r.summarize(by, agg, as));
+    }
+
+    @Test
+    public void testSummarizeOnAvg() {
+        RelationType r = RelationType.dress(SID, String.class, NAME, String.class, QTY, Integer.class);
+        AttrList by = AttrList.attrs(SID);
+        AttrName as = AttrName.attr("NEW");
+        Avg agg = new Avg(QTY);
+        RelationType expected = RelationType.dress(SID, String.class, "NEW", Double.class);
+        assertEquals(expected, r.summarize(by, agg, as));
+    }
 }

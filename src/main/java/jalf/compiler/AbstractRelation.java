@@ -1,11 +1,16 @@
 package jalf.compiler;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import jalf.AttrList;
+import jalf.AttrName;
 import jalf.Predicate;
 import jalf.Relation;
 import jalf.Renaming;
 import jalf.Selection;
 import jalf.Tuple;
+import jalf.aggregator.Aggregator;
 import jalf.relation.algebra.Intersect;
 import jalf.relation.algebra.Join;
 import jalf.relation.algebra.Minus;
@@ -13,11 +18,9 @@ import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
 import jalf.relation.algebra.Select;
+import jalf.relation.algebra.Summarize;
 import jalf.relation.algebra.Union;
 import jalf.type.TupleType;
-
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Parent (abstract) class of all relation implementations.
@@ -49,6 +52,11 @@ public abstract class AbstractRelation implements Relation {
     @Override
     public Relation project(AttrList attributes) {
         return new Project(this, attributes);
+    }
+
+    @Override
+    public Relation summarize(AttrList by,Aggregator<?> agg, AttrName as) {
+        return new Summarize(this, by,agg, as);
     }
 
     @Override
@@ -146,5 +154,6 @@ public abstract class AbstractRelation implements Relation {
         s += "\n)";
         return s;
     }
+
 
 }
