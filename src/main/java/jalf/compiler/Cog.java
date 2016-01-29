@@ -3,8 +3,10 @@ package jalf.compiler;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -166,9 +168,9 @@ public abstract class Cog {
         Supplier<Stream<Tuple>> supplier = () ->{
             Stream<Tuple> leftStream = this.stream();
             Stream<Tuple> rightStream = right.stream();
-            List<Tuple> leftList = leftStream.collect(Collectors.toList());
+            Set<Tuple> leftHashSet = leftStream.collect(Collectors.toCollection(HashSet::new));
             Stream<Tuple>intersectStream =rightStream
-                    .filter(x -> leftList.contains(x));
+                    .filter(x -> leftHashSet.contains(x));
             return intersectStream ;
 
         };
@@ -180,9 +182,9 @@ public abstract class Cog {
         Supplier<Stream<Tuple>> supplier = () ->{
             Stream<Tuple> leftStream = this.stream();
             Stream<Tuple> rightStream = right.stream();
-            List<Tuple> rightList = rightStream.collect(Collectors.toList());
+            Set<Tuple> rightHashSet = rightStream.collect(Collectors.toCollection(HashSet::new));
             Stream<Tuple> minusStream = leftStream
-                    .filter(x -> !rightList.contains(x));
+                    .filter(x -> !rightHashSet.contains(x));
             return minusStream;
         };
         return new BaseCog(minus, supplier);
