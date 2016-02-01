@@ -7,4 +7,5 @@ public abstract class Aggregator {
     protected  AttrName  newnameattr;
     protected String nameaggr ;
 
+    public abstract String getNameAggr();
 }

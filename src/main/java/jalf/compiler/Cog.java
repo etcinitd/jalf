@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -90,10 +91,17 @@ public abstract class Cog {
         Set <Aggregator> aggrs= summarized.getAggregators();
         Iterator<Aggregator> it = aggrs.iterator();
         Aggregator firstaggr = it.next();
+        String nameaggr=firstaggr.getNameAggr();
         Supplier<Stream<Tuple>> supplier = () ->{
             Stream<Tuple> leftStream = this.stream();
-            leftStream.collect(Collectors.groupingBy(on, Collectors.counting()));
-
+            Map<List<Object>, Long> map = leftStream.collect(Collectors.groupingBy(t -> t.fetch(on), Collectors.counting()));
+            for(Entry<List<Object>, Long> entry : map.entrySet()) {
+                List<Object> cle = entry.getKey();
+                Stream<Object> stram1= cle.stream();
+                Long valeur = entry.getValue();
+                // traitements
+            }
+            System.out.println(map);
             return leftStream;
 
         };

@@ -14,5 +14,10 @@ public class Count extends Aggregator{
         this.attr=attr;
     }
 
+    @Override
+    public String getNameAggr() {
+        return this.nameaggr;
+    }
+
 
 }

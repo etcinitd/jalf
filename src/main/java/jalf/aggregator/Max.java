@@ -13,4 +13,8 @@ public class Max extends Aggregator{
         this.nameaggr="max";
         this.attr=attr;
     }
+    @Override
+    public String getNameAggr() {
+        return this.nameaggr;
+    }
 }
