@@ -4,6 +4,7 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +18,7 @@ import jalf.Relation;
 import jalf.Renaming;
 import jalf.Selection;
 import jalf.Tuple;
+import jalf.aggregator.Aggregator;
 import jalf.relation.algebra.Intersect;
 import jalf.relation.algebra.Join;
 import jalf.relation.algebra.Minus;
@@ -85,10 +87,17 @@ public abstract class Cog {
     public Cog summarize(Summarize summarized) {
         AttrList on = summarized.getAttributes();
         TupleType tt = summarized.getTupleType();
-        // stream compilation: map projection + distinct
-        Supplier<Stream<Tuple>> supplier = () -> this.stream()
-                .map(t -> t.project(on, tt))
-                .distinct();
+        Set <Aggregator> aggrs= summarized.getAggregators();
+        Iterator<Aggregator> it = aggrs.iterator();
+        Aggregator firstaggr = it.next();
+        Supplier<Stream<Tuple>> supplier = () ->{
+            Stream<Tuple> leftStream = this.stream();
+            leftStream.collect(Collectors.groupingBy(on, Collectors.counting()));
+
+            return leftStream;
+
+        };
+
 
         return new BaseCog(summarized, supplier);
     }
