@@ -133,6 +133,19 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
     }
 
     /**
+     * Projects this type on a subset of its attributes.
+     *
+     * @pre attributes should be a subset of the type's attribute names.
+     * @param on a set of attribute names.
+     * @return the projected type.
+     * a ajouter lesheading des aggrgator
+     */
+    public RelationType summarize(AttrList on) {
+        checkValidAttrList(on);
+        return new RelationType(heading.summarize(on));
+    }
+
+    /**
      * Returns the type obtained by renaming some of its attributes.
      *
      * @param renaming a renaming function.

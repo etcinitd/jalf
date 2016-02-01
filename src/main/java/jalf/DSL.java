@@ -2,6 +2,7 @@ package jalf;
 
 import java.util.stream.Stream;
 
+import jalf.aggregator.Aggregator;
 import jalf.relation.materialized.SetMemoryRelation;
 import jalf.type.Heading;
 import jalf.type.RelationType;
@@ -109,6 +110,10 @@ public class DSL {
 
     public static Relation project(Relation relation, AttrList attrNames) {
         return relation.project(attrNames);
+    }
+
+    public static Relation summarize(Relation relation, AttrList attrNames,Aggregator aggregat) {
+        return relation.summarize(attrNames,aggregat);
     }
 
     public static Relation rename(Relation relation, Renaming renaming) {

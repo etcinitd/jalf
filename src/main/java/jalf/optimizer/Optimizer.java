@@ -1,9 +1,11 @@
 package jalf.optimizer;
 
+import java.util.Iterator;
 import java.util.function.Function;
 
 import jalf.Relation;
 import jalf.Visitor;
+import jalf.aggregator.Aggregator;
 import jalf.relation.algebra.Dee;
 import jalf.relation.algebra.Dum;
 import jalf.relation.algebra.Intersect;
@@ -14,6 +16,7 @@ import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
 import jalf.relation.algebra.Select;
+import jalf.relation.algebra.Summarize;
 import jalf.relation.algebra.Union;
 
 /**
@@ -60,6 +63,15 @@ public class Optimizer implements Visitor<Relation> {
     public Relation visit(Project relation) {
         Relation optimized = relation.getOperand().accept(this);
         return optimized(optimized).project(relation.getAttributes());
+    }
+
+    @Override
+    public Relation visit(Summarize relation) {
+        Relation optimized = relation.getOperand().accept(this);
+        Iterator<Aggregator> it = relation.getAggregators().iterator();
+        Aggregator aggr;
+        aggr=it.next();
+        return optimized(optimized).summarize(relation.getAttributes(),aggr);
     }
 
     @Override
