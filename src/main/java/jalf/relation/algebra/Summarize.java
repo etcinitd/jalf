@@ -1,16 +1,14 @@
 package jalf.relation.algebra;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import jalf.AttrList;
 import jalf.AttrName;
 import jalf.Relation;
 import jalf.Visitor;
 import jalf.aggregator.Aggregator;
 import jalf.type.RelationType;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class Summarize extends UnaryOperator {
 
@@ -20,28 +18,27 @@ public class Summarize extends UnaryOperator {
 
     private final RelationType type;
 
-    private final Set<Aggregator> aggregators;
+    private final Aggregator aggregator;
 
 
-    public Summarize(Relation operand, AttrList attributes, RelationType type,Set<Aggregator> aggregators) {
+    public Summarize(Relation operand, AttrList attributes, RelationType type, Aggregator aggregator) {
         this.operand = operand;
         this.attributes = attributes;
-        this.aggregators=aggregators;
+        this.aggregator = aggregator;
         this.type = type;
     }
 
-    public Summarize(Relation operand, AttrList attributes, AttrName newname, Set<Aggregator> aggregators) {
+    public Summarize(Relation operand, AttrList attributes, AttrName newname, Aggregator aggregator) {
         this.operand = operand;
         this.attributes = attributes;
-        this.aggregators=aggregators;
+        this.aggregator = aggregator;
         this.type = typeCheck();
     }
 
     public Summarize(Relation operand, AttrList attributes, Aggregator aggregator) {
         this.operand = operand;
         this.attributes = attributes;
-        this.aggregators=new HashSet<Aggregator>();
-        this.aggregators.add(aggregator);
+        this.aggregator = aggregator;
         this.type = typeCheck();
     }
 
@@ -64,8 +61,8 @@ public class Summarize extends UnaryOperator {
         return attributes;
     }
 
-    public Set<Aggregator> getAggregators() {
-        return aggregators;
+    public Aggregator getAggregator() {
+        return aggregator;
     }
 
 

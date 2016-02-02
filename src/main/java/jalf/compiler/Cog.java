@@ -2,17 +2,6 @@ package jalf.compiler;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import jalf.AttrList;
 import jalf.Predicate;
 import jalf.Relation;
@@ -30,6 +19,14 @@ import jalf.relation.algebra.Select;
 import jalf.relation.algebra.Summarize;
 import jalf.relation.algebra.Union;
 import jalf.type.TupleType;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Compiled-version of a relation(al) expression, ready to be consumed.
@@ -85,7 +82,7 @@ public abstract class Cog {
     }
 
     /** Default compilation of `Summarize`. */
-    public Cog summarize(Summarize summarized) {
+    /*public Cog summarize(Summarize summarized) {
         AttrList on = summarized.getAttributes();
         TupleType tt = summarized.getTupleType();
         Set <Aggregator> aggrs= summarized.getAggregators();
@@ -103,10 +100,20 @@ public abstract class Cog {
             }
             System.out.println(map);
             return leftStream;
-
         };
 
+        return new BaseCog(summarized, supplier);
+    }*/
 
+    public Cog summarize(Summarize summarized) {
+        Aggregator aggregator = summarized.getAggregator();
+        AttrList byNameAttrs = summarized.getAttributes();
+
+        Supplier<Stream<Tuple>> supplier = () ->{
+            Stream<Tuple> tuples = this.stream();//.collect(Collectors.toList());
+            List<Tuple> newTuple = aggregator.apply(tuples, byNameAttrs);
+            return newTuple.stream();
+        };
         return new BaseCog(summarized, supplier);
     }
 
