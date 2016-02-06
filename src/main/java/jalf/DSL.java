@@ -149,8 +149,11 @@ public class DSL {
     public static Aggregator count(){
         return Aggregator.count();
     }
-    public static Aggregator max(AttrName qty) {
-        return Aggregator.max(qty);
+    public static Aggregator max(AttrName attr) {
+        return Aggregator.max(attr);
+    }
+    public static Aggregator avg(AttrName attr) {
+        return Aggregator.avg(attr);
     }
 
 

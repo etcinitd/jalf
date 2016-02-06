@@ -6,6 +6,7 @@ import jalf.Tuple;
 public abstract class Aggregator{
     private AttrName aggregatedField;
     protected  Number state;
+    protected  Integer counttuple ;
 
 
 
@@ -30,7 +31,10 @@ public abstract class Aggregator{
         return new Max(aggregatedField);
     }
 
+    public static Avg avg(AttrName aggregatedField){
 
+        return new Avg(aggregatedField);
+    }
 
     public AttrName getAggregatedField() {
         return aggregatedField;

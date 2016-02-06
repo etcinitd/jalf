@@ -15,6 +15,7 @@ import jalf.Relation;
 import jalf.Tuple;
 import jalf.Visitor;
 import jalf.aggregator.Aggregator;
+import jalf.aggregator.Avg;
 import jalf.aggregator.Count;
 import jalf.aggregator.Max;
 import jalf.type.RelationType;
@@ -67,6 +68,12 @@ public class Summarize extends UnaryOperator {
         if (this.aggregator instanceof Max){
             map = tuples.collect(Collectors.groupingBy(t -> t.fetch(byNameAttrs),
                     Collector.of(() -> new Max(this.aggregator.getAggregatedField()), Aggregator::updateState, Aggregator::finishState)));
+
+
+        }
+        if (this.aggregator instanceof Avg){
+            map = tuples.collect(Collectors.groupingBy(t -> t.fetch(byNameAttrs),
+                    Collector.of(() -> new Avg(this.aggregator.getAggregatedField()), Aggregator::updateState, Aggregator::finishState)));
 
 
         }

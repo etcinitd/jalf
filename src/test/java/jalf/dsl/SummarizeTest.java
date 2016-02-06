@@ -1,6 +1,7 @@
 package jalf.dsl;
 import static jalf.DSL.attr;
 import static jalf.DSL.attrs;
+import static jalf.DSL.avg;
 import static jalf.DSL.count;
 import static jalf.DSL.max;
 import static jalf.DSL.relation;
@@ -17,7 +18,7 @@ import jalf.Relation;
 public class SummarizeTest {
 
     @Test
-    public void testItWorksAsExpectedForCount() {
+    public void testItWorksAsExpectedbyCount() {
 
         Relation expected = relation(
                 tuple(SID, "S1", attr("count"), 6),
@@ -40,7 +41,7 @@ public class SummarizeTest {
     }
 
     @Test
-    public void testItWorksAsExpectedForMax() {
+    public void testItWorksAsExpectedbyMax() {
 
         Relation expected = relation(
                 tuple(SID, "S1", attr("MAX_QTY"), 400),
@@ -62,7 +63,28 @@ public class SummarizeTest {
 
     }
 
+    @Test
+    public void testItWorksAsExpectedbyAvg() {
 
+        Relation expected = relation(
+                tuple(SID, "S1", attr("AVG_QTY"), 216.66666666666666),
+                tuple(SID, "S2", attr("AVG_QTY"), 350.0),
+                tuple(SID, "S3", attr("AVG_QTY"), 200.0),
+                tuple(SID, "S4", attr("AVG_QTY"),300.0)
+                );
+
+        // summarize takes :
+        // a relation,
+        // an attribut name (for grouping),
+        // an attribut name (for result of aggreation),
+        // an aggregation function (TODO)
+
+        Relation actual = summarize(shipments(),attrs(SID), avg(QTY),attr("AVG_QTY"));
+
+        // real test
+        assertEquals(expected, actual);
+
+    }
 
 
 

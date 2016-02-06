@@ -4,10 +4,6 @@ import jalf.Tuple;
 
 public class Max extends Aggregator{
 
-    public Max() {
-        super();
-        this.initState();
-    }
 
 
 
