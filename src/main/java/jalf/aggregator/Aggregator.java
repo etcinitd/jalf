@@ -9,7 +9,13 @@ public abstract class Aggregator{
 
 
 
+    public Aggregator() {
 
+    }
+
+    public Aggregator( AttrName aggregatedField) {
+        this.aggregatedField= aggregatedField;
+    }
 
 
 
@@ -40,17 +46,11 @@ public abstract class Aggregator{
 
     abstract public Aggregator finishState(Aggregator other) ;
 
-
-
-
-
     abstract public void updateState(Tuple t) ;
 
     abstract public Number getState();
 
-    public Count finishState(Count other) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+
+
 
 }

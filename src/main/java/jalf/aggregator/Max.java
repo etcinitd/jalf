@@ -4,6 +4,10 @@ import jalf.Tuple;
 
 public class Max extends Aggregator{
 
+    public Max() {
+        super();
+        this.initState();
+    }
 
 
 
@@ -16,6 +20,7 @@ public class Max extends Aggregator{
 
     @Override
     public void initState() {
+        this.state=new Integer(0);
 
 
     }
@@ -30,15 +35,21 @@ public class Max extends Aggregator{
 
     @Override
     public void updateState(Tuple t) {
-        // TODO Auto-generated method stub
+
+        Integer value=(Integer) t.get(this.getAggregatedField());
+        if(value > this.state.intValue()){
+            this.state=value;
+        }
+
+
+
 
     }
 
 
     @Override
     public Number getState() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.state;
     }
 
 

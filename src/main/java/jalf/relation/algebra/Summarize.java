@@ -16,6 +16,7 @@ import jalf.Tuple;
 import jalf.Visitor;
 import jalf.aggregator.Aggregator;
 import jalf.aggregator.Count;
+import jalf.aggregator.Max;
 import jalf.type.RelationType;
 import jalf.type.TupleType;
 
@@ -51,17 +52,34 @@ public class Summarize extends UnaryOperator {
 
     public List<Tuple> test(Stream<Tuple> tuples, AttrList byNameAttrs,TupleType tt,AttrName as) {
 
-        List<Tuple> list = new ArrayList<Tuple>();
-        Map<List<Object>, Count> map = tuples.collect(Collectors.groupingBy(t -> t.fetch(byNameAttrs),
-                Collector.of(Count::new, Count::updateState, Count::finishState)));
 
-        for (Entry<List<Object>,Count> item : map.entrySet()) {
+        List<Tuple> list = new ArrayList<Tuple>();
+        Map<List<Object>, Aggregator> map=null;;
+
+
+        if (this.aggregator instanceof Count){
+            map = tuples.collect(Collectors.groupingBy(t -> t.fetch(byNameAttrs),
+                    Collector.of(Count::new, Aggregator::updateState, Aggregator::finishState)));
+
+
+        }
+
+        if (this.aggregator instanceof Max){
+            map = tuples.collect(Collectors.groupingBy(t -> t.fetch(byNameAttrs),
+                    Collector.of(() -> new Max(this.aggregator.getAggregatedField()), Aggregator::updateState, Aggregator::finishState)));
+
+
+        }
+
+
+        for (Entry<List<Object>,Aggregator> item : map.entrySet()) {
 
             list.add(Tuple.dress(computeKeyValuePairOfTuple(this.as.getName(),item, tuples, byNameAttrs)));
         }
         System.out.println(list);
         return list;
     }
+
 
 
 
@@ -73,7 +91,7 @@ public class Summarize extends UnaryOperator {
      * @param byNameAttrs
      * @return
      */
-    Object[] computeKeyValuePairOfTuple(String newFieldName, Entry<List<Object>,Count> item, Stream<Tuple> tuples, AttrList byNameAttrs){
+    Object[] computeKeyValuePairOfTuple(String newFieldName, Entry<List<Object>,Aggregator> item, Stream<Tuple> tuples, AttrList byNameAttrs){
         List<Object> list = new ArrayList<Object>();
 
         List<AttrName> attrs = byNameAttrs.toList();
@@ -81,7 +99,7 @@ public class Summarize extends UnaryOperator {
 
         list.add(attrs.get(0).getName());
         list.add(item.getKey().get(0));
-        Count value = item.getValue();
+        Aggregator value = item.getValue();
         list.add(AttrName.attr(newFieldName));
         list.add(value.getState());
 

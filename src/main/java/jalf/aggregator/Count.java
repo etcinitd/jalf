@@ -18,7 +18,6 @@ public class Count extends Aggregator{
 
     @Override
     public Aggregator finishState( Aggregator other) {
-
         this.state = other.state;
         return this;
     }
@@ -29,9 +28,6 @@ public class Count extends Aggregator{
 
     }
 
-    public void updateState(int i) {
-        this.state=this.state.intValue()+1;
-    }
 
     @Override
     public Number getState() {

@@ -43,10 +43,10 @@ public class SummarizeTest {
     public void testItWorksAsExpectedForMax() {
 
         Relation expected = relation(
-                tuple(SID, "S1", attr("MAX"), 400),
-                tuple(SID, "S2", attr("MAX"), 400),
-                tuple(SID, "S3", attr("MAX"), 200),
-                tuple(SID, "S4", attr("MAX"),400)
+                tuple(SID, "S1", attr("MAX_QTY"), 400),
+                tuple(SID, "S2", attr("MAX_QTY"), 400),
+                tuple(SID, "S3", attr("MAX_QTY"), 200),
+                tuple(SID, "S4", attr("MAX_QTY"),400)
                 );
 
         // summarize takes :
@@ -55,7 +55,7 @@ public class SummarizeTest {
         // an attribut name (for result of aggreation),
         // an aggregation function (TODO)
 
-        Relation actual = summarize(shipments(),attrs(SID), max(QTY),attr("MAX"));
+        Relation actual = summarize(shipments(),attrs(SID), max(QTY),attr("MAX_QTY"));
 
         // real test
         assertEquals(expected, actual);
