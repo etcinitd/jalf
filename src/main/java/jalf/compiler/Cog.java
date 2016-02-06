@@ -2,7 +2,17 @@ package jalf.compiler;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import jalf.AttrList;
+import jalf.AttrName;
 import jalf.Predicate;
 import jalf.Relation;
 import jalf.Renaming;
@@ -19,14 +29,6 @@ import jalf.relation.algebra.Select;
 import jalf.relation.algebra.Summarize;
 import jalf.relation.algebra.Union;
 import jalf.type.TupleType;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Compiled-version of a relation(al) expression, ready to be consumed.
@@ -107,11 +109,12 @@ public abstract class Cog {
 
     public Cog summarize(Summarize summarized) {
         Aggregator aggregator = summarized.getAggregator();
-        AttrList byNameAttrs = summarized.getAttributes();
-
+        AttrList byNameAttrs = summarized.getBy();
+        AttrName asNameAttr = summarized.getAs();
+        TupleType tt = summarized.getTupleType();
         Supplier<Stream<Tuple>> supplier = () ->{
             Stream<Tuple> tuples = this.stream();//.collect(Collectors.toList());
-            List<Tuple> newTuple = aggregator.apply(tuples, byNameAttrs);
+            List<Tuple> newTuple = summarized.apply(tuples, byNameAttrs,tt,asNameAttr);
             return newTuple.stream();
         };
         return new BaseCog(summarized, supplier);

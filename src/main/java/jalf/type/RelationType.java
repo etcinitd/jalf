@@ -8,12 +8,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jalf.AttrList;
+import jalf.AttrName;
 import jalf.Predicate;
 import jalf.Relation;
 import jalf.Renaming;
 import jalf.Tuple;
 import jalf.Type;
 import jalf.TypeException;
+import jalf.aggregator.Aggregator;
 
 /**
  * Relation type, captures the possible types of relations.
@@ -140,9 +142,10 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
      * @return the projected type.
      * a ajouter lesheading des aggrgator
      */
-    public RelationType summarize(AttrList on) {
-        checkValidAttrList(on);
-        return new RelationType(heading.summarize(on));
+    public RelationType summarize(AttrList by,Aggregator aggregator,AttrName as) {
+        checkValidAttrList(by);
+        // checkValidAttrList(aggregator.getAggregatedField().);
+        return new RelationType(heading.summarize(by));
     }
 
     /**

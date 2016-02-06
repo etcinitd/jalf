@@ -1,28 +1,47 @@
 package jalf.aggregator;
 
-import jalf.AttrList;
 import jalf.Tuple;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Count extends Aggregator{
 
-    @Override
-    List<Tuple> test(Stream<Tuple> tuples, AttrList byNameAttrs) {
 
-        List<Tuple> list = new ArrayList<Tuple>();
-        Map<List<Object>, Long> map = tuples.collect(Collectors.groupingBy(t -> t.fetch(byNameAttrs), Collectors.counting()));
-
-        for (Entry<List<Object>,Long> item : map.entrySet()) {
-
-            list.add(Tuple.dress(computeKeyValuePairOfTuple("count",item, tuples, byNameAttrs)));
-        }
-        return list;
+    public Count() {
+        super();
+        this.initState();
     }
+
+    @Override
+    public void initState() {
+        this.state=new Integer(0);
+
+    }
+
+    @Override
+    public Aggregator finishState( Aggregator other) {
+
+        this.state = other.state;
+        return this;
+    }
+
+    @Override
+    public void updateState(Tuple t) {
+        this.state=this.state.intValue()+1;
+
+    }
+
+    public void updateState(int i) {
+        this.state=this.state.intValue()+1;
+    }
+
+    @Override
+    public Number getState() {
+
+        return this.state;
+    }
+
+
+
+
+
 
 }

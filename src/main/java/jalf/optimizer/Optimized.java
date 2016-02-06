@@ -1,6 +1,7 @@
 package jalf.optimizer;
 
 import jalf.AttrList;
+import jalf.AttrName;
 import jalf.Predicate;
 import jalf.Relation;
 import jalf.Renaming;
@@ -66,15 +67,15 @@ public class Optimized<R extends Relation> extends AbstractRelation {
 
 
     @Override
-    public Relation summarize(AttrList attributes,Aggregator aggregat) {
+    public Relation summarize(AttrList by,Aggregator aggregat,AttrName as) {
         AttrList opAttrs = operator.getType().toAttrList();
 
 
-        if (opAttrs.equals(attributes)) {
+        if (opAttrs.equals(by)) {
             return operator;
         }
 
-        return operator.summarize(attributes,aggregat);
+        return operator.summarize(by,aggregat, as);
     }
 
 

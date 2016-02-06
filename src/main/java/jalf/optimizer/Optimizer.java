@@ -1,5 +1,8 @@
 package jalf.optimizer;
 
+import java.util.function.Function;
+
+import jalf.AttrName;
 import jalf.Relation;
 import jalf.Visitor;
 import jalf.aggregator.Aggregator;
@@ -15,8 +18,6 @@ import jalf.relation.algebra.Restrict;
 import jalf.relation.algebra.Select;
 import jalf.relation.algebra.Summarize;
 import jalf.relation.algebra.Union;
-
-import java.util.function.Function;
 
 /**
  * Logical optimizer of relational expressions.
@@ -68,7 +69,8 @@ public class Optimizer implements Visitor<Relation> {
     public Relation visit(Summarize relation) {
         Relation optimized = relation.getOperand().accept(this);
         Aggregator aggregator = relation.getAggregator();
-        return optimized(optimized).summarize(relation.getAttributes(),aggregator);
+        AttrName as =relation.getAs();
+        return optimized(optimized).summarize(relation.getBy(),aggregator,as);
     }
 
     @Override

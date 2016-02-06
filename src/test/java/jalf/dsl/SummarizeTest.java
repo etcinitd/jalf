@@ -2,20 +2,18 @@ package jalf.dsl;
 import static jalf.DSL.attr;
 import static jalf.DSL.attrs;
 import static jalf.DSL.count;
-import static jalf.DSL.expression;
 import static jalf.DSL.max;
 import static jalf.DSL.relation;
 import static jalf.DSL.summarize;
 import static jalf.DSL.tuple;
-import static jalf.fixtures.SuppliersAndParts.PID;
+import static jalf.fixtures.SuppliersAndParts.QTY;
 import static jalf.fixtures.SuppliersAndParts.SID;
-import static jalf.fixtures.SuppliersAndParts.WEIGHT;
-import static jalf.fixtures.SuppliersAndParts.parts;
 import static jalf.fixtures.SuppliersAndParts.shipments;
 import static org.junit.Assert.assertEquals;
-import jalf.Relation;
 
 import org.junit.Test;
+
+import jalf.Relation;
 public class SummarizeTest {
 
     @Test
@@ -34,7 +32,7 @@ public class SummarizeTest {
         // an attribut name (for result of aggreation),
         // an aggregation function (TODO)
 
-        Relation actual = summarize(shipments(),attrs(SID), count());
+        Relation actual = summarize(shipments(),attrs(SID), count(),attr("count"));
 
         // real test
         assertEquals(expected, actual);
@@ -45,7 +43,10 @@ public class SummarizeTest {
     public void testItWorksAsExpectedForMax() {
 
         Relation expected = relation(
-                tuple(PID, "P6", attr("MAX"), 19.0)
+                tuple(SID, "S1", attr("MAX"), 400),
+                tuple(SID, "S2", attr("MAX"), 400),
+                tuple(SID, "S3", attr("MAX"), 200),
+                tuple(SID, "S4", attr("MAX"),400)
                 );
 
         // summarize takes :
@@ -54,12 +55,16 @@ public class SummarizeTest {
         // an attribut name (for result of aggreation),
         // an aggregation function (TODO)
 
-        Relation actual = summarize(parts(),attrs(PID), max(expression(WEIGHT)));
+        Relation actual = summarize(shipments(),attrs(SID), max(QTY),attr("MAX"));
 
         // real test
         assertEquals(expected, actual);
 
     }
+
+
+
+
 
 
 }

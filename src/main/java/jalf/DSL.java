@@ -1,12 +1,11 @@
 package jalf;
 
+import java.util.stream.Stream;
+
 import jalf.aggregator.Aggregator;
-import jalf.aggregator.Expression;
 import jalf.relation.materialized.SetMemoryRelation;
 import jalf.type.Heading;
 import jalf.type.RelationType;
-
-import java.util.stream.Stream;
 
 /**
  * @author amirm
@@ -113,8 +112,8 @@ public class DSL {
         return relation.project(attrNames);
     }
 
-    public static Relation summarize(Relation relation, AttrList byNameAttr, Aggregator aggregat) {
-        return relation.summarize(byNameAttr, aggregat);
+    public static Relation summarize(Relation relation, AttrList by, Aggregator agg, AttrName as ){
+        return relation.summarize(by,agg,as);
     }
 
     public static Relation rename(Relation relation, Renaming renaming) {
@@ -150,13 +149,11 @@ public class DSL {
     public static Aggregator count(){
         return Aggregator.count();
     }
-
-    public static Aggregator max(Expression exp){
-        return Aggregator.max(exp);
+    public static Aggregator max(AttrName qty) {
+        return Aggregator.max(qty);
     }
 
-    public static Expression expression(AttrName aggregatedField){
-        return Expression.getInstance(aggregatedField);
-    }
+
+
 
 }

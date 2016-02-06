@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jalf.AttrList;
+import jalf.AttrName;
 import jalf.Predicate;
 import jalf.Relation;
 import jalf.Renaming;
@@ -54,8 +55,8 @@ public abstract class AbstractRelation implements Relation {
     }
 
     @Override
-    public Relation summarize(AttrList attributes,Aggregator aggregator) {
-        return new Summarize(this, attributes,aggregator);
+    public Relation summarize(AttrList by,Aggregator agg, AttrName as) {
+        return new Summarize(this, by,agg, as);
     }
 
     @Override
@@ -153,5 +154,6 @@ public abstract class AbstractRelation implements Relation {
         s += "\n)";
         return s;
     }
+
 
 }

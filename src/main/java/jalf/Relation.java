@@ -62,10 +62,11 @@ public interface Relation {
      *
      * @pre attributes must be a subset of relation's attribute names.
      * @param attributes the list of attributes to summarize by.
-     * @param un agragat
+     * @param un aaggregat
+     * @param non de la colonne de l'agregat as
      * @return the resulting relation.
      */
-    Relation summarize(AttrList attributes,Aggregator aggregat);
+    Relation summarize(AttrList by,Aggregator agg,AttrName as);
 
     /**
      * Rename some attributes of this relation.
