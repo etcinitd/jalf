@@ -55,7 +55,7 @@ public abstract class AbstractRelation implements Relation {
     }
 
     @Override
-    public Relation summarize(AttrList by,Aggregator agg, AttrName as) {
+    public Relation summarize(AttrList by,Aggregator<?> agg, AttrName as) {
         return new Summarize(this, by,agg, as);
     }
 

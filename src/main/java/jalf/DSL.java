@@ -3,6 +3,9 @@ package jalf;
 import java.util.stream.Stream;
 
 import jalf.aggregator.Aggregator;
+import jalf.aggregator.Avg;
+import jalf.aggregator.Count;
+import jalf.aggregator.Max;
 import jalf.relation.materialized.SetMemoryRelation;
 import jalf.type.Heading;
 import jalf.type.RelationType;
@@ -112,7 +115,7 @@ public class DSL {
         return relation.project(attrNames);
     }
 
-    public static Relation summarize(Relation relation, AttrList by, Aggregator agg, AttrName as ){
+    public static Relation summarize(Relation relation, AttrList by, Aggregator<?> agg, AttrName as ){
         return relation.summarize(by,agg,as);
     }
 
@@ -146,14 +149,15 @@ public class DSL {
 
     // Aggregator
 
-    public static Aggregator count(){
-        return Aggregator.count();
+    public static Count count(){
+        return Count.count();
     }
     public static Aggregator max(AttrName attr) {
-        return Aggregator.max(attr);
+        return Max.max(attr);
+
     }
     public static Aggregator avg(AttrName attr) {
-        return Aggregator.avg(attr);
+        return Avg.avg(attr);
     }
 
 

@@ -68,7 +68,7 @@ public class Optimizer implements Visitor<Relation> {
     @Override
     public Relation visit(Summarize relation) {
         Relation optimized = relation.getOperand().accept(this);
-        Aggregator aggregator = relation.getAggregator();
+        Aggregator <?> aggregator = relation.getAggregator();
         AttrName as =relation.getAs();
         return optimized(optimized).summarize(relation.getBy(),aggregator,as);
     }

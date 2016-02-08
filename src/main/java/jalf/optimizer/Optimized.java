@@ -67,10 +67,8 @@ public class Optimized<R extends Relation> extends AbstractRelation {
 
 
     @Override
-    public Relation summarize(AttrList by,Aggregator aggregat,AttrName as) {
+    public Relation summarize(AttrList by,Aggregator<?> aggregat,AttrName as) {
         AttrList opAttrs = operator.getType().toAttrList();
-
-
         if (opAttrs.equals(by)) {
             return operator;
         }

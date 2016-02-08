@@ -85,8 +85,4 @@ public class SummarizeTest {
         assertEquals(expected, actual);
 
     }
-
-
-
-
 }

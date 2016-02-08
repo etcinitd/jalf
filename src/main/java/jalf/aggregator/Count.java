@@ -1,43 +1,59 @@
 package jalf.aggregator;
 
+import jalf.AttrName;
 import jalf.Tuple;
 
-public class Count extends Aggregator{
+public class Count  implements Aggregator<Count>{
+    private Number state;
+
+    public static Count count() {
+        return new Count();
+    }
 
 
     public Count() {
         super();
-        this.initState();
+        this.init();
     }
 
+
+
     @Override
-    public void initState() {
+    public Number getState() {
+        return this.state;
+    }
+
+
+    @Override
+    public void init() {
         this.state=new Integer(0);
-
     }
 
-    @Override
-    public Aggregator finishState( Aggregator other) {
-        this.state = other.state;
-        return this;
-    }
 
     @Override
-    public void updateState(Tuple t) {
+    public void accumulate(Tuple t) {
         this.state=this.state.intValue()+1;
 
     }
 
 
-    @Override
-    public Number getState() {
 
-        return this.state;
+    @Override
+    public Count finish(Count other) {
+        this.state =other.state;
+        return this;
+    }
+
+    public static Count count(AttrName attr) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 
-
-
-
+    @Override
+    public AttrName getAggregatedField() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

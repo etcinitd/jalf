@@ -16,6 +16,7 @@ import jalf.Tuple;
 import jalf.Type;
 import jalf.TypeException;
 import jalf.aggregator.Aggregator;
+import jalf.aggregator.Count;
 
 /**
  * Relation type, captures the possible types of relations.
@@ -144,7 +145,9 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
      */
     public RelationType summarize(AttrList by,Aggregator aggregator,AttrName as) {
         checkValidAttrList(by);
-        // checkValidAttrList(aggregator.getAggregatedField().);
+        if( !(aggregator instanceof Count)){
+            // checkValidAttrList(AttrList.attrs(aggregator.getAggregatedField()));
+        }
         return new RelationType(heading.summarize(by));
     }
 

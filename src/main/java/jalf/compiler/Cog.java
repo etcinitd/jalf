@@ -18,7 +18,6 @@ import jalf.Relation;
 import jalf.Renaming;
 import jalf.Selection;
 import jalf.Tuple;
-import jalf.aggregator.Aggregator;
 import jalf.relation.algebra.Intersect;
 import jalf.relation.algebra.Join;
 import jalf.relation.algebra.Minus;
@@ -108,7 +107,6 @@ public abstract class Cog {
     }*/
 
     public Cog summarize(Summarize summarized) {
-        Aggregator aggregator = summarized.getAggregator();
         AttrList byNameAttrs = summarized.getBy();
         AttrName asNameAttr = summarized.getAs();
         TupleType tt = summarized.getTupleType();
