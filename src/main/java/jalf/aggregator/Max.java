@@ -4,11 +4,11 @@ import java.util.Comparator;
 import jalf.AttrName;
 import jalf.Tuple;
 
-public class Max  implements Aggregator<Max>,Comparator<Number>{
+public class Max  implements Aggregator<Number>,Comparator<Number>{
 
 
     private AttrName aggregatedField;
-    private  Number state;
+    private Number state;
 
 
     public static Max max(AttrName attr) {
@@ -26,10 +26,6 @@ public class Max  implements Aggregator<Max>,Comparator<Number>{
         this.aggregatedField= aggregatedField;
     }
 
-    @Override
-    public Number getState() {
-        return this.state;
-    }
 
     @Override
     public int compare(Number n1, Number n2) {
@@ -61,16 +57,20 @@ public class Max  implements Aggregator<Max>,Comparator<Number>{
         }
     }
 
-    @Override
+    public Max conclude(Max other) {
+        this.state =  other.state;
+        return this;
+    }
     public AttrName getAggregatedField() {
         return this.aggregatedField;
     }
 
     @Override
-    public Max finish(Max other) {
-        this.state = other.state;
-        return this;
+    public Number finish() {
+        return this.state;
     }
+
+
 
 
 

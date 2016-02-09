@@ -60,7 +60,7 @@ public class Summarize extends UnaryOperator {
 
         if (this.aggregator instanceof Count){
             map = tuples.collect(Collectors.groupingBy(t -> t.fetch(byNameAttrs),
-                    Collector.of(Count::new, Count::accumulate, Count::finish)));
+                    Collector.of(Count::new, Count::accumulate, Count::conclude)));
 
 
         }
@@ -68,14 +68,14 @@ public class Summarize extends UnaryOperator {
         if (this.aggregator instanceof Max){
             Max agg =(Max) this.aggregator;
             map = tuples.collect(Collectors.groupingBy(t -> t.fetch(byNameAttrs),
-                    Collector.of(() -> new Max(agg.getAggregatedField()), Max::accumulate, Max::finish)));
+                    Collector.of(() -> new Max(agg.getAggregatedField()), Max::accumulate, Max::conclude)));
 
 
         }
         if (this.aggregator instanceof Avg){
             Avg agg =(Avg) this.aggregator;
             map = tuples.collect(Collectors.groupingBy(t -> t.fetch(byNameAttrs),
-                    Collector.of(() -> new Avg(agg.getAggregatedField()), Avg::accumulate, Avg::finish)));
+                    Collector.of(() -> new Avg(agg.getAggregatedField()), Avg::accumulate, Avg::conclude)));
 
 
         }
@@ -107,7 +107,7 @@ public class Summarize extends UnaryOperator {
         list.add((item.getKey().get(0)));
         Aggregator<?> value = item.getValue();
         list.add(asName);
-        list.add(value.getState());
+        list.add(value.finish());
 
         return list.stream().toArray();
     }

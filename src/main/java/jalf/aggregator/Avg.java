@@ -3,9 +3,9 @@ package jalf.aggregator;
 import jalf.AttrName;
 import jalf.Tuple;
 
-public class Avg implements Aggregator<Avg>{
+public class  Avg implements Aggregator<Double>{
     private AttrName aggregatedField;
-    private  Number state;
+    private  Double state;
     private  Integer counttuple ;
 
 
@@ -31,12 +31,12 @@ public class Avg implements Aggregator<Avg>{
 
 
     @Override
-    public Number getState() {
+    public Double finish() {
         if (this.counttuple > 0 ){
-            this.state =this.state.doubleValue()/this.counttuple;
+            this.state =this.state/this.counttuple;
         }
         else {
-            this.state=0;
+            this.state=0.0;
         }
         return this.state;
     }
@@ -57,15 +57,13 @@ public class Avg implements Aggregator<Avg>{
 
     }
 
-    @Override
+
     public AttrName getAggregatedField() {
         return this.aggregatedField;
     }
 
 
-
-    @Override
-    public Avg finish(Avg other) {
+    public Avg  conclude(Avg other) {
         this.counttuple=other.counttuple;
         this.state = other.state;
         return this;
