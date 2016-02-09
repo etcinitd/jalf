@@ -152,11 +152,11 @@ public class DSL {
     public static Count count(){
         return Count.count();
     }
-    public static Aggregator max(AttrName attr) {
+    public static Max max(AttrName attr) {
         return Max.max(attr);
 
     }
-    public static Aggregator avg(AttrName attr) {
+    public static Avg avg(AttrName attr) {
         return Avg.avg(attr);
     }
 

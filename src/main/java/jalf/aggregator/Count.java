@@ -52,7 +52,6 @@ public class Count  implements Aggregator<Count>{
 
     @Override
     public AttrName getAggregatedField() {
-        // TODO Auto-generated method stub
         return null;
     }
 

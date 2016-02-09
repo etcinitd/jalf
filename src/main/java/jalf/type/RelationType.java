@@ -143,10 +143,10 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
      * @return the projected type.
      * a ajouter lesheading des aggrgator
      */
-    public RelationType summarize(AttrList by,Aggregator aggregator,AttrName as) {
+    public RelationType summarize(AttrList by,Aggregator<?> aggregator,AttrName as) {
         checkValidAttrList(by);
         if( !(aggregator instanceof Count)){
-            // checkValidAttrList(AttrList.attrs(aggregator.getAggregatedField()));
+            checkValidAttrList(AttrList.attrs(aggregator.getAggregatedField()));
         }
         return new RelationType(heading.summarize(by));
     }

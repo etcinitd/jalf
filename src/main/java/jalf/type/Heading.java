@@ -161,7 +161,6 @@ public class Heading {
      * @pre `on` should be a subset of the heading attribute names.
      * @param on a set of attribute names.
      * @return the heading obtained by keeping only attributes in `on`.
-     * a ajouter les heading desaggregator
      */
     public Heading summarize(AttrList on) {
         Map<AttrName, Type<?>> summarized = new HashMap<>();
