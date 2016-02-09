@@ -7,6 +7,7 @@ import static jalf.DSL.max;
 import static jalf.DSL.relation;
 import static jalf.DSL.summarize;
 import static jalf.DSL.tuple;
+import static jalf.fixtures.SuppliersAndParts.PID;
 import static jalf.fixtures.SuppliersAndParts.QTY;
 import static jalf.fixtures.SuppliersAndParts.SID;
 import static jalf.fixtures.SuppliersAndParts.shipments;
@@ -44,10 +45,10 @@ public class SummarizeTest {
     public void testItWorksAsExpectedbyMax() {
 
         Relation expected = relation(
-                tuple(SID, "S1", attr("MAX_QTY"), 400),
-                tuple(SID, "S2", attr("MAX_QTY"), 400),
-                tuple(SID, "S3", attr("MAX_QTY"), 200),
-                tuple(SID, "S4", attr("MAX_QTY"),400)
+                tuple(SID, "S1", attr("MAX_PID"), "P6"),
+                tuple(SID, "S2", attr("MAX_PID"), "P2"),
+                tuple(SID, "S3", attr("MAX_PID"), "P2"),
+                tuple(SID, "S4", attr("MAX_PID"), "P5")
                 );
 
         // summarize takes :
@@ -56,7 +57,7 @@ public class SummarizeTest {
         // an attribut name (for result of aggreation),
         // an aggregation function (TODO)
 
-        Relation actual = summarize(shipments(),attrs(SID), max(QTY),attr("MAX_QTY"));
+        Relation actual = summarize(shipments(),attrs(SID), max(PID),attr("MAX_PID"));
 
         // real test
         assertEquals(expected, actual);

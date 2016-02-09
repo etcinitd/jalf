@@ -50,7 +50,7 @@ public class  Avg implements Aggregator<Double>{
 
     @Override
     public void accumulate(Tuple t) {
-        System.out.println(t.get(this.getAggregatedField()).getClass());
+        // ajouter les autres types
         Integer value=(Integer) t.get(this.getAggregatedField());
         this.state= this.state.doubleValue() +value;
         this.counttuple=this.counttuple+1;

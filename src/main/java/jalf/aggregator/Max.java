@@ -1,14 +1,12 @@
 package jalf.aggregator;
-import java.util.Comparator;
-
 import jalf.AttrName;
 import jalf.Tuple;
 
-public class Max  implements Aggregator<Number>,Comparator<Number>{
+public class Max  implements Aggregator<Comparable<?>>{
 
 
     private AttrName aggregatedField;
-    private Number state;
+    private Comparable<?> state;
 
 
     public static Max max(AttrName attr) {
@@ -27,14 +25,6 @@ public class Max  implements Aggregator<Number>,Comparator<Number>{
     }
 
 
-    @Override
-    public int compare(Number n1, Number n2) {
-        long l1 = n1.longValue();
-        long l2 = n2.longValue();
-        if (l1 != l2)
-            return (l1 < l2 ? -1 : 1);
-        return Double.compare(n1.doubleValue(), n2.doubleValue());
-    }
 
 
     @Override
@@ -46,15 +36,31 @@ public class Max  implements Aggregator<Number>,Comparator<Number>{
 
     @Override
     public void accumulate(Tuple t) {
-        Number value= (Number) t.get(this.getAggregatedField());
+        Comparable<?> value= (Comparable<?>) t.get(this.getAggregatedField());
         if (this.state==null){
             this.state= value;
         }else{
-            if(compare(value,this.state)==1){
+            if(CompareTo(value,this.state)>=1){
                 this.state=value;
             }
 
         }
+    }
+
+    private int CompareTo(Comparable<?> value, Comparable<?> state) {
+        if (state instanceof Integer){
+            return Integer.compare((Integer)value, (Integer)state);
+        }
+        else if(state instanceof Double){
+            return Double.compare((Double)value, (Double)state);
+        }
+        else if(state instanceof Long){
+            return Long.compare((Long)value, (Long)state);
+        }
+        else if(state instanceof String){
+            return value.toString().compareTo(state.toString());
+        }
+        return 0;
     }
 
     public Max conclude(Max other) {
@@ -66,12 +72,8 @@ public class Max  implements Aggregator<Number>,Comparator<Number>{
     }
 
     @Override
-    public Number finish() {
+    public Comparable<?> finish() {
         return this.state;
     }
-
-
-
-
 
 }
