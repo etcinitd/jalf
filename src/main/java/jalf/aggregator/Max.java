@@ -12,12 +12,8 @@ public class Max  implements Aggregator<Comparable<?>>{
 
     public Max(AttrName aggregatedField) {
         super();
-        this.setAggregatedField(aggregatedField);
-        this.init();
-    }
-
-    public void setAggregatedField(AttrName aggregatedField) {
         this.aggregatedField= aggregatedField;
+        this.init();
     }
 
     @Override
