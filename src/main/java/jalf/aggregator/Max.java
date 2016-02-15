@@ -3,11 +3,8 @@ import jalf.AttrName;
 import jalf.Tuple;
 
 public class Max  implements Aggregator<Comparable<?>>{
-
-
     private AttrName aggregatedField;
     private Comparable<?> state;
-
 
     public static Max max(AttrName attr) {
         return new Max(attr);
@@ -19,20 +16,14 @@ public class Max  implements Aggregator<Comparable<?>>{
         this.init();
     }
 
-
     public void setAggregatedField(AttrName aggregatedField) {
         this.aggregatedField= aggregatedField;
     }
 
-
-
-
     @Override
     public void init() {
         this.state=null;
-
     }
-
 
     @Override
     public void accumulate(Tuple t) {
@@ -43,7 +34,6 @@ public class Max  implements Aggregator<Comparable<?>>{
             if(CompareTo(value,this.state)>=1){
                 this.state=value;
             }
-
         }
     }
 
@@ -67,6 +57,7 @@ public class Max  implements Aggregator<Comparable<?>>{
         this.state =  other.state;
         return this;
     }
+
     public AttrName getAggregatedField() {
         return this.aggregatedField;
     }
