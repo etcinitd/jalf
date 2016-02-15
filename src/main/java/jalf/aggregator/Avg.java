@@ -43,6 +43,7 @@ public class  Avg implements Aggregator<Double>{
         this.counttuple=this.counttuple+1;
     }
 
+    @Override
     public AttrName getAggregatedField() {
         return this.aggregatedField;
     }

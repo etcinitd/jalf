@@ -1,5 +1,6 @@
 package jalf.aggregator;
 
+import jalf.AttrName;
 import jalf.Tuple;
 
 public class Count  implements Aggregator<Integer>{
@@ -32,5 +33,10 @@ public class Count  implements Aggregator<Integer>{
     @Override
     public Integer finish() {
         return this.state;
+    }
+
+    @Override
+    public AttrName getAggregatedField() {
+        return null;
     }
 }

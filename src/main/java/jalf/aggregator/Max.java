@@ -54,6 +54,7 @@ public class Max  implements Aggregator<Comparable<?>>{
         return this;
     }
 
+    @Override
     public AttrName getAggregatedField() {
         return this.aggregatedField;
     }
