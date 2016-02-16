@@ -1,7 +1,9 @@
 package jalf.type;
 
 import static jalf.DSL.attrs;
+import static jalf.DSL.count;
 import static jalf.DSL.heading;
+import static jalf.DSL.max;
 import static jalf.DSL.relation;
 import static jalf.DSL.renaming;
 import static jalf.DSL.tuple;
@@ -15,16 +17,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Test;
+
 import jalf.AttrList;
 import jalf.AttrName;
 import jalf.Relation;
 import jalf.Tuple;
 import jalf.TypeException;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Test;
 
 public class TestRelationType {
 
@@ -91,6 +93,21 @@ public class TestRelationType {
     public void testProject() {
         RelationType from = RelationType.dress(SID, String.class, STATUS, Integer.class);
         RelationType actual = from.project(attrs(SID));
+        RelationType expected = type;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void TestSummarizemax() {
+        RelationType from = RelationType.dress(SID, String.class, STATUS, Integer.class);
+        RelationType actual = from.summarize(attrs(SID), max(STATUS));
+        RelationType expected = type;
+        assertEquals(expected, actual);
+    }
+    @Test
+    public void TestSummarizecount() {
+        RelationType from = RelationType.dress(SID, String.class, STATUS, Integer.class);
+        RelationType actual = from.summarize(attrs(SID), count());
         RelationType expected = type;
         assertEquals(expected, actual);
     }

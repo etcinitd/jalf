@@ -82,36 +82,13 @@ public abstract class Cog {
         return new BaseCog(projection, supplier);
     }
 
-    /** Default compilation of `Summarize`. */
-    /*public Cog summarize(Summarize summarized) {
-        AttrList on = summarized.getAttributes();
-        TupleType tt = summarized.getTupleType();
-        Set <Aggregator> aggrs= summarized.getAggregators();
-        Iterator<Aggregator> it = aggrs.iterator();
-        Aggregator firstaggr = it.next();
-        String nameaggr=firstaggr.getNameAggr();
-        Supplier<Stream<Tuple>> supplier = () ->{
-            Stream<Tuple> leftStream = this.stream();
-            Map<List<Object>, Long> map = leftStream.collect(Collectors.groupingBy(t -> t.fetch(on), Collectors.counting()));
-            for(Entry<List<Object>, Long> entry : map.entrySet()) {
-                List<Object> cle = entry.getKey();
-                Stream<Object> stram1= cle.stream();
-                Long valeur = entry.getValue();
-                // traitements
-            }
-            System.out.println(map);
-            return leftStream;
-        };
-
-        return new BaseCog(summarized, supplier);
-    }*/
-
+    /** Default compilation of `summarize`. */
     public Cog summarize(Summarize summarized) {
         AttrList byNameAttrs = summarized.getBy();
         AttrName asNameAttr = summarized.getAs();
         TupleType tt = summarized.getTupleType();
         Supplier<Stream<Tuple>> supplier = () ->{
-            Stream<Tuple> tuples = this.stream();//.collect(Collectors.toList());
+            Stream<Tuple> tuples = this.stream();
             List<Tuple> newTuple = summarized.apply(tuples, byNameAttrs,tt,asNameAttr);
             return newTuple.stream();
         };

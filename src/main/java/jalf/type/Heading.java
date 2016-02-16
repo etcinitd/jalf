@@ -156,16 +156,16 @@ public class Heading {
         return new Heading(projected);
     }
     /**
-     * Projects this heading on a subset of its attributes captured by `on`.
+     * Projects this heading on a subset of its attributes captured by `by`.
      *
      * @pre `on` should be a subset of the heading attribute names.
      * @param on a set of attribute names.
-     * @return the heading obtained by keeping only attributes in `on`.
+     * @return the heading obtained by keeping only attributes in `by and field aggregator`.
      */
-    public Heading summarize(AttrList on) {
+    public Heading summarize(AttrList by) {
         Map<AttrName, Type<?>> summarized = new HashMap<>();
         attributes.forEach((name, type) -> {
-            if (on.contains(name))
+            if (by.contains(name))
                 summarized.put(name, type);
         });
         return new Heading(summarized);

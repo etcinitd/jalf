@@ -55,7 +55,7 @@ public class Summarize extends UnaryOperator {
 
 
         List<Tuple> list = new ArrayList<Tuple>();
-        Map<List<Object>, ? extends Aggregator<?>> map=null;
+        Map<List<Object>,  ? extends Aggregator<?>> map=null;
 
 
         if (this.aggregator instanceof Count){
@@ -101,8 +101,6 @@ public class Summarize extends UnaryOperator {
     private  Object[] computeKeyValuePairOfTuple(AttrName asName, Entry<List<Object>, ? extends Aggregator<?>> item,  AttrList byNameAttrs){
         List<Object> list = new ArrayList<Object>();
         List<AttrName> attrs = byNameAttrs.toList();
-
-
         list.add(attrs.get(0).getName());
         list.add((item.getKey().get(0)));
         Aggregator<?> value = item.getValue();
@@ -123,7 +121,7 @@ public class Summarize extends UnaryOperator {
 
     @Override
     protected RelationType typeCheck() {
-        return operand.getType().summarize(by,aggregator,as);
+        return operand.getType().summarize(by,aggregator);
     }
 
     @Override
