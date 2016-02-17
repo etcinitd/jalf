@@ -22,31 +22,16 @@ public class Max  implements Aggregator<Comparable<?>>{
     }
 
     @Override
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void accumulate(Tuple t) {
-        Comparable<?> value= (Comparable<?>) t.get(this.getAggregatedField());
-        if (this.state==null){
-            this.state= value;
-        }else{
-            if(CompareTo(value,this.state)>=1){
-                this.state=value;
+        Comparable value = (Comparable) t.get(this.getAggregatedField());
+        if (this.state == null){
+            this.state = value;
+        } else {
+            if (value.compareTo(this.state)>0) {
+                this.state = value;
             }
         }
-    }
-
-    private int CompareTo(Comparable<?> value, Comparable<?> state) {
-        if (state instanceof Integer){
-            return Integer.compare((Integer)value, (Integer)state);
-        }
-        else if(state instanceof Double){
-            return Double.compare((Double)value, (Double)state);
-        }
-        else if(state instanceof Long){
-            return Long.compare((Long)value, (Long)state);
-        }
-        else if(state instanceof String){
-            return value.toString().compareTo(state.toString());
-        }
-        return 0;
     }
 
     @Override
