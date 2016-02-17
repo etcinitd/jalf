@@ -8,5 +8,5 @@ public interface Aggregator<T> {
     void accumulate(Tuple t);
     public T finish();
     public AttrName getAggregatedField();
-
+    public Aggregator<T> duplicate();
 }

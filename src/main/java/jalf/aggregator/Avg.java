@@ -48,10 +48,9 @@ public class  Avg implements Aggregator<Double>{
         return this.aggregatedField;
     }
 
-    public Avg  conclude(Avg other) {
-        this.counttuple=other.counttuple;
-        this.state = other.state;
-        return this;
+    @Override
+    public Avg duplicate() {
+        return new Avg(this.aggregatedField);
     }
 
 }

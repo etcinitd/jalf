@@ -49,11 +49,6 @@ public class Max  implements Aggregator<Comparable<?>>{
         return 0;
     }
 
-    public Max conclude(Max other) {
-        this.state =  other.state;
-        return this;
-    }
-
     @Override
     public AttrName getAggregatedField() {
         return this.aggregatedField;
@@ -62,6 +57,11 @@ public class Max  implements Aggregator<Comparable<?>>{
     @Override
     public Comparable<?> finish() {
         return this.state;
+    }
+
+    @Override
+    public Max duplicate() {
+        return new Max(this.aggregatedField);
     }
 
 }

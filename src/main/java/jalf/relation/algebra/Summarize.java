@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -15,9 +18,6 @@ import jalf.Relation;
 import jalf.Tuple;
 import jalf.Visitor;
 import jalf.aggregator.Aggregator;
-import jalf.aggregator.Avg;
-import jalf.aggregator.Count;
-import jalf.aggregator.Max;
 import jalf.type.RelationType;
 import jalf.type.TupleType;
 
@@ -53,36 +53,30 @@ public class Summarize extends UnaryOperator {
 
     public List<Tuple> test(Stream<Tuple> tuples, AttrList byNameAttrs,TupleType tt,AttrName as) {
 
-
         List<Tuple> list = new ArrayList<Tuple>();
         Map<List<Object>,  ? extends Aggregator<?>> map=null;
 
+        Supplier<Aggregator<?>> s = () -> this.aggregator.duplicate();
 
-        if (this.aggregator instanceof Count){
-            map = tuples.collect(Collectors.groupingBy(t -> t.fetch(byNameAttrs),
-                    Collector.of(Count::new, Count::accumulate, Count::conclude)));
+        BiConsumer<Aggregator<?>, Tuple> b = new BiConsumer<Aggregator<?>,Tuple>(){
+            @Override
+            public void accept(Aggregator<?> agg, Tuple t) {
+                agg.accumulate(t);
+            }
+        };
 
+        java.util.function.BinaryOperator<Aggregator<?>> f = new java.util.function.BinaryOperator<Aggregator<?>>(){
+            @Override
+            public Aggregator<?> apply(Aggregator<?> t, Aggregator<?> u) {
+                return t;
+            }
+        };
 
-        }
-
-        if (this.aggregator instanceof Max){
-            Max agg =(Max) this.aggregator;
-            map = tuples.collect(Collectors.groupingBy(t -> t.fetch(byNameAttrs),
-                    Collector.of(() -> new Max(agg.getAggregatedField()), Max::accumulate, Max::conclude)));
-
-
-        }
-        if (this.aggregator instanceof Avg){
-            Avg agg =(Avg) this.aggregator;
-            map = tuples.collect(Collectors.groupingBy(t -> t.fetch(byNameAttrs),
-                    Collector.of(() -> new Avg(agg.getAggregatedField()), Avg::accumulate, Avg::conclude)));
-
-
-        }
-
+        Collector<Tuple, Aggregator<?>, Aggregator<?>> coll = Collector.of(s, b, f);
+        Function<Tuple,List<Object>> grouper = t -> t.fetch(byNameAttrs);
+        map = tuples.collect(Collectors.groupingBy(grouper, coll));
 
         for (Entry<List<Object>, ? extends Aggregator<?>> item : map.entrySet()) {
-
             list.add(Tuple.dress(computeKeyValuePairOfTuple(this.as,item, byNameAttrs)));
         }
         return list;

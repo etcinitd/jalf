@@ -25,11 +25,6 @@ public class Count  implements Aggregator<Integer>{
         this.state=this.state+1;
     }
 
-    public Count conclude(Count other) {
-        this.state =  other.state;
-        return this;
-    }
-
     @Override
     public Integer finish() {
         return this.state;
@@ -38,5 +33,10 @@ public class Count  implements Aggregator<Integer>{
     @Override
     public AttrName getAggregatedField() {
         return null;
+    }
+
+    @Override
+    public Count duplicate() {
+        return new Count();
     }
 }
