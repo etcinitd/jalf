@@ -1,5 +1,14 @@
 package jalf.relation.algebra;
 
+import jalf.AttrList;
+import jalf.AttrName;
+import jalf.Relation;
+import jalf.Tuple;
+import jalf.Visitor;
+import jalf.aggregator.Aggregator;
+import jalf.type.RelationType;
+import jalf.type.TupleType;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,15 +20,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import jalf.AttrList;
-import jalf.AttrName;
-import jalf.Relation;
-import jalf.Tuple;
-import jalf.Visitor;
-import jalf.aggregator.Aggregator;
-import jalf.type.RelationType;
-import jalf.type.TupleType;
 
 public class Summarize extends UnaryOperator {
 
@@ -51,7 +51,7 @@ public class Summarize extends UnaryOperator {
 
     }
 
-    public List<Tuple> test(Stream<Tuple> tuples, AttrList byNameAttrs,TupleType tt,AttrName as) {
+    public List<Tuple> apply(Stream<Tuple> tuples, AttrList byNameAttrs,TupleType tt,AttrName as) {
 
         List<Tuple> list = new ArrayList<Tuple>();
         Map<List<Object>,  ? extends Aggregator<?>> map=null;
@@ -82,11 +82,9 @@ public class Summarize extends UnaryOperator {
         return list;
     }
 
-
-
-
     /**
      * Compute the key value pair list to form a tuple
+     *
      * @paramAttrName as
      * @param  AttrList Entry<List<Object>,Aggregator> item
      * @param byNameAttrs
@@ -102,10 +100,6 @@ public class Summarize extends UnaryOperator {
         list.add(value.finish());
 
         return list.stream().toArray();
-    }
-
-    public List<Tuple> apply(Stream<Tuple> tuples, AttrList  byNameAttrs, TupleType tt, AttrName as){
-        return test(tuples, byNameAttrs,tt, as);
     }
 
     @Override
