@@ -8,6 +8,11 @@ import static jalf.fixtures.SuppliersAndParts.STATUS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import jalf.AttrList;
+import jalf.AttrName;
+import jalf.Renaming;
+import jalf.Type;
+import jalf.TypeException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,12 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-
-import jalf.AttrList;
-import jalf.AttrName;
-import jalf.Renaming;
-import jalf.Type;
-import jalf.TypeException;
 
 public class TestHeading {
 
@@ -90,9 +89,11 @@ public class TestHeading {
     }
     @Test
     public void testSummarize() {
-        Heading h = Heading.dress(SID, String.class, STATUS, Integer.class);
-        Heading expected = Heading.dress(STATUS, Integer.class);
-        assertEquals(expected, h.summarize(AttrList.attrs(STATUS)));
+        Heading h = Heading.dress(SID, String.class, NAME, String.class, STATUS, Integer.class);
+        AttrList by = AttrList.attrs(SID);
+        AttrName as = AttrName.attr("NEW");
+        Heading expected = Heading.dress(SID, Integer.class, "NEW", Integer.class);
+        assertEquals(expected, h.summarize(by, as, Integer.class));
     }
 
     @Test
