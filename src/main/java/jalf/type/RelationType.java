@@ -144,7 +144,7 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
      */
     public RelationType summarize(AttrList by,Aggregator<?> aggregator) {
         if( !(aggregator instanceof Count)){
-            by.union(AttrList.attrs(aggregator.getAggregatedField()));
+            by= by.union(AttrList.attrs(aggregator.getAggregatedField()));
         }
         checkValidAttrList(by);
 

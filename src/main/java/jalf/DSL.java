@@ -1,5 +1,7 @@
 package jalf;
 
+import java.util.stream.Stream;
+
 import jalf.aggregator.Aggregator;
 import jalf.aggregator.Avg;
 import jalf.aggregator.Count;
@@ -7,8 +9,6 @@ import jalf.aggregator.Max;
 import jalf.relation.materialized.SetMemoryRelation;
 import jalf.type.Heading;
 import jalf.type.RelationType;
-
-import java.util.stream.Stream;
 
 /**
  * @author amirm
@@ -160,8 +160,5 @@ public class DSL {
     public static Avg avg(AttrName attr) {
         return Avg.avg(attr);
     }
-
-
-
 
 }

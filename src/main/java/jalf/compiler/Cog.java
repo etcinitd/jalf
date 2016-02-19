@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jalf.AttrList;
-import jalf.AttrName;
 import jalf.Predicate;
 import jalf.Relation;
 import jalf.Renaming;
@@ -84,12 +83,9 @@ public abstract class Cog {
 
     /** Default compilation of `summarize`. */
     public Cog summarize(Summarize summarized) {
-        AttrList byNameAttrs = summarized.getBy();
-        AttrName asNameAttr = summarized.getAs();
-        TupleType tt = summarized.getTupleType();
         Supplier<Stream<Tuple>> supplier = () ->{
             Stream<Tuple> tuples = this.stream();
-            List<Tuple> newTuple = summarized.apply(tuples, byNameAttrs,tt,asNameAttr);
+            List<Tuple> newTuple = summarized.apply(tuples);
             return newTuple.stream();
         };
         return new BaseCog(summarized, supplier);

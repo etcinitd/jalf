@@ -23,9 +23,6 @@ public class  Avg implements Aggregator<Double>{
         if (this.counttuple > 0 ){
             this.state =this.state/this.counttuple;
         }
-        else {
-            this.state=0.0;
-        }
         return this.state;
     }
 
@@ -37,7 +34,6 @@ public class  Avg implements Aggregator<Double>{
 
     @Override
     public void accumulate(Tuple t) {
-        // ajouter les autres types
         Integer value=(Integer) t.get(this.getAggregatedField());
         this.state= this.state.doubleValue() +value;
         this.counttuple=this.counttuple+1;
