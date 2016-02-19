@@ -109,7 +109,7 @@ public class Summarize extends UnaryOperator {
 
     @Override
     protected RelationType typeCheck() {
-        return operand.getType().summarize(by,aggregator);
+        return operand.getType().summarize(by, aggregator, as);
     }
 
     @Override

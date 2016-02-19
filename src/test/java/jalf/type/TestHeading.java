@@ -91,9 +91,10 @@ public class TestHeading {
     public void testSummarize() {
         Heading h = Heading.dress(SID, String.class, NAME, String.class, STATUS, Integer.class);
         AttrList by = AttrList.attrs(SID);
-        AttrName as = AttrName.attr("NEW");
-        Heading expected = Heading.dress(SID, Integer.class, "NEW", Integer.class);
-        assertEquals(expected, h.summarize(by, as, Integer.class));
+        AttrName as = AttrName.attr("new");
+        Heading expected = Heading.dress(SID, String.class, "new", Integer.class);
+        Heading actual = h.summarize(by, as, Type.scalarType(Integer.class));
+        assertEquals(expected, actual);
     }
 
     @Test
