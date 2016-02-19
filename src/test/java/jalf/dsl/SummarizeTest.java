@@ -3,6 +3,7 @@ import static jalf.DSL.attr;
 import static jalf.DSL.attrs;
 import static jalf.DSL.avg;
 import static jalf.DSL.count;
+import static jalf.DSL.heading;
 import static jalf.DSL.max;
 import static jalf.DSL.relation;
 import static jalf.DSL.summarize;
@@ -12,10 +13,9 @@ import static jalf.fixtures.SuppliersAndParts.QTY;
 import static jalf.fixtures.SuppliersAndParts.SID;
 import static jalf.fixtures.SuppliersAndParts.shipments;
 import static org.junit.Assert.assertEquals;
+import jalf.Relation;
 
 import org.junit.Test;
-
-import jalf.Relation;
 public class SummarizeTest {
 
     @Test
@@ -81,6 +81,38 @@ public class SummarizeTest {
         // an aggregation function (TODO)
 
         Relation actual = summarize(shipments(),attrs(SID), avg(QTY),attr("AVG_QTY"));
+
+        // real test
+        assertEquals(expected, actual);
+
+    }
+
+    @Test
+    public void testItWorksAsExpectedbyAvg2() {
+
+        Relation expected = relation(
+                heading(SID, String.class, PID, String.class, attr("AVG_QTY"), Double.class),
+                tuple(SID, "S1", PID, "P1", attr("AVG_QTY"), 300.0),
+                tuple(SID, "S1", PID, "P2", attr("AVG_QTY"), 200.0),
+                tuple(SID, "S1", PID, "P3", attr("AVG_QTY"), 400.0),
+                tuple(SID, "S1", PID, "P4", attr("AVG_QTY"), 200.0),
+                tuple(SID, "S1", PID, "P5", attr("AVG_QTY"), 100.0),
+                tuple(SID, "S1", PID, "P6", attr("AVG_QTY"), 100.0),
+                tuple(SID, "S2", PID, "P1", attr("AVG_QTY"), 300.0),
+                tuple(SID, "S2", PID, "P2", attr("AVG_QTY"), 400.0),
+                tuple(SID, "S3", PID, "P2", attr("AVG_QTY"), 200.0),
+                tuple(SID, "S4", PID, "P2", attr("AVG_QTY"), 200.0),
+                tuple(SID, "S4", PID, "P4", attr("AVG_QTY"), 300.0),
+                tuple(SID, "S4", PID, "P5", attr("AVG_QTY"), 400.0)
+                );
+
+        // summarize takes :
+        // a relation,
+        // an attribut name (for grouping),
+        // an attribut name (for result of aggreation),
+        // an aggregation function (TODO)
+
+        Relation actual = summarize(shipments(),attrs(SID, PID), avg(QTY),attr("AVG_QTY"));
 
         // real test
         assertEquals(expected, actual);
