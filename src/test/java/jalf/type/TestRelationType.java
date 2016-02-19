@@ -209,7 +209,7 @@ public class TestRelationType {
     }
 
     @Test(expected=TypeException.class)
-    public void testSummarizeMissMatchAttrBy() {
+    public void testSummarizeMismatchesAttrBy() {
         RelationType r = RelationType.dress(SID, String.class, NAME, String.class, STATUS, Integer.class);
         AttrList by = AttrList.attrs(PID);
         AttrName as = AttrName.attr("NEW");
