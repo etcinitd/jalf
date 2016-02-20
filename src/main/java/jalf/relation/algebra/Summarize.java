@@ -20,6 +20,7 @@ import jalf.Visitor;
 import jalf.aggregator.Aggregator;
 import jalf.type.RelationType;
 
+
 public class Summarize extends UnaryOperator {
 
     private final Relation operand;
@@ -81,11 +82,9 @@ public class Summarize extends UnaryOperator {
         return list;
     }
 
-
-
-
     /**
      * Compute the key value pair list to form a tuple
+     *
      * @paramAttrName as
      * @param  AttrList Entry<List<Object>,Aggregator> item
      * @param byNameAttrs
@@ -139,8 +138,5 @@ public class Summarize extends UnaryOperator {
     public <R> R accept(Visitor<R> visitor) {
         return visitor.visit(this);
     }
-
-
-
 
 }

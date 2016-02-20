@@ -16,17 +16,17 @@ import static jalf.fixtures.SuppliersAndParts.suppliers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Test;
-
 import jalf.AttrList;
 import jalf.AttrName;
 import jalf.Relation;
 import jalf.Tuple;
 import jalf.TypeException;
+import jalf.aggregator.Count;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Test;
 
 public class TestRelationType {
 
@@ -197,5 +197,25 @@ public class TestRelationType {
         RelationType r2 = RelationType.dress(PID, String.class);
         r1.minus(r2);
     }
+
+    @Test
+    public void testSummarize() {
+        RelationType r = RelationType.dress(SID, String.class, NAME, String.class, STATUS, Integer.class);
+        AttrList by = AttrList.attrs(SID);
+        AttrName as = AttrName.attr("NEW");
+        Count agg = new Count();
+        RelationType expected = RelationType.dress(SID, Integer.class, "NEW", Integer.class);
+        assertEquals(expected, r.summarize(by, agg, as));
+    }
+
+    @Test(expected=TypeException.class)
+    public void testSummarizeMismatchesAttrBy() {
+        RelationType r = RelationType.dress(SID, String.class, NAME, String.class, STATUS, Integer.class);
+        AttrList by = AttrList.attrs(PID);
+        AttrName as = AttrName.attr("NEW");
+        Count agg = new Count();
+        r.summarize(by, agg, as);
+    }
+
 
 }
