@@ -1,12 +1,6 @@
 package jalf.type;
 
 import static jalf.util.ValidationUtils.validateNotNull;
-
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import jalf.AttrList;
 import jalf.AttrName;
 import jalf.Predicate;
@@ -17,6 +11,11 @@ import jalf.Type;
 import jalf.TypeException;
 import jalf.aggregator.Aggregator;
 import jalf.aggregator.Count;
+
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Relation type, captures the possible types of relations.
@@ -145,10 +144,23 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
      */
 
     public RelationType summarize(AttrList by,Aggregator<?> agg, AttrName as) {
+        AttrList l = by;
         if( !(agg instanceof Count)){
-            by= by.union(AttrList.attrs(agg.getAggregatedField()));
+            l = by.union(AttrList.attrs(agg.getAggregatedField()));
         }
-        checkValidAttrList(by);
+        // check if the by+on list is valid
+        checkValidAttrList(l);
+
+        // check if by+on don't contain as
+        if (l.contains(as))
+            throw new TypeException("By can't contain as: by " + by + " as " + as);
+
+        // check if the aggregator can aggregate on the on attr
+        if( !(agg instanceof Count)){
+            if (agg.notAllowedAggrAttr(heading.getTypeOf(agg.getAggregatedField())))
+                throw new TypeException("Aggregator can't aggregate on the on attr " + agg.getAggregatedField());
+        }
+
         // TODO : define the type of as
         return new RelationType(heading.summarize(by, as, null));
     }

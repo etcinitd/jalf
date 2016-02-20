@@ -184,12 +184,41 @@ public class TestRelationType {
         r1.minus(r2);
     }
 
+    // relationtype tests for summarize
+
     @Test(expected=TypeException.class)
     public void testSummarizeMismatchesAttrBy() {
         RelationType r = RelationType.dress(SID, String.class, NAME, String.class, STATUS, Integer.class);
         AttrList by = AttrList.attrs(PID);
         AttrName as = AttrName.attr("NEW");
         Count agg = new Count();
+        r.summarize(by, agg, as);
+    }
+
+    @Test(expected=TypeException.class)
+    public void testSummarizeByNotContainAs() {
+        RelationType r = RelationType.dress(SID, String.class, NAME, String.class, QTY, Integer.class);
+        AttrList by = AttrList.attrs(SID, NAME);
+        AttrName as = NAME;
+        Avg agg = new Avg(QTY);
+        r.summarize(by, agg, as);
+    }
+
+    @Test(expected=TypeException.class)
+    public void testSummarizeOnIncorrectOnAttrForAvg() {
+        RelationType r = RelationType.dress(SID, String.class, NAME, String.class, QTY, Integer.class);
+        AttrList by = AttrList.attrs(SID);
+        AttrName as = AttrName.attr("NEW");;
+        Avg agg = new Avg(NAME);
+        r.summarize(by, agg, as);
+    }
+
+    @Test(expected=TypeException.class)
+    public void testSummarizeOnIncorrectOnAttrForMax() {
+        RelationType r = RelationType.dress(SID, String.class, STATUS, Number.class, QTY, Integer.class);
+        AttrList by = AttrList.attrs(SID);
+        AttrName as = AttrName.attr("NEW");;
+        Max agg = new Max(STATUS);
         r.summarize(by, agg, as);
     }
 
@@ -232,5 +261,4 @@ public class TestRelationType {
         RelationType expected = RelationType.dress(SID, String.class, "NEW", Double.class);
         assertEquals(expected, r.summarize(by, agg, as));
     }
-
 }

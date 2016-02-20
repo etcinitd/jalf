@@ -1,6 +1,7 @@
 package jalf.aggregator;
 import jalf.AttrName;
 import jalf.Tuple;
+import jalf.Type;
 
 public class Max  implements Aggregator<Comparable<?>>{
     private AttrName aggregatedField;
@@ -47,6 +48,19 @@ public class Max  implements Aggregator<Comparable<?>>{
     @Override
     public Max duplicate() {
         return new Max(this.aggregatedField);
+    }
+
+    @Override
+    public boolean notAllowedAggrAttr(Type<?> t) {
+        Object tt = null;
+        try {
+            tt = t.getRepresentationClass().newInstance();
+            if (tt instanceof Comparable<?>)
+                return false;
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
 }

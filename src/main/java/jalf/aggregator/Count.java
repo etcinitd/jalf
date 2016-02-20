@@ -2,6 +2,7 @@ package jalf.aggregator;
 
 import jalf.AttrName;
 import jalf.Tuple;
+import jalf.Type;
 
 public class Count  implements Aggregator<Integer>{
     private Integer state;
@@ -38,5 +39,10 @@ public class Count  implements Aggregator<Integer>{
     @Override
     public Count duplicate() {
         return new Count();
+    }
+
+    @Override
+    public boolean notAllowedAggrAttr(Type<?> t) {
+        return false;
     }
 }

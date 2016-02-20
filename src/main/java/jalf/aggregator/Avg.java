@@ -2,6 +2,7 @@ package jalf.aggregator;
 
 import jalf.AttrName;
 import jalf.Tuple;
+import jalf.Type;
 
 public class  Avg implements Aggregator<Double>{
     private AttrName aggregatedField;
@@ -47,6 +48,21 @@ public class  Avg implements Aggregator<Double>{
     @Override
     public Avg duplicate() {
         return new Avg(this.aggregatedField);
+    }
+
+    @Override
+    public boolean notAllowedAggrAttr(Type<?> t) {
+        Class<?> tt = null;
+        //try {
+        tt = t.getRepresentationClass().getSuperclass();
+        if (tt == Number.class)
+            return false;
+        //if (tt.getClass().isInstance(Number.class))
+        //    return false;
+        /*} catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }*/
+        return true;
     }
 
 }
