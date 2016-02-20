@@ -76,6 +76,8 @@ public class Summarize extends UnaryOperator {
         Function<Tuple,List<Object>> grouper = t -> t.fetch(this.by);
         map = tuples.collect(Collectors.groupingBy(grouper, coll));
 
+
+
         for (Entry<List<Object>, ? extends Aggregator<?>> item : map.entrySet()) {
             list.add(Tuple.dress(computeKeyValuePairOfTuple(this.as,item, this.by)));
         }
@@ -93,8 +95,10 @@ public class Summarize extends UnaryOperator {
     private  Object[] computeKeyValuePairOfTuple(AttrName asName, Entry<List<Object>, ? extends Aggregator<?>> item,  AttrList byNameAttrs){
         List<Object> list = new ArrayList<Object>();
         List<AttrName> attrs = byNameAttrs.toList();
-        list.add(attrs.get(0).getName());
-        list.add((item.getKey().get(0)));
+        for(int i = 0; i < attrs.size(); i++){
+            list.add(attrs.get(i).getName());
+            list.add((item.getKey().get(i)));
+        }
         Aggregator<?> value = item.getValue();
         list.add(asName);
         list.add(value.finish());
@@ -109,7 +113,7 @@ public class Summarize extends UnaryOperator {
 
     @Override
     protected RelationType typeCheck() {
-        return operand.getType().summarize(by,aggregator);
+        return operand.getType().summarize(by, aggregator, as);
     }
 
     @Override

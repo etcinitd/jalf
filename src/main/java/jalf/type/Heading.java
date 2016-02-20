@@ -3,18 +3,17 @@ package jalf.type;
 import static jalf.util.CollectionUtils.rekey;
 import static jalf.util.ValidationUtils.validate;
 import static jalf.util.ValidationUtils.validateNotNull;
+import jalf.AttrList;
+import jalf.AttrName;
+import jalf.Renaming;
+import jalf.Type;
+import jalf.TypeException;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-
-import jalf.AttrList;
-import jalf.AttrName;
-import jalf.Renaming;
-import jalf.Type;
-import jalf.TypeException;
 
 /**
  * A heading is a set of attribute (name, type) pairs, under the constraints
@@ -162,12 +161,13 @@ public class Heading {
      * @param on a set of attribute names.
      * @return the heading obtained by keeping only attributes in `by and field aggregator`.
      */
-    public Heading summarize(AttrList by) {
+    public Heading summarize(AttrList by, AttrName as, Type<?> t) {
         Map<AttrName, Type<?>> summarized = new HashMap<>();
         attributes.forEach((name, type) -> {
             if (by.contains(name))
                 summarized.put(name, type);
         });
+        summarized.put(as, t);
         return new Heading(summarized);
     }
 
