@@ -52,14 +52,16 @@ public class Max  implements Aggregator<Comparable<?>>{
 
     @Override
     public boolean notAllowedAggrAttr(Type<?> t) {
-        Object tt = null;
-        try {
-            tt = t.getRepresentationClass().newInstance();
-            if (tt instanceof Comparable<?>)
-                return false;
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        //Object tt = null;
+        //try {
+        //tt = t.getRepresentationClass();
+        if (Comparable.class.isAssignableFrom(t.getRepresentationClass()))
+            //if (tt instanceof Comparable<?>)
+            return false;
+        //} catch (InstantiationException | IllegalAccessException e) {
+        //    e.printStackTrace();
+        //}
+
         return true;
     }
 
