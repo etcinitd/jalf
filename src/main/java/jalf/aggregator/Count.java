@@ -3,6 +3,7 @@ package jalf.aggregator;
 import jalf.AttrName;
 import jalf.Tuple;
 import jalf.Type;
+import jalf.type.RelationType;
 
 public class Count  implements Aggregator<Integer>{
     private Integer state;
@@ -47,12 +48,8 @@ public class Count  implements Aggregator<Integer>{
     }
 
     @Override
-    public Type<?> getTypeOfOn() {
+    public Type<?> getAggregatedType(RelationType type) {
         return Type.scalarType(Integer.class);
     }
 
-    @Override
-    public void setTypeOfOn(Type<?> t) {
-        // TODO nothing to do
-    }
 }

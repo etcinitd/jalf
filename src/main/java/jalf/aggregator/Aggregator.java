@@ -3,6 +3,7 @@ package jalf.aggregator;
 import jalf.AttrName;
 import jalf.Tuple;
 import jalf.Type;
+import jalf.type.RelationType;
 
 public interface Aggregator<T> {
     void init();
@@ -11,6 +12,5 @@ public interface Aggregator<T> {
     public AttrName getAggregatedField();
     public Aggregator<T> duplicate();
     public boolean notAllowedAggrAttr(Type<?> t);
-    public Type<?> getTypeOfOn();
-    abstract void setTypeOfOn(Type<?> t);
+    public Type<?> getAggregatedType(RelationType type);
 }

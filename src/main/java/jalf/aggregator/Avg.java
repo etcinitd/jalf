@@ -3,6 +3,7 @@ package jalf.aggregator;
 import jalf.AttrName;
 import jalf.Tuple;
 import jalf.Type;
+import jalf.type.RelationType;
 
 public class  Avg implements Aggregator<Double>{
     private AttrName aggregatedField;
@@ -53,27 +54,15 @@ public class  Avg implements Aggregator<Double>{
     @Override
     public boolean notAllowedAggrAttr(Type<?> t) {
         Class<?> tt = null;
-        //try {
         tt = t.getRepresentationClass().getSuperclass();
         if (tt == Number.class)
             return false;
-        //if (tt.getClass().isInstance(Number.class))
-        //    return false;
-        /*} catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }*/
         return true;
     }
 
     @Override
-    public Type<?> getTypeOfOn() {
+    public Type<?> getAggregatedType(RelationType type) {
         return Type.scalarType(Double.class);
     }
-
-    @Override
-    public void setTypeOfOn(Type<?> t) {
-        // TODO nothing to do
-    }
-
 
 }

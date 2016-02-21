@@ -161,12 +161,7 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
                 throw new TypeException("Aggregator can't aggregate on the on attr " + agg.getAggregatedField());
         }
 
-        //if(agg instanceof Max){
-        agg.setTypeOfOn(this.getTypeOf(agg.getAggregatedField()));
-        //}
-
-        // TODO : define the type of as
-        return new RelationType(heading.summarize(by, as, agg.getTypeOfOn()));
+        return new RelationType(heading.summarize(by, as, agg.getAggregatedType(this)));
     }
 
     /**

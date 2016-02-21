@@ -2,11 +2,11 @@ package jalf.aggregator;
 import jalf.AttrName;
 import jalf.Tuple;
 import jalf.Type;
+import jalf.type.RelationType;
 
 public class Max  implements Aggregator<Comparable<?>>{
     private AttrName aggregatedField;
     private Comparable<?> state;
-    private Type<?> type;
 
     public static Max max(AttrName attr) {
         return new Max(attr);
@@ -16,7 +16,6 @@ public class Max  implements Aggregator<Comparable<?>>{
         super();
         this.aggregatedField= aggregatedField;
         this.init();
-        this.type = null;
     }
 
     @Override
@@ -54,28 +53,14 @@ public class Max  implements Aggregator<Comparable<?>>{
 
     @Override
     public boolean notAllowedAggrAttr(Type<?> t) {
-        //Object tt = null;
-        //try {
-        //tt = t.getRepresentationClass();
         if (Comparable.class.isAssignableFrom(t.getRepresentationClass()))
-            //if (tt instanceof Comparable<?>)
             return false;
-        //} catch (InstantiationException | IllegalAccessException e) {
-        //    e.printStackTrace();
-        //}
-
         return true;
     }
 
     @Override
-    public Type<?> getTypeOfOn() {
-        return type;
-    }
-
-    @Override
-    public void setTypeOfOn(Type<?> t) {
-        if (type == null)
-            this.type = t;
+    public Type<?> getAggregatedType(RelationType type) {
+        return type.getTypeOf(this.aggregatedField);
     }
 
 }
