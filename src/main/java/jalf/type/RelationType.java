@@ -148,14 +148,14 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
         if( !(agg instanceof Count)){
             l = by.union(AttrList.attrs(agg.getAggregatedField()));
         }
-        // check if the by+on list is valid
+        // check if the by+aggregated attr is valid
         checkValidAttrList(l);
 
-        // check if by+on don't contain as
+        // check if by+aggregated attr don't contain as
         if (l.contains(as))
             throw new TypeException("By can't contain as: by " + by + " as " + as);
 
-        // check if the aggregator can aggregate on the on attr
+        // check if the aggregator can aggregate on the aggregated attr
         if( !(agg instanceof Count)){
             if (agg.notAllowedAggrAttr(heading.getTypeOf(agg.getAggregatedField())))
                 throw new TypeException("Aggregator can't aggregate on the on attr " + agg.getAggregatedField());
