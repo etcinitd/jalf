@@ -1,5 +1,13 @@
 package jalf.relation.algebra;
 
+import jalf.AttrList;
+import jalf.AttrName;
+import jalf.Relation;
+import jalf.Tuple;
+import jalf.Visitor;
+import jalf.aggregator.Aggregator;
+import jalf.type.RelationType;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,14 +19,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import jalf.AttrList;
-import jalf.AttrName;
-import jalf.Relation;
-import jalf.Tuple;
-import jalf.Visitor;
-import jalf.aggregator.Aggregator;
-import jalf.type.RelationType;
 
 
 public class Summarize extends UnaryOperator {

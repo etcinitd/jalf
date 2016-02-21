@@ -45,4 +45,14 @@ public class Count  implements Aggregator<Integer>{
     public boolean notAllowedAggrAttr(Type<?> t) {
         return false;
     }
+
+    @Override
+    public Type<?> getTypeOfOn() {
+        return Type.scalarType(Integer.class);
+    }
+
+    @Override
+    public void setTypeOfOn(Type<?> t) {
+        // TODO nothing to do
+    }
 }

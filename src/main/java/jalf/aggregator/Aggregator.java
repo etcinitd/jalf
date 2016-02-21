@@ -11,4 +11,6 @@ public interface Aggregator<T> {
     public AttrName getAggregatedField();
     public Aggregator<T> duplicate();
     public boolean notAllowedAggrAttr(Type<?> t);
+    public Type<?> getTypeOfOn();
+    abstract void setTypeOfOn(Type<?> t);
 }

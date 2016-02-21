@@ -65,4 +65,15 @@ public class  Avg implements Aggregator<Double>{
         return true;
     }
 
+    @Override
+    public Type<?> getTypeOfOn() {
+        return Type.scalarType(Double.class);
+    }
+
+    @Override
+    public void setTypeOfOn(Type<?> t) {
+        // TODO nothing to do
+    }
+
+
 }
