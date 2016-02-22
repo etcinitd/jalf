@@ -205,7 +205,7 @@ public class TestRelationType {
     }
 
     @Test(expected=TypeException.class)
-    public void testSummarizeOnIncorrectOnAttrForAvg() {
+    public void testSummarizeOnIncorrectAggAttrForAvg() {
         RelationType r = RelationType.dress(SID, String.class, NAME, String.class, QTY, Integer.class);
         AttrList by = AttrList.attrs(SID);
         AttrName as = AttrName.attr("NEW");;
@@ -214,7 +214,7 @@ public class TestRelationType {
     }
 
     @Test(expected=TypeException.class)
-    public void testSummarizeOnIncorrectOnAttrForMax() {
+    public void testSummarizeOnIncorrectAggAttrForMax() {
         RelationType r = RelationType.dress(SID, String.class, STATUS, Number.class, QTY, Integer.class);
         AttrList by = AttrList.attrs(SID);
         AttrName as = AttrName.attr("NEW");;
@@ -253,7 +253,7 @@ public class TestRelationType {
     }
 
     @Test
-    public void testSummarizeOnAvgInteger() {
+    public void testSummarizeOnAvg() {
         RelationType r = RelationType.dress(SID, String.class, NAME, String.class, QTY, Integer.class);
         AttrList by = AttrList.attrs(SID);
         AttrName as = AttrName.attr("NEW");
