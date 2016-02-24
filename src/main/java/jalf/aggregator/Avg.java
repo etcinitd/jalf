@@ -52,8 +52,9 @@ public class  Avg implements Aggregator<Double>{
     }
 
     @Override
-    public boolean notAllowedAggrAttr(Type<?> t) {
+    public boolean notAllowedAggrAttr(RelationType type) {
         Class<?> tt = null;
+        Type<?> t = type.getHeading().getTypeOf(this.aggregatedField);
         tt = t.getRepresentationClass().getSuperclass();
         if (tt == Number.class)
             return false;

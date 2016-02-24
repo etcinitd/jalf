@@ -43,7 +43,7 @@ public class Count  implements Aggregator<Integer>{
     }
 
     @Override
-    public boolean notAllowedAggrAttr(Type<?> t) {
+    public boolean notAllowedAggrAttr(RelationType t) {
         return false;
     }
 

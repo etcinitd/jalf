@@ -52,7 +52,8 @@ public class Max  implements Aggregator<Comparable<?>>{
     }
 
     @Override
-    public boolean notAllowedAggrAttr(Type<?> t) {
+    public boolean notAllowedAggrAttr(RelationType type) {
+        Type<?> t = type.getHeading().getTypeOf(this.aggregatedField);
         if (Comparable.class.isAssignableFrom(t.getRepresentationClass()))
             return false;
         return true;
