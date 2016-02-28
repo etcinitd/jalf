@@ -10,7 +10,6 @@ import jalf.Tuple;
 import jalf.Type;
 import jalf.TypeException;
 import jalf.aggregator.Aggregator;
-import jalf.aggregator.Count;
 
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -145,8 +144,9 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
 
     public RelationType summarize(AttrList by,Aggregator<?> agg, AttrName as) {
         AttrList l = by;
-        if( !(agg instanceof Count)){
-            l = by.union(AttrList.attrs(agg.getAggregatedField()));
+        AttrName n = agg.getAggregatedField();
+        if(n != null){
+            l = by.union(AttrList.attrs(n));
         }
         // check if the by+aggregated attr is valid
         checkValidAttrList(l);
