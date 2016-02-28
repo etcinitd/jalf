@@ -1,7 +1,5 @@
 package jalf.optimizer;
 
-import java.util.function.Function;
-
 import jalf.AttrName;
 import jalf.Relation;
 import jalf.Visitor;
@@ -18,6 +16,8 @@ import jalf.relation.algebra.Restrict;
 import jalf.relation.algebra.Select;
 import jalf.relation.algebra.Summarize;
 import jalf.relation.algebra.Union;
+
+import java.util.function.Function;
 
 /**
  * Logical optimizer of relational expressions.

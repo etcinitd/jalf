@@ -27,7 +27,7 @@ public class TestOptimizedSummarize  extends OptimizerTest {
         // normal execution
         Relation operator = summarize(rel,attrs(SID, PID),count(),attr("count"));
         Relation optimized = optimized(operator).project(attrs(SID, attr("count")));
-        Relation expected = rel.summarize(attrs(SID), count(), attr("count"));
+        Relation expected = summarize(rel, attrs(SID, PID), count(), attr("count")).project(attrs(SID, attr("count")));
         assertSameExpression(expected, optimized);
 
     }
@@ -54,9 +54,9 @@ public class TestOptimizedSummarize  extends OptimizerTest {
     public void testProject3() {
 
         // by and on are the same
-        Relation operator = summarize(rel,attrs(SID, PID),count(),attr("count"));
+        Relation operator = summarize(rel, attrs(SID, PID),count(),attr("count"));
         Relation optimized = optimized(operator).project(attrs(SID, PID, attr("count")));
-        Relation expected = rel.summarize(attrs(SID, PID), count(), attr("count"));
+        Relation expected = summarize(rel, attrs(SID, PID), count(), attr("count")).project(attrs(SID, PID, attr("count")));
         assertSameExpression(expected, optimized);
 
     }
@@ -82,8 +82,7 @@ public class TestOptimizedSummarize  extends OptimizerTest {
 
         // restrict attr is not in the header
         Relation operator =  summarize(rel,attrs(SID, PID), count(), attr("count"));
-        optimized(operator).restrict(eq(QTY, 400));
-
+        optimized(operator).restrict(eq(NAME, "Jack"));
     }
 
 }
