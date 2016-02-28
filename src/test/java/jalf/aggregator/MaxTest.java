@@ -9,9 +9,10 @@ import static jalf.fixtures.SuppliersAndParts.QTY;
 import static jalf.fixtures.SuppliersAndParts.SID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import jalf.Relation;
 
 import org.junit.Test;
+
+import jalf.Relation;
 
 public class MaxTest {
 
@@ -38,6 +39,13 @@ public class MaxTest {
         r.stream().forEach(t -> m.accumulate(t));
         int expected = 500;
         assertNotEquals(expected, m.finish());
+    }
+    @Test
+    public void testItWorksAsExpectedbyMaxString() {
+        Max m = max(PID);
+        r.stream().forEach(t -> m.accumulate(t));
+        String expected = "P6";
+        assertEquals(expected, m.finish());
     }
 
 }
