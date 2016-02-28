@@ -158,7 +158,7 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
 
         // check if the aggregator can aggregate on the aggregated attr
         if (agg.notAllowedAggrAttr(this))
-            throw new TypeException("Aggregator can't aggregate on the on attr " + agg.getAggregatedField());
+            throw new TypeException("Aggregator can't aggregate on the aggregated attr " + agg.getAggregatedField());
 
         return new RelationType(heading.summarize(by, as, agg.getAggregatedType(this)));
     }
