@@ -134,11 +134,12 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
     }
 
     /**
-     * Projects this type on a subset of its attributes.
+     * Compute the relation type of the summarized relation on by.
      *
-     * @pre attributes should be a subset of the type's attribute names.
-     * @param on a set of attribute names.
-     * @return the by type and field aggregator type.
+     * @param by the attributes lists on which we summarize.
+     * @param agg the aggregator operator.
+     * @param as the attributes on which the we aggregate.
+     * @return the relation type that contain the by attributes and the as attributes.
      *
      */
 
