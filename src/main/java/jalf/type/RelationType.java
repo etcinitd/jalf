@@ -17,6 +17,7 @@ import jalf.Type;
 import jalf.TypeException;
 import jalf.aggregator.Aggregator;
 
+
 /**
  * Relation type, captures the possible types of relations.
  *
@@ -135,18 +136,21 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
     }
 
     /**
-     * Projects this type on a subset of its attributes.
+     * Compute the relation type of the summarized relation on by.
      *
-     * @pre attributes should be a subset of the type's attribute names.
-     * @param on a set of attribute names.
-     * @return the by type and field aggregator type.
+     * @param by the attributes lists on which we summarize.
+     * @param agg the aggregator operator.
+     * @param as the attributes on which the we aggregate.
+     * @return the relation type that contain the by attributes and the as attributes.
      *
      */
 
     public RelationType summarize(AttrList by,Aggregator<?> agg, AttrName as) {
         AttrList l = by;
-        if( agg.getAggregatedField() !=null){
-            l = by.union(AttrList.attrs(agg.getAggregatedField()));
+        AttrName attraggr = agg.getAggregatedField();
+        if(attraggr != null){
+            l = by.union(AttrList.attrs(attraggr));
+
         }
         // check if the by+aggregated attr is valid
         checkValidAttrList(l);
@@ -157,7 +161,7 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
 
         // check if the aggregator can aggregate on the aggregated attr
         if (agg.notAllowedAggrAttr(this))
-            throw new TypeException("Aggregator can't aggregate on the on attr " + agg.getAggregatedField());
+            throw new TypeException("Aggregator can't aggregate on the aggregated attr " + attraggr);
 
         return new RelationType(heading.summarize(by, as, agg.getResultingType(this)));
     }
@@ -226,8 +230,6 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
         RelationType other = (RelationType) obj;
         return heading.equals(other.heading);
     }
-
-    ///
 
     /**
      * Checks that `on` is a subset of this relation type attributes or throws
