@@ -60,7 +60,7 @@ public class Max  implements Aggregator<Comparable<?>>{
     }
 
     @Override
-    public Type<?> getAggregatedType(RelationType type) {
+    public Type<?> getResultingType(RelationType type) {
         return type.getTypeOf(this.aggregatedField);
     }
 

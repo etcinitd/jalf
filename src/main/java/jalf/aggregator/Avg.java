@@ -60,7 +60,7 @@ public class  Avg implements Aggregator<Double>{
     }
 
     @Override
-    public Type<?> getAggregatedType(RelationType type) {
+    public Type<?> getResultingType(RelationType type) {
         return Type.scalarType(Double.class);
     }
 

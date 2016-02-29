@@ -13,9 +13,10 @@ import static jalf.fixtures.SuppliersAndParts.QTY;
 import static jalf.fixtures.SuppliersAndParts.SID;
 import static jalf.fixtures.SuppliersAndParts.shipments;
 import static org.junit.Assert.assertEquals;
-import jalf.Relation;
 
 import org.junit.Test;
+
+import jalf.Relation;
 public class SummarizeTest {
 
     @Test
@@ -32,7 +33,7 @@ public class SummarizeTest {
         // a relation,
         // an attribut name (for grouping),
         // an attribut name (for result of aggreation),
-        // an aggregation function (TODO)
+        // an aggregation function (count)
 
         Relation actual = summarize(shipments(),attrs(SID), count(),attr("count"));
 
@@ -55,7 +56,7 @@ public class SummarizeTest {
         // a relation,
         // an attribut name (for grouping),
         // an attribut name (for result of aggreation),
-        // an aggregation function (TODO)
+        // an aggregation function: max)
 
         Relation actual = summarize(shipments(),attrs(SID), max(PID),attr("MAX_PID"));
 
@@ -78,7 +79,7 @@ public class SummarizeTest {
         // a relation,
         // an attribut name (for grouping),
         // an attribut name (for result of aggreation),
-        // an aggregation function (TODO)
+        // an aggregation function (avg)
 
         Relation actual = summarize(shipments(),attrs(SID), avg(QTY),attr("AVG_QTY"));
 
@@ -110,7 +111,7 @@ public class SummarizeTest {
         // a relation,
         // an attribut name (for grouping),
         // an attribut name (for result of aggreation),
-        // an aggregation function (TODO)
+        // an aggregation function (avg)
 
         Relation actual = summarize(shipments(),attrs(SID, PID), avg(QTY),attr("AVG_QTY"));
 

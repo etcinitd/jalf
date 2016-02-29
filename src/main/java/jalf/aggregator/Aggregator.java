@@ -12,5 +12,5 @@ public interface Aggregator<T> {
     public AttrName getAggregatedField();
     public Aggregator<T> duplicate();
     public boolean notAllowedAggrAttr(RelationType t);
-    public Type<?> getAggregatedType(RelationType type);
+    public Type<?> getResultingType(RelationType type);
 }

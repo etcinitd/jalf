@@ -48,7 +48,7 @@ public class Count  implements Aggregator<Integer>{
     }
 
     @Override
-    public Type<?> getAggregatedType(RelationType type) {
+    public Type<?> getResultingType(RelationType type) {
         return Type.scalarType(Integer.class);
     }
 

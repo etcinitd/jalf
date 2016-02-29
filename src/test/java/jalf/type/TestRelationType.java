@@ -15,6 +15,12 @@ import static jalf.fixtures.SuppliersAndParts.suppliers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Test;
+
 import jalf.AttrList;
 import jalf.AttrName;
 import jalf.Relation;
@@ -23,11 +29,6 @@ import jalf.TypeException;
 import jalf.aggregator.Avg;
 import jalf.aggregator.Count;
 import jalf.aggregator.Max;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Test;
 
 public class TestRelationType {
 
@@ -208,7 +209,7 @@ public class TestRelationType {
     public void testSummarizeOnIncorrectAggAttrForAvg() {
         RelationType r = RelationType.dress(SID, String.class, NAME, String.class, QTY, Integer.class);
         AttrList by = AttrList.attrs(SID);
-        AttrName as = AttrName.attr("NEW");;
+        AttrName as = AttrName.attr("NEW");
         Avg agg = new Avg(NAME);
         r.summarize(by, agg, as);
     }
@@ -217,7 +218,7 @@ public class TestRelationType {
     public void testSummarizeOnIncorrectAggAttrForMax() {
         RelationType r = RelationType.dress(SID, String.class, STATUS, Number.class, QTY, Integer.class);
         AttrList by = AttrList.attrs(SID);
-        AttrName as = AttrName.attr("NEW");;
+        AttrName as = AttrName.attr("NEW");
         Max agg = new Max(STATUS);
         r.summarize(by, agg, as);
     }

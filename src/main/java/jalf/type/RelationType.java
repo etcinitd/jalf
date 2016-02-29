@@ -1,6 +1,12 @@
 package jalf.type;
 
 import static jalf.util.ValidationUtils.validateNotNull;
+
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import jalf.AttrList;
 import jalf.AttrName;
 import jalf.Predicate;
@@ -10,12 +16,6 @@ import jalf.Tuple;
 import jalf.Type;
 import jalf.TypeException;
 import jalf.aggregator.Aggregator;
-import jalf.aggregator.Count;
-
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Relation type, captures the possible types of relations.
@@ -145,7 +145,7 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
 
     public RelationType summarize(AttrList by,Aggregator<?> agg, AttrName as) {
         AttrList l = by;
-        if( !(agg instanceof Count)){
+        if( agg.getAggregatedField() !=null){
             l = by.union(AttrList.attrs(agg.getAggregatedField()));
         }
         // check if the by+aggregated attr is valid
@@ -159,7 +159,7 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
         if (agg.notAllowedAggrAttr(this))
             throw new TypeException("Aggregator can't aggregate on the on attr " + agg.getAggregatedField());
 
-        return new RelationType(heading.summarize(by, as, agg.getAggregatedType(this)));
+        return new RelationType(heading.summarize(by, as, agg.getResultingType(this)));
     }
 
     /**
