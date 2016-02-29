@@ -1,9 +1,9 @@
 package jalf;
 
+import static jalf.util.CollectionUtils.rekey;
 import static jalf.util.ValidationUtils.validate;
 import static jalf.util.ValidationUtils.validateNotNull;
 import static java.util.Collections.unmodifiableMap;
-import static jalf.util.CollectionUtils.rekey;
 import jalf.type.TupleType;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * modifying the receiver.
  *
  * Instances of this class can be obtained through static factory methods or
- * through JAlf's DSL. 
+ * through JAlf's DSL.
  */
 public class Tuple {
 
@@ -53,6 +53,7 @@ public class Tuple {
         }
         return new Tuple(TupleType.infer(attrs), attrs);
     }
+
 
     /**
      * Returns the type of this tuple.

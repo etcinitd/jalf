@@ -1,10 +1,24 @@
 package jalf.type;
 
-import static jalf.fixtures.SuppliersAndParts.*;
-import static org.junit.Assert.*;
+import static jalf.fixtures.SuppliersAndParts.CITY;
+import static jalf.fixtures.SuppliersAndParts.NAME;
+import static jalf.fixtures.SuppliersAndParts.PID;
+import static jalf.fixtures.SuppliersAndParts.SID;
+import static jalf.fixtures.SuppliersAndParts.STATUS;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import jalf.AttrList;
+import jalf.AttrName;
+import jalf.Renaming;
+import jalf.Type;
+import jalf.TypeException;
 
-import java.util.*;
-import jalf.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Test;
 
 public class TestHeading {
@@ -24,9 +38,9 @@ public class TestHeading {
     public void testDress() {
         AttrName[] names = new AttrName[]{ SID, STATUS };
         Heading got = Heading.dress(names, (name)-> {
-           return name.equals(SID) ?
-                  Type.scalarType(String.class) :
-                  Type.scalarType(Integer.class);
+            return name.equals(SID) ?
+                    Type.scalarType(String.class) :
+                        Type.scalarType(Integer.class);
         });
         Heading expected = Heading.dress(SID, String.class, STATUS, Integer.class);
         assertEquals(expected, got);
@@ -72,6 +86,15 @@ public class TestHeading {
         Heading h = Heading.dress(SID, String.class, STATUS, Integer.class);
         Heading expected = Heading.dress(STATUS, Integer.class);
         assertEquals(expected, h.project(AttrList.attrs(STATUS)));
+    }
+    @Test
+    public void testSummarize() {
+        Heading h = Heading.dress(SID, String.class, NAME, String.class, STATUS, Integer.class);
+        AttrList by = AttrList.attrs(SID);
+        AttrName as = AttrName.attr("new");
+        Heading expected = Heading.dress(SID, String.class, "new", Integer.class);
+        Heading actual = h.summarize(by, as, Type.scalarType(Integer.class));
+        assertEquals(expected, actual);
     }
 
     @Test

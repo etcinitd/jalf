@@ -1,10 +1,13 @@
 package jalf.optimizer;
 
 import jalf.AttrList;
+import jalf.AttrName;
 import jalf.Predicate;
 import jalf.Relation;
 import jalf.Renaming;
 import jalf.Visitor;
+import jalf.aggregator.Aggregator;
+import jalf.aggregator.Count;
 import jalf.compiler.AbstractRelation;
 import jalf.relation.materialized.EmptyRelation;
 import jalf.type.RelationType;
@@ -61,6 +64,20 @@ public class Optimized<R extends Relation> extends AbstractRelation {
 
         return operator.project(attributes);
     }
+
+    @Override
+    public Relation summarize(AttrList by, Aggregator<?> aggregat, AttrName as) {
+        AttrList opAttrs = operator.getType().toAttrList();
+        AttrList l = by;
+        if (!(aggregat instanceof Count)){
+            l = by.union(AttrList.attrs(as));
+        }
+        if (opAttrs.equals(l)) {
+            return operator;
+        }
+        return operator.summarize(by, aggregat, as);
+    }
+
 
     @Override
     public Relation rename(Renaming renaming) {

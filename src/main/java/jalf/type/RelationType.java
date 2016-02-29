@@ -8,12 +8,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jalf.AttrList;
+import jalf.AttrName;
 import jalf.Predicate;
 import jalf.Relation;
 import jalf.Renaming;
 import jalf.Tuple;
 import jalf.Type;
 import jalf.TypeException;
+import jalf.aggregator.Aggregator;
+
 
 /**
  * Relation type, captures the possible types of relations.
@@ -133,6 +136,37 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
     }
 
     /**
+     * Compute the relation type of the summarized relation on by.
+     *
+     * @param by the attributes lists on which we summarize.
+     * @param agg the aggregator operator.
+     * @param as the attributes on which the we aggregate.
+     * @return the relation type that contain the by attributes and the as attributes.
+     *
+     */
+
+    public RelationType summarize(AttrList by,Aggregator<?> agg, AttrName as) {
+        AttrList l = by;
+        AttrName attraggr = agg.getAggregatedField();
+        if(attraggr != null){
+            l = by.union(AttrList.attrs(attraggr));
+
+        }
+        // check if the by+aggregated attr is valid
+        checkValidAttrList(l);
+
+        // check if by+aggregated attr don't contain as
+        if (l.contains(as))
+            throw new TypeException("By can't contain as: by " + by + " as " + as);
+
+        // check if the aggregator can aggregate on the aggregated attr
+        if (agg.notAllowedAggrAttr(this))
+            throw new TypeException("Aggregator can't aggregate on the aggregated attr " + attraggr);
+
+        return new RelationType(heading.summarize(by, as, agg.getResultingType(this)));
+    }
+
+    /**
      * Returns the type obtained by renaming some of its attributes.
      *
      * @param renaming a renaming function.
@@ -196,8 +230,6 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
         RelationType other = (RelationType) obj;
         return heading.equals(other.heading);
     }
-
-    ///
 
     /**
      * Checks that `on` is a subset of this relation type attributes or throws
