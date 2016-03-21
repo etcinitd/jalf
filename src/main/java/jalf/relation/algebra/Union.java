@@ -1,12 +1,13 @@
 package jalf.relation.algebra;
 
-import java.util.Arrays;
-import java.util.List;
-
 import jalf.AttrList;
 import jalf.Relation;
 import jalf.Visitor;
+import jalf.constraint.Keys;
 import jalf.type.RelationType;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class Union extends BinaryOperator{
 
@@ -65,6 +66,11 @@ public class Union extends BinaryOperator{
     @Override
     public <R> R accept(Visitor<R> visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    protected Keys lazyComputeKey() {
+        return new Keys(this.getLargestKey());
     }
 
 }

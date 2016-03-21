@@ -11,6 +11,7 @@ import jalf.Renaming;
 import jalf.Selection;
 import jalf.Tuple;
 import jalf.aggregator.Aggregator;
+import jalf.constraint.Key;
 import jalf.relation.algebra.Intersect;
 import jalf.relation.algebra.Join;
 import jalf.relation.algebra.Minus;
@@ -41,8 +42,6 @@ public abstract class AbstractRelation implements Relation {
         }
         return tupleType;
     }
-
-    ///
 
     @Override
     public Relation select(Selection selection) {
@@ -99,6 +98,10 @@ public abstract class AbstractRelation implements Relation {
     @Override
     public long cardinality() {
         return stream().count();
+    }
+
+    public Key getLargestKey(){
+        return this.getType().getLargestKey();
     }
 
     ///

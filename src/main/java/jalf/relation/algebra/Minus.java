@@ -1,12 +1,13 @@
 package jalf.relation.algebra;
 
+import java.util.Arrays;
+import java.util.List;
+
 import jalf.AttrList;
 import jalf.Relation;
 import jalf.Visitor;
+import jalf.constraint.Keys;
 import jalf.type.RelationType;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class Minus extends BinaryOperator{
     private final Relation left;
@@ -65,4 +66,10 @@ public class Minus extends BinaryOperator{
     public <R> R accept(Visitor<R> visitor) {
         return visitor.visit(this);
     }
+
+    @Override
+    protected Keys lazyComputeKey() {
+        return this.left.getKeys();
+    }
+
 }

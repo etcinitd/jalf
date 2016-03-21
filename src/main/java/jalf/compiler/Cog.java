@@ -35,8 +35,8 @@ import jalf.type.TupleType;
  * expressions. It is a middleware between logic expressions and streams
  * providing access to the list of tuples of a relation. Cogs implement stream
  * manipulation algorithms while also providing the compilation context in
- * terms of the source expression and actual compiler used. Also, unlike
- * Java streams, Cog may be consumed multiple times, thereby providing a real
+ * terms of the source expression and actual compiler used. Also, unlike Java
+ * streams, Cog may be consumed multiple times, thereby providing a real
  * reusable compilation result.
  *
  * This parent class implements the default compilation mechanism using Java
@@ -72,12 +72,15 @@ public abstract class Cog {
     public Cog project(Project projection) {
         AttrList on = projection.getAttributes();
         TupleType tt = projection.getTupleType();
-
-        // stream compilation: map projection + distinct
-        Supplier<Stream<Tuple>> supplier = () -> this.stream()
-                .map(t -> t.project(on, tt))
-                .distinct();
-
+        Supplier<Stream<Tuple>> supplier;
+        // avoid duplicate
+        if (projection.isKeyPreserving()){
+            supplier = () -> this.stream().map(t -> t.project(on, tt));
+        } else {
+            // stream compilation: map projection + distinct
+            supplier = () -> this.stream().map(t -> t.project(on, tt))
+                    .distinct();
+        }
         return new BaseCog(projection, supplier);
     }
 
@@ -144,15 +147,17 @@ public abstract class Cog {
         final TupleType tt = join.getTupleType();
 
         // build a supplier that does the join
-        Supplier<Stream<Tuple>> supplier = () -> {
+        Supplier<Stream<Tuple>> supplier = () ->{
             Stream<Tuple> leftStream = this.stream();
             Stream<Tuple> rightStream = right.stream();
 
             // build an index on left tuples and do the hash join
-            Map<Object, List<Tuple>> leftTuplesIndex = leftStream.collect(groupingBy(t -> t.fetch(on)));
+            Map<Object, List<Tuple>> leftTuplesIndex = leftStream
+                    .collect(groupingBy(t -> t.fetch(on)));
             return rightStream.flatMap(rightTuple -> {
                 Object rightKey = rightTuple.fetch(on);
-                List<Tuple> leftTuples = leftTuplesIndex.getOrDefault(rightKey, emptyList());
+                List<Tuple> leftTuples = leftTuplesIndex.getOrDefault(rightKey,
+                        emptyList());
                 return leftTuples.stream().map(t -> t.join(rightTuple, tt));
             });
         };
@@ -165,13 +170,14 @@ public abstract class Cog {
         Supplier<Stream<Tuple>> supplier = () ->{
             Stream<Tuple> leftStream = this.stream();
             Stream<Tuple> rightStream = right.stream();
-            return Stream.of(leftStream,rightStream)
+            return Stream.of(leftStream, rightStream)
                     .reduce(Stream::concat)
                     .orElse(Stream.empty())
                     .distinct();
         };
         return new BaseCog(union, supplier);
     }
+
     /** Default compilation of `intersect`. */
     public Cog intersect(Intersect intersect, Cog right) {
         // stream compilation: concat + distinct
@@ -179,10 +185,11 @@ public abstract class Cog {
         Supplier<Stream<Tuple>> supplier = () ->{
             Stream<Tuple> leftStream = this.stream();
             Stream<Tuple> rightStream = right.stream();
-            Set<Tuple> leftHashSet = leftStream.collect(Collectors.toCollection(HashSet::new));
-            Stream<Tuple>intersectStream =rightStream
+            Set<Tuple> leftHashSet = leftStream
+                    .collect(Collectors.toCollection(HashSet::new));
+            Stream<Tuple> intersectStream = rightStream
                     .filter(x -> leftHashSet.contains(x));
-            return intersectStream ;
+            return intersectStream;
 
         };
         return new BaseCog(intersect, supplier);
@@ -190,10 +197,11 @@ public abstract class Cog {
 
     /** Default compilation of `minus`. */
     public Cog minus(Minus minus, Cog right) {
-        Supplier<Stream<Tuple>> supplier = () ->{
+        Supplier<Stream<Tuple>> supplier = () -> {
             Stream<Tuple> leftStream = this.stream();
             Stream<Tuple> rightStream = right.stream();
-            Set<Tuple> rightHashSet = rightStream.collect(Collectors.toCollection(HashSet::new));
+            Set<Tuple> rightHashSet = rightStream
+                    .collect(Collectors.toCollection(HashSet::new));
             Stream<Tuple> minusStream = leftStream
                     .filter(x -> !rightHashSet.contains(x));
             return minusStream;

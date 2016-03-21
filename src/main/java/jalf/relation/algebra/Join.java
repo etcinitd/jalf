@@ -1,12 +1,13 @@
 package jalf.relation.algebra;
 
-import java.util.Arrays;
-import java.util.List;
-
 import jalf.AttrList;
 import jalf.Relation;
 import jalf.Visitor;
+import jalf.constraint.Keys;
 import jalf.type.RelationType;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Relational natural join based on same name attributes.
@@ -64,13 +65,18 @@ public class Join extends BinaryOperator {
     }
 
     @Override
-   public List<Object> getArguments() {
+    public List<Object> getArguments() {
         return Arrays.asList();
     }
 
     @Override
     public <R> R accept(Visitor<R> visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    protected Keys lazyComputeKey() {
+        return left.getKeys().complexUnion(right.getKeys());
     }
 
 }

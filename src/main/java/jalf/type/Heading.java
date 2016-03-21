@@ -8,6 +8,7 @@ import jalf.AttrName;
 import jalf.Renaming;
 import jalf.Type;
 import jalf.TypeException;
+import jalf.constraint.Key;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -204,6 +205,14 @@ public class Heading {
             }
         });
         return new Heading(joined);
+    }
+
+    /**
+     * Get key with the all header attributes
+     * @return
+     */
+    public Key toKey(){
+        return new Key(this.toAttrList());
     }
 
     @Override

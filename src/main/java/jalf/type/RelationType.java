@@ -1,12 +1,6 @@
 package jalf.type;
 
 import static jalf.util.ValidationUtils.validateNotNull;
-
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import jalf.AttrList;
 import jalf.AttrName;
 import jalf.Predicate;
@@ -16,6 +10,11 @@ import jalf.Tuple;
 import jalf.Type;
 import jalf.TypeException;
 import jalf.aggregator.Aggregator;
+import jalf.constraint.Key;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Relation type, captures the possible types of relations.
@@ -206,6 +205,10 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
 
     public AttrList toAttrList() {
         return heading.toAttrList();
+    }
+
+    public Key getLargestKey(){
+        return this.heading.toKey();
     }
 
     @Override
