@@ -12,6 +12,7 @@ import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
 import jalf.relation.algebra.Select;
+import jalf.relation.algebra.Summarize;
 import jalf.relation.algebra.UnaryOperator;
 import jalf.relation.algebra.Union;
 
@@ -28,6 +29,10 @@ public class DefaultVisitor<T> implements Visitor<T> {
 
     @Override
     public T visit(Project relation) {
+        return visit((UnaryOperator)relation);
+    }
+    @Override
+    public T visit(Summarize relation) {
         return visit((UnaryOperator)relation);
     }
 

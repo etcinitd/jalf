@@ -12,6 +12,7 @@ import jalf.relation.algebra.Project;
 import jalf.relation.algebra.Rename;
 import jalf.relation.algebra.Restrict;
 import jalf.relation.algebra.Select;
+import jalf.relation.algebra.Summarize;
 import jalf.relation.algebra.Union;
 
 /**
@@ -43,6 +44,11 @@ public class DefaultMapper implements Visitor<Optimized<?>> {
     @Override
     public Optimized<?> visit(Project relation) {
         return new OptimizedProject(optimizer, relation);
+    }
+
+    @Override
+    public Optimized<?>  visit(Summarize relation) {
+        return new OptimizedSummarize(optimizer, relation);
     }
 
     @Override

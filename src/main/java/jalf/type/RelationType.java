@@ -8,12 +8,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jalf.AttrList;
+import jalf.AttrName;
 import jalf.Predicate;
 import jalf.Relation;
 import jalf.Renaming;
 import jalf.Tuple;
 import jalf.Type;
 import jalf.TypeException;
+import jalf.aggregator.Aggregator;
 
 /**
  * Relation type, captures the possible types of relations.
@@ -130,6 +132,30 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
     public RelationType project(AttrList on) {
         checkValidAttrList(on);
         return new RelationType(heading.project(on));
+    }
+
+    /**
+     * Computes the relation type of summarizing with given arguments.
+     *
+     * @param by the attributes lists on which we summarize.
+     * @param agg the aggregator operator.
+     * @param as the attributes on which the we aggregate.
+     * @return the relation type that contain the by attributes and the as attributes.
+     */
+    public RelationType summarize(AttrList by, Aggregator<?> agg, AttrName as) {
+        AttrList l = by;
+        if (agg.getAggregatedField() != null) {
+            l = by.union(AttrList.attrs(agg.getAggregatedField()));
+        }
+
+        // check if the by+aggregated is valid
+        checkValidAttrList(l);
+
+        // check if by+aggregated doesn't contain `as`
+        if (l.contains(as))
+            throw new TypeException("Attribute `" + as + "` introduced by summarization already exists");
+
+        return new RelationType(heading.summarize(by, as, agg.getResultingType(this)));
     }
 
     /**
