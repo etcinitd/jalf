@@ -18,6 +18,7 @@ import jalf.Relation;
 import jalf.Tuple;
 import jalf.Visitor;
 import jalf.aggregator.Aggregator;
+import jalf.constraint.Keys;
 import jalf.type.RelationType;
 
 public class Summarize extends UnaryOperator {
@@ -126,6 +127,11 @@ public class Summarize extends UnaryOperator {
     @Override
     public <R> R accept(Visitor<R> visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    protected Keys lazyComputeKey() {
+        throw new RuntimeException("Not implemented");
     }
 
 }
