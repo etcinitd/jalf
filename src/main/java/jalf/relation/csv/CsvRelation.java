@@ -10,6 +10,7 @@ import jalf.compiler.AbstractRelation;
 import jalf.compiler.BaseCog;
 import jalf.compiler.Cog;
 import jalf.compiler.Compiler;
+import jalf.constraint.Keys;
 import jalf.relation.algebra.LeafOperand;
 import jalf.relation.materialized.SetMemoryRelation;
 import jalf.type.Heading;
@@ -138,6 +139,11 @@ public class CsvRelation extends AbstractRelation implements LeafOperand {
             }
             return reader;
         }
+    }
+
+    @Override
+    public Keys getKeys() {
+        return new Keys(type.getLargestKey());
     }
 
 }

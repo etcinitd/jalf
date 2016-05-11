@@ -2,13 +2,14 @@ package jalf;
 
 import static jalf.util.CollectionUtils.rekey;
 import static jalf.util.CollectionUtils.remap;
-import jalf.type.Heading;
-import jalf.type.RelationType;
-import jalf.type.TupleType;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import jalf.type.Heading;
+import jalf.type.RelationType;
+import jalf.type.TupleType;
 
 public class Selection implements Function<Tuple,Tuple> {
 
@@ -27,6 +28,10 @@ public class Selection implements Function<Tuple,Tuple> {
             fns.put(attr, SelectionMember.attrSelection(type, attr));
         });
         return new Selection(fns);
+    }
+
+    public  Map<AttrName, SelectionMember> gefns (){
+        return this.fns;
     }
 
     public static Selection varargs(Object...args) {
@@ -70,7 +75,7 @@ public class Selection implements Function<Tuple,Tuple> {
 
     protected RelationType relationType;
     public RelationType toRelationType() {
-        if (relationType == null)
+        if (relationType == null || relationType.getHeading()==null)
             relationType = RelationType.dress(toHeading());
         return relationType;
     }

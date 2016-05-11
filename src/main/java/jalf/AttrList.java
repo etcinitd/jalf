@@ -2,6 +2,7 @@ package jalf;
 
 import static java.util.Collections.unmodifiableSet;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -30,10 +31,16 @@ import java.util.stream.StreamSupport;
  */
 public class AttrList implements Iterable<AttrName> {
 
+    public static final AttrList EMPTY = new AttrList();
+
     private Set<AttrName> names;
 
     private AttrList(Set<AttrName> names) {
         this.names = unmodifiableSet(names);
+    }
+
+    private AttrList() {
+        this(new HashSet<AttrName>());
     }
 
     public static Collector<AttrName, ?, AttrList> collector() {

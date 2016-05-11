@@ -8,6 +8,8 @@ import jalf.Visitor;
 import jalf.compiler.BaseCog;
 import jalf.compiler.Cog;
 import jalf.compiler.Compiler;
+import jalf.constraint.Key;
+import jalf.constraint.Keys;
 import jalf.type.RelationType;
 import jalf.type.TupleType;
 import jalf.util.CollectionUtils;
@@ -29,13 +31,26 @@ public class SetMemoryRelation extends MemoryRelation {
 
     private Collection<Tuple> tuples;
 
-    public SetMemoryRelation(RelationType type, Set<Tuple> tuples) {
+    //ici on précise la clef
+    public SetMemoryRelation(RelationType type, Set<Tuple> tuples, Keys keys) {
         this.type = type;
         this.tuples = tuples;
+        this.keys = keys;
+        if (!keys.check(this))
+            throw new IllegalArgumentException("Invalid key!");
+    }
+
+    //no key préciser tout les attributs deviennent la clef  de la relation
+    public SetMemoryRelation(RelationType type, Set<Tuple> tuples) {
+        this(type, tuples, new Keys(new Key(type.getHeading().toAttrList())));
     }
 
     public SetMemoryRelation(RelationType type, Tuple[] tuples) {
         this(type, setOf(tuples));
+    }
+
+    public SetMemoryRelation(RelationType type, Tuple[] tuples, Keys keys) {
+        this(type, setOf(tuples), keys);
     }
 
     /**
@@ -60,6 +75,19 @@ public class SetMemoryRelation extends MemoryRelation {
             throw new TypeException("Relation type mismatch: " + t);
         } else {
             return new SetMemoryRelation(type, tuples);
+        }
+    }
+
+    public static Relation tuples(RelationType type, Keys keys, Tuple...tuples) {
+        TupleType ttype = type.toTupleType();
+        Optional<Tuple> fail = Stream.of(tuples)
+                .filter(t -> !ttype.contains(t))
+                .findAny();
+        if (fail.isPresent()) {
+            Tuple t = fail.get();
+            throw new TypeException("Relation type mismatch: " + t);
+        } else {
+            return new SetMemoryRelation(type, tuples, keys);
         }
     }
 

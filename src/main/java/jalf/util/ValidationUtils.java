@@ -4,6 +4,7 @@ package jalf.util;
  * @author amirm
  */
 public class ValidationUtils {
+
     public static <T> T validateCast(String msg, Object arg, Class<T> clazz) {
         if (!clazz.isInstance(arg)) {
             throw new IllegalArgumentException(msg);
@@ -22,4 +23,11 @@ public class ValidationUtils {
             throw new IllegalArgumentException(msg);
         }
     }
+
+    public static void validate(String msg, long arg, long expected) {
+        if (arg != expected) {
+            throw new IllegalArgumentException(msg);
+        }
+    }
+
 }

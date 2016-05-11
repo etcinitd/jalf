@@ -1,19 +1,20 @@
 package jalf.type;
 
 import static jalf.util.ValidationUtils.validateNotNull;
-
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import jalf.AttrList;
+import jalf.AttrName;
 import jalf.Predicate;
 import jalf.Relation;
 import jalf.Renaming;
 import jalf.Tuple;
 import jalf.Type;
 import jalf.TypeException;
+import jalf.aggregator.Aggregator;
+import jalf.constraint.Key;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Relation type, captures the possible types of relations.
@@ -133,6 +134,30 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
     }
 
     /**
+     * Computes the relation type of summarizing with given arguments.
+     *
+     * @param by the attributes lists on which we summarize.
+     * @param agg the aggregator operator.
+     * @param as the attributes on which the we aggregate.
+     * @return the relation type that contain the by attributes and the as attributes.
+     */
+    public RelationType summarize(AttrList by, Aggregator<?> agg, AttrName as) {
+        AttrList l = by;
+        if (agg.getAggregatedField() != null) {
+            l = by.union(AttrList.attrs(agg.getAggregatedField()));
+        }
+
+        // check if the by+aggregated is valid
+        checkValidAttrList(l);
+
+        // check if by+aggregated doesn't contain `as`
+        if (l.contains(as))
+            throw new TypeException("Attribute `" + as + "` introduced by summarization already exists");
+
+        return new RelationType(heading.summarize(by, as, agg.getResultingType(this)));
+    }
+
+    /**
      * Returns the type obtained by renaming some of its attributes.
      *
      * @param renaming a renaming function.
@@ -180,6 +205,10 @@ public class RelationType extends HeadingBasedType implements Type<Relation> {
 
     public AttrList toAttrList() {
         return heading.toAttrList();
+    }
+
+    public Key getLargestKey(){
+        return this.heading.toKey();
     }
 
     @Override

@@ -6,6 +6,8 @@ import jalf.Visitor;
 import jalf.compiler.AbstractRelation;
 import jalf.compiler.BaseCog;
 import jalf.compiler.Cog;
+import jalf.constraint.Key;
+import jalf.constraint.Keys;
 import jalf.type.RelationType;
 
 import java.util.Collections;
@@ -31,6 +33,11 @@ public class Dee extends AbstractRelation {
     }
 
     @Override
+    public Keys getKeys() {
+        return new Keys(Key.EMPTY);
+    }
+
+    @Override
     public RelationType getType() {
         return TYPE;
     }
@@ -50,9 +57,10 @@ public class Dee extends AbstractRelation {
             return true;
         if (arg == null || !(arg instanceof Relation))
             return false;
-        Relation other = (Relation) arg;
+        Relation other = arg;
         return TYPE.equals(other.getType()) &&
                 other.stream().findFirst().isPresent();
     }
+
 
 }
